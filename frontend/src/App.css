@@ -1,0 +1,65 @@
+.letter {
+  border: 1px black solid;
+  height: 50px;
+  width: 50px;
+  margin-bottom: 20px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 50px;
+  vertical-align: middle;
+}
+
+.selected {
+  border: 2px rgb(102, 81, 3) solid;
+}
+
+.disabled {
+  border: 1px grey solid;
+}
+
+#square1 { animation-delay: 0s; }
+#square2 { animation-delay: 0.5s; }
+#square3 { animation-delay: 1s; }
+#square4 { animation-delay: 1.5s; }
+#square5 { animation-delay: 2s; }
+#square6 { animation-delay: 2.5s; }
+
+.right {
+  animation: reveal-right 1s 0s 1 forwards;
+}
+
+.wrong {
+  animation: reveal-wrong 1s 0s 1 forwards;
+}
+
+.moved {
+  animation: reveal-moved 1s 0s 1 forwards;
+}
+
+
+@keyframes reveal-right {
+    0% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: green;
+    }
+}
+
+@keyframes reveal-wrong {
+  0% {
+      background-color: transparent;
+  }
+  100% {
+      background-color: red;
+  }
+}
+
+@keyframes reveal-moved {
+  0% {
+      background-color: transparent;
+  }
+  100% {
+      background-color: yellow;
+  }
+}
