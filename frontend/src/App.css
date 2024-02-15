@@ -100,3 +100,10 @@
       font-size: 2.5em;
   }
 }
+
+#scoreboard {
+  height: 100%;
+  width: 100%;
+  margin: 15%;
+  background-color: antiquewhite;
+}

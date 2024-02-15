@@ -3,33 +3,52 @@ import React, { useState } from 'react';
 import { Word } from './components/Word';
 import { requestData } from './services/requests';
 import sixLetterWords from './six_letter_words';
+import { Scoreboard } from './components/Scoreboard';
 
 const App = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState({evaluation: [], accentuatedAnswer: ''});
+  const [showScoreboard, setShowScoreboard] = useState(false);
+
+  const scoreTemplate = {attemptsPerTry: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,}, wins: 0, losses: 0, timesPlayed: 0, streak: 0}
 
   const checkAttempt = (attempt) => {
     if(attempt.length < 6){
-        setMessage(() => 'Digite as 6 letras');
+        setMessage(() => 'Escreve direito');
         return
     }
 
     if(!sixLetterWords.includes(attempt.toLowerCase())){
-        setMessage(() => 'Palavra inválida');
+        setMessage(() => 'Desconheço essa palavra aí');
         return
     }
 
     requestData(`check/${attempt.toLowerCase()}`)
     .then((response) => {
-      console.log(response);
       if(response.evaluation.every((elem) => elem === 'right')){
+        let score = JSON.parse(localStorage.getItem('score')) || scoreTemplate;
+        score.wins += 1;
+        score.attemptsPerTry[attemptNumber + 1] += 1;
+        score.timesPlayed += 1;
+        score.streak += 1;
+        localStorage.setItem('score', JSON.stringify(score));
+
         setResponse(() => response);
-        setTimeout(() => setMessage(() => 'Parabéns!'), 3000);
+        setTimeout(() => setMessage(() => 'Top de linha...'), 3500);
+        setShowScoreboard(true);
+      } else if(attemptNumber === 7){
+        let score = JSON.parse(localStorage.getItem('score')) || scoreTemplate;
+        score.losses += 1;
+        score.streak = 0;
+        score.timesPlayed += 1;
+        localStorage.setItem('score', JSON.stringify(score));
+
+        setTimeout(() => setMessage(() => 'Estudar mais né, sei lá'), 3500);
       } else {
         setResponse(() => response);
         setMessage(() => '');
-        setTimeout(() => setAttemptNumber((prev) => prev + 1), 3000);
+        setTimeout(() => setAttemptNumber((prev) => prev !== 7 ? prev + 1 : 7), 3500);
       }
     })
     .catch((error) => {
@@ -53,6 +72,7 @@ const App = () => {
           <Word wordNumber={7} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
         </tbody>
       </table>
+      {showScoreboard && <Scoreboard/>}
     </div>
   );
 }
