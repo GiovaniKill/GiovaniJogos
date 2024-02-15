@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 import { Word } from './components/Word';
 import { requestData } from './services/requests';
+import sixLetterWords from './six_letter_words';
 
 const App = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
@@ -11,6 +12,11 @@ const App = () => {
   const checkAttempt = (attempt) => {
     if(attempt.length < 6){
         setMessage(() => 'Digite as 6 letras');
+        return
+    }
+
+    if(!sixLetterWords.includes(attempt.toLowerCase())){
+        setMessage(() => 'Palavra inválida');
         return
     }
 

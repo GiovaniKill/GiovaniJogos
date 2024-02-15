@@ -1,0 +1,42 @@
+version: '3.6'
+
+services:
+  frontend:
+      container_name: app_frontend
+      build: ./frontend
+      ports:
+        - 3000:3000
+      platform: linux/x86_64
+      working_dir: /frontend
+      volumes: 
+        - ./frontend:/frontend
+        - ./:/react-docker:delegated
+        - /node_modules
+      depends_on:
+        backend:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "lsof", "-t", "-i:3000"]
+        timeout: 10s
+        retries: 5
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+  backend:
+      container_name: app_backend
+      build: ./backend
+      platform: linux/x86_64
+      volumes: 
+        - ./backend:/backend
+      environment:
+        - APP_PORT=3001
+      ports:
+        - "3001:3001" 
+        - "9229:9229"
+      healthcheck:
+          test: ["CMD", "lsof", "-t", "-i:3001"]
+          timeout: 10s
+          retries: 5
+      command:
+        - node
+        - "--inspect-brk=0.0.0.0"
+        - "." 
