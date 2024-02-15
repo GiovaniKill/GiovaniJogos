@@ -31,6 +31,8 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, evaluation}) => {
         } else if(e.key === 'ArrowLeft'){
             changeSelection('-');
         } else if(e.key === 'Enter'){
+            window.removeEventListener('keydown', handleKeyPress);
+            disableLetters();
             checkAttempt(_typedLetters.current.join(''));
         } else if(e.key === 'Backspace'){
             const currentSelection = _classNames.current.findIndex((name) => name.includes('selected'));
