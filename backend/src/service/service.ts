@@ -3,9 +3,13 @@ import answers from './answers'
 
 export default class Service {
     check(req: Request, res: Response) {
-        const { word } = req.params;
+        let { word } = req.params;
         const date = new Date()
-        const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)]
+        const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)];
+
+        //Removing accents from the answer and the guess word
+        const normalizedAnswer = answer.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        word = word.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
         if(word.length !== answer.length){
             return res.status(400).json({ message: 'Word length is wrong' });
@@ -21,12 +25,12 @@ export default class Service {
             return counter;
         }
 
-        let answerLetterCounter = countLetters(answer);
+        let answerLetterCounter = countLetters(normalizedAnswer);
         
         let evaluation: ('right' | 'wrong' | 'moved')[] = [];
 
         for(let index = 0; index < answer.length; index++){
-            if(word[index] === answer[index] && answerLetterCounter[word[index]]){
+            if(word[index] === normalizedAnswer[index] && answerLetterCounter[word[index]]){
                 answerLetterCounter[word[index]] -= 1;
                 evaluation.push('right');
             } else if(Object.keys(answerLetterCounter).includes(word[index]) && answerLetterCounter[word[index]]){
@@ -37,6 +41,10 @@ export default class Service {
             }
         }
 
-        return res.status(200).json({evaluation});
+        if(evaluation.every((elem) => elem === 'right')){
+            return res.status(200).json({evaluation, accentuatedAnswer: answer});
+        } else {
+            return res.status(200).json({evaluation, accentuatedAnswer: ''});
+        }
     }
 }

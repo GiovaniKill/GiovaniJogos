@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 
-const Word = ({attemptNumber, wordNumber, checkAttempt, evaluation}) => {
+const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
     const [classNames, setClassNames] = useState(['disabled letter', 'disabled letter', 'disabled letter', 'disabled letter', 'disabled letter', 'disabled letter']);
     const _classNames = useRef(classNames);
 
@@ -131,13 +131,15 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, evaluation}) => {
     }, [typedLetters]);
 
     useEffect(() => {
-        if(isActive && evaluation.length){
+        if(isActive && response.evaluation.length){
             setClassNames((prev) => prev.map((curr, index) => {
-                console.log(evaluation);
-                return curr += ' ' + evaluation[index]
+                return curr += ' ' + response.evaluation[index]
             }));
+            if(response.evaluation.every((elem) => elem === 'right')){
+                setTypedLetters(() => response.accentuatedAnswer.toUpperCase().split(''));
+            }
         }
-    }, [evaluation]);
+    }, [response.evaluation]);
 
     return (
         <tr>
