@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Word } from './components/Word';
 import { requestData } from './services/requests';
 import sixLetterWords from './six_letter_words';
@@ -7,6 +7,7 @@ import { Scoreboard } from './components/Scoreboard';
 
 const App = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
+  const _attemptNumber = useRef(attemptNumber)
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState({evaluation: [], accentuatedAnswer: ''});
   const [showScoreboard, setShowScoreboard] = useState(false);
@@ -29,7 +30,7 @@ const App = () => {
       if(response.evaluation.every((elem) => elem === 'right')){
         let score = JSON.parse(localStorage.getItem('score')) || scoreTemplate;
         score.wins += 1;
-        score.attemptsPerTry[attemptNumber + 1] += 1;
+        score.attemptsPerTry[_attemptNumber.current + 1] += 1;
         score.timesPlayed += 1;
         score.streak += 1;
         localStorage.setItem('score', JSON.stringify(score));
@@ -37,18 +38,20 @@ const App = () => {
         setResponse(() => response);
         setTimeout(() => setMessage(() => 'Top de linha...'), 3500);
         setTimeout(() => setShowScoreboard(true), 4500);
-      } else if(attemptNumber === 7){
+      } else if(_attemptNumber.current === 7){
         let score = JSON.parse(localStorage.getItem('score')) || scoreTemplate;
         score.losses += 1;
         score.streak = 0;
         score.timesPlayed += 1;
         localStorage.setItem('score', JSON.stringify(score));
 
+        setResponse(() => response);
         setTimeout(() => setMessage(() => 'Estudar mais né, sei lá'), 3500);
+        setTimeout(() => setShowScoreboard(true), 4500);
       } else {
         setResponse(() => response);
         setMessage(() => '');
-        setTimeout(() => setAttemptNumber((prev) => prev !== 7 ? prev + 1 : 7), 3500);
+        setTimeout(() => setAttemptNumber((prev) => prev + 1), 3500);
       }
     })
     .catch((error) => {
@@ -56,6 +59,10 @@ const App = () => {
       setMessage(() => 'Falha ao se conectar ao servidor: ' + error);
     })
   }
+
+  useEffect(() => {
+    _attemptNumber.current = attemptNumber;
+}, [attemptNumber]);
 
   return (
     <div className="">
