@@ -1,3 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Rubik+Doodle+Shadow&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    font-family: "Rubik Doodle Shadow", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  tbody {
+    font-family: "Gloria Hallelujah", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+}
+
 .letter {
   border: 1px black solid;
   height: 50px;
@@ -99,11 +119,4 @@
       height: 50px;
       font-size: 2.5em;
   }
-}
-
-#scoreboard {
-  height: 100%;
-  width: 100%;
-  margin: 15%;
-  background-color: antiquewhite;
 }
