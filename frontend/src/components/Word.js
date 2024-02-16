@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 
-const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
+const Word = ({attemptNumber, wordNumber, checkAttempt, response, blockTyping, setBlockTyping}) => {
     const [classNames, setClassNames] = useState(['disabled letter', 'disabled letter', 'disabled letter', 'disabled letter', 'disabled letter', 'disabled letter']);
     const _classNames = useRef(classNames);
 
@@ -31,8 +31,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
         } else if(e.key === 'ArrowLeft'){
             changeSelection('-');
         } else if(e.key === 'Enter'){
-            window.removeEventListener('keydown', handleKeyPress);
-            disableLetters();
+            setBlockTyping(true);
             checkAttempt(_typedLetters.current.join(''));
         } else if(e.key === 'Backspace'){
             const currentSelection = _classNames.current.findIndex((name) => name.includes('selected'));
@@ -110,8 +109,10 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
         setIsActive((prev) => {
             const turnComparison = attemptNumber === wordNumber;
 
+            //Muda apenas se o estado alternou
             if(turnComparison !== prev){
                 if(turnComparison){
+                    //Ver se eu posso colocar dentro da enableletters
                     window.addEventListener('keydown', handleKeyPress);
                     enableLetters();
                 } else {
@@ -120,9 +121,17 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
                 }
             }
 
+            if(!blockTyping && turnComparison){
+                window.addEventListener('keydown', handleKeyPress);
+                enableLetters();
+            } else {
+                window.removeEventListener('keydown', handleKeyPress);
+                disableLetters();
+            }
+
             return turnComparison;
         })
-    }, [attemptNumber]);
+    }, [attemptNumber, blockTyping]);
 
     useEffect(() => {
         _classNames.current = classNames;
@@ -134,9 +143,11 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
 
     useEffect(() => {
         if(isActive && response.evaluation.length){
+            //Change classes to correponding colors
             setClassNames((prev) => prev.map((curr, index) => {
                 return curr += ' ' + response.evaluation[index]
             }));
+            //Reveal accentuated answer
             if(response.evaluation.every((elem) => elem === 'right')){
                 setTypedLetters(() => response.accentuatedAnswer.toUpperCase().split(''));
             }

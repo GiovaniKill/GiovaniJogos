@@ -11,17 +11,20 @@ const App = () => {
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState({evaluation: [], accentuatedAnswer: ''});
   const [showScoreboard, setShowScoreboard] = useState(false);
+  const [blockTyping, setBlockTyping] = useState(false);
 
   const scoreTemplate = {attemptsPerTry: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,}, wins: 0, losses: 0, timesPlayed: 0, streak: 0}
 
   const checkAttempt = (attempt) => {
     if(attempt.length < 6){
         setMessage(() => 'Escreve direito');
+        setBlockTyping(false);
         return
     }
 
     if(!sixLetteredWords.includes(attempt.toLowerCase())){
         setMessage(() => 'Desconheço essa palavra aí');
+        setBlockTyping(false);
         return
     }
 
@@ -52,6 +55,7 @@ const App = () => {
         setResponse(() => response);
         setMessage(() => '');
         setTimeout(() => setAttemptNumber((prev) => prev + 1), 3500);
+        setTimeout(() => setBlockTyping(false), 3500);
       }
     })
     .catch((error) => {
@@ -71,14 +75,14 @@ const App = () => {
       <div className="flex justify-center align-middle">
         <table>
           <tbody>
-            <Word wordNumber={0} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={1} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={2} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={3} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={4} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={5} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={6} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-            <Word wordNumber={7} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={0} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={1} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={2} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={3} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={4} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={5} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={6} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
+            <Word wordNumber={7} attemptNumber={attemptNumber} response={response} checkAttempt={checkAttempt} blockTyping={blockTyping} setBlockTyping={setBlockTyping}/>
           </tbody>
         </table>
       </div>
