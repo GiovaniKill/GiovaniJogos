@@ -36,7 +36,7 @@ const App = () => {
 
         setResponse(() => response);
         setTimeout(() => setMessage(() => 'Top de linha...'), 3500);
-        setShowScoreboard(true);
+        setTimeout(() => setShowScoreboard(true), 4500);
       } else if(attemptNumber === 7){
         let score = JSON.parse(localStorage.getItem('score')) || scoreTemplate;
         score.losses += 1;
