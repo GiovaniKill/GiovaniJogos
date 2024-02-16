@@ -58,21 +58,24 @@ const App = () => {
   }
 
   return (
-    <div className="App">
-      <div>{message}</div>
-      <table>
-        <tbody>
-          <Word wordNumber={0} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={1} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={2} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={3} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={4} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={5} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={6} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-          <Word wordNumber={7} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
-        </tbody>
-      </table>
-      {showScoreboard && <Scoreboard/>}
+    <div className="">
+      <h1 className="text-5xl my-5 mx-auto max-w-min">PALAVROU</h1>
+      <div className="my-2 mx-auto max-w-min whitespace-nowrap text-sm">{message}</div> 
+      <div className="flex justify-center align-middle">
+        <table>
+          <tbody>
+            <Word wordNumber={0} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={1} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={2} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={3} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={4} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={5} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={6} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+            <Word wordNumber={7} attemptNumber={attemptNumber} response={response}checkAttempt={checkAttempt}/>
+          </tbody>
+        </table>
+      </div>
+        {showScoreboard && <Scoreboard/>}
     </div>
   );
 }

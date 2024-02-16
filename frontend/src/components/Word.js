@@ -84,6 +84,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
         setClassNames((prev) => {
             let newClassNames = [...prev];
             let enabledClassNames = newClassNames.map((name) => name.replace('disabled', ''));
+            enabledClassNames = enabledClassNames.map((name) => `${name} hover:bg-slate-100`);
 
             if (!enabledClassNames[0].includes('selected')) enabledClassNames[0] += ' selected';
             _classNames.current = enabledClassNames;
@@ -97,6 +98,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
             let newClassNames = [...prev];
             let unselectedClassNames = newClassNames.map((name) => name.includes('selected') ? name.replace('selected', '') : name);
             let disabledClassNames = unselectedClassNames.map((name) => name.includes('disabled') ? name : name + ' disabled');
+            disabledClassNames = disabledClassNames.map((name) => name.includes('hover:bg-slate-100') ? name.replace('hover:bg-slate-100', '') : name);
             _classNames.current = disabledClassNames;
 
             return disabledClassNames;
@@ -143,12 +145,12 @@ const Word = ({attemptNumber, wordNumber, checkAttempt, response}) => {
 
     return (
         <tr>
-            <td><div ref={inputRefs[0]} className={classNames[0]} id="square1" onClick={(e) => selectLetter(0)}>{typedLetters[0]}</div></td>
-            <td><div ref={inputRefs[1]} className={classNames[1]} id="square2" onClick={(e) => selectLetter(1)}>{typedLetters[1]}</div></td>
-            <td><div ref={inputRefs[2]} className={classNames[2]} id="square3" onClick={(e) => selectLetter(2)}>{typedLetters[2]}</div></td>
-            <td><div ref={inputRefs[3]} className={classNames[3]} id="square4" onClick={(e) => selectLetter(3)}>{typedLetters[3]}</div></td>
-            <td><div ref={inputRefs[4]} className={classNames[4]} id="square5" onClick={(e) => selectLetter(4)}>{typedLetters[4]}</div></td>
-            <td><div ref={inputRefs[5]} className={classNames[5]} id="square6" onClick={(e) => selectLetter(5)}>{typedLetters[5]}</div></td>
+            <td><div ref={inputRefs[0]} className={classNames[0]} id="square1" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(0)}>{typedLetters[0]}</div></td>
+            <td><div ref={inputRefs[1]} className={classNames[1]} id="square2" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(1)}>{typedLetters[1]}</div></td>
+            <td><div ref={inputRefs[2]} className={classNames[2]} id="square3" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(2)}>{typedLetters[2]}</div></td>
+            <td><div ref={inputRefs[3]} className={classNames[3]} id="square4" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(3)}>{typedLetters[3]}</div></td>
+            <td><div ref={inputRefs[4]} className={classNames[4]} id="square5" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(4)}>{typedLetters[4]}</div></td>
+            <td><div ref={inputRefs[5]} className={classNames[5]} id="square6" onClick={(e) => !e.target.classList.contains('disabled') && selectLetter(5)}>{typedLetters[5]}</div></td>
         </tr>
     );
 }
