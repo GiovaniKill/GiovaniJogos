@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { Word } from './components/Word';
 import { requestData } from './services/requests';
-import sixLetterWords from './six_letter_words';
+import sixLetteredWords from './sixLetteredWords';
 import { Scoreboard } from './components/Scoreboard';
 
 const App = () => {
@@ -20,7 +20,7 @@ const App = () => {
         return
     }
 
-    if(!sixLetterWords.includes(attempt.toLowerCase())){
+    if(!sixLetteredWords.includes(attempt.toLowerCase())){
         setMessage(() => 'Desconheço essa palavra aí');
         return
     }
