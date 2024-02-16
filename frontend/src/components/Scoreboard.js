@@ -1,8 +1,6 @@
 const Scoreboard = () => {
     const score = JSON.parse(localStorage.getItem('score'));
 
-    console.log('socre');
-
     return (
         <div id="scoreboard" className="absolute inset-0 m-auto w-1/4 h-1/4 rounded-lg p-5 bg-amber-100">
             <div>Jogos: {score.timesPlayed}</div>
