@@ -22,8 +22,8 @@ const Scoreboard = () => {
     console.log('raiot: ' + widthRatioStyling);
 
     return (
-        <div id="scoreboard" className="absolute inset-0 m-auto w-1/4 h-1/4 rounded-lg p-5 bg-amber-100">
-            <div>
+        <div id="scoreboard" className="absolute inset-0 m-auto w-fit h-fit rounded-lg p-5 bg-amber-100">
+            <div className="">
                 <div>Jogos: {score.timesPlayed}</div>
                 <div>Vitórias: {score.wins}</div>
                 <div>Taxa de vitórias: {((score.wins / score.timesPlayed) * 100).toFixed(1)}%</div>
