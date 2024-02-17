@@ -1,4 +1,4 @@
-import './App.css';
+import '../App.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {Word} from '../components/palavrou/Word';
 import {requestData} from '../services/requests';
