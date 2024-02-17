@@ -13,6 +13,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
 
   const [isActive, setIsActive] = useState(false);
 
+  const wordRef = useRef();
 
   const validLetters = ['a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e',
     'E', 'f', 'F', 'g', 'G', 'h', 'H', 'i', 'I', 'j', 'J', 'k', 'K',
@@ -108,6 +109,8 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
 
       return enabledClassNames;
     });
+    window.addEventListener('keydown', handleKeyPress);
+    wordRef.current.scrollIntoView({behavior: 'smooth'});
   };
 
   const disableLetters = () => {
@@ -127,6 +130,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
 
       return disabledClassNames;
     });
+    window.removeEventListener('keydown', handleKeyPress);
   };
 
   // Enables and disables component
@@ -137,20 +141,15 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       // Muda apenas se o estado alternou
       if (turnComparison !== prev) {
         if (turnComparison) {
-          // Ver se eu posso colocar dentro da enableletters
-          window.addEventListener('keydown', handleKeyPress);
           enableLetters();
         } else {
-          window.removeEventListener('keydown', handleKeyPress);
           disableLetters();
         }
       }
 
       if (!blockTyping && turnComparison) {
-        window.addEventListener('keydown', handleKeyPress);
         enableLetters();
       } else {
-        window.removeEventListener('keydown', handleKeyPress);
         disableLetters();
       }
 
@@ -182,7 +181,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
   }, [response.evaluation]);
 
   return (
-    <tr>
+    <tr ref={wordRef}>
       <td>
         <div ref={inputRefs[0]} className={classNames[0]}
           id="square1" onClick={(e) =>
