@@ -21,5 +21,5 @@
       "*": ["node_modules/*", "src/*.ts"]
     }
   },
-  "include": ["src/**/*", "src/router/router.ts"],
+  "include": ["src/**/*", "src/routes/palavrou.routes.ts"],
 }

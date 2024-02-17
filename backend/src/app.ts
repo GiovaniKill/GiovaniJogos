@@ -1,5 +1,6 @@
 import express = require('express')
-import { router } from './router/router.ts'
+import routes from 'routes/index'
+import errorHandler from 'middlewares/errorHandler'
 
 class App {
   public app: express.Express
@@ -9,7 +10,8 @@ class App {
 
     this.config()
 
-    this.app.use(router)
+    routes(this.app)
+    this.app.use(errorHandler)
   }
 
   public start (PORT: string | number): void {
