@@ -1,9 +1,9 @@
 import './App.css';
 import React, {useEffect, useRef, useState} from 'react';
-import {Word} from './components/Word';
-import {requestData} from './services/requests';
-import sixLetteredWords from './sixLetteredWords';
-import {Scoreboard} from './components/Scoreboard';
+import {Word} from '../components/palavrou/Word';
+import {requestData} from '../services/requests';
+import sixLetteredWords from '../sixLetteredWords';
+import {Scoreboard} from '../components/palavrou/Scoreboard';
 
 const App = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
@@ -35,7 +35,7 @@ const App = () => {
       return;
     }
 
-    requestData(`check/${attempt.toLowerCase()}`)
+    requestData(`palavrou/check/${attempt.toLowerCase()}`)
         .then((response) => {
           if (response.evaluation.every((elem) => elem === 'right')) {
             const score = JSON.
