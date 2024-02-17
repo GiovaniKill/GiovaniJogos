@@ -110,7 +110,9 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       return enabledClassNames;
     });
     window.addEventListener('keydown', handleKeyPress);
-    wordRef.current.scrollIntoView({behavior: 'smooth'});
+    wordRef.current.scrollIntoView(
+        {behavior: 'smooth', block: 'end', inline: 'nearest'},
+    );
   };
 
   const disableLetters = () => {
