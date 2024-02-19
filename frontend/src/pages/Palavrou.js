@@ -1,11 +1,11 @@
-import '../App.css';
+import '../styles/Palavrou.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {Word} from '../components/palavrou/Word';
 import {requestData} from '../services/requests';
 import sixLetteredWords from '../sixLetteredWords';
 import {Scoreboard} from '../components/palavrou/Scoreboard';
 
-const App = () => {
+const Palavrou = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
   const _attemptNumber = useRef(attemptNumber);
   const [message, setMessage] = useState('');
@@ -134,4 +134,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Palavrou;
