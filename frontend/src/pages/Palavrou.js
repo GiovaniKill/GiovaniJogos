@@ -78,8 +78,10 @@ const Palavrou = () => {
   }, [attemptNumber]);
 
   return (
-    <div className="">
-      <h1 className="text-5xl my-5 mx-auto max-w-min">PALAVROU</h1>
+    <>
+      <h1 className="text-5xl my-5 mx-auto max-w-min rubik-doodle-shadow">
+        PALAVROU
+      </h1>
       <div className="my-2 mx-auto max-w-min whitespace-nowrap text-sm">
         {message}
       </div>
@@ -130,7 +132,7 @@ const Palavrou = () => {
         </table>
       </div>
       {showScoreboard && <Scoreboard/>}
-    </div>
+    </>
   );
 };
 

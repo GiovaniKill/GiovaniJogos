@@ -1,11 +1,24 @@
 import React from 'react';
 import '../styles/MainPage.css';
+import {Link} from 'react-router-dom';
 
 const MainPage = () => {
   return (
-    <>
-      <p>Bien venido</p>
-    </>
+    <div className='bg-amber-50 h-screen'>
+      <header className='flex justify-center'>
+        <h1 className='my-5 text-3xl handrawn'>Giovani Jogos</h1>
+      </header>
+      <nav className='grid md:grid-cols-2 lg:grid-cols-3
+      gap-3 mx-3 justify-items-center'>
+        <Link to='/palavrou'>
+          <img
+            className='rounded-lg border-2 border-solid
+          border-black hover:border-yellow-300 hover:border-dashed'
+            src='images/palavrou_logo.jpg'
+          />
+        </Link>
+      </nav>
+    </div>
   );
 };
 
