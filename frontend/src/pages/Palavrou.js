@@ -4,6 +4,7 @@ import {Word} from '../components/palavrou/Word';
 import {requestData} from '../services/requests';
 import sixLetteredWords from '../sixLetteredWords';
 import {Scoreboard} from '../components/palavrou/Scoreboard';
+import {Link} from 'react-router-dom';
 
 const Palavrou = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
@@ -79,9 +80,19 @@ const Palavrou = () => {
 
   return (
     <>
-      <h1 className="text-5xl my-5 mx-auto max-w-min rubik-doodle-shadow">
-        PALAVROU
-      </h1>
+      <header className=''>
+        <Link to='/'>
+          <h2
+            className='text-2xl absolute top-5 left-5
+            handrawn hover:text-3xl'
+          >
+            Giovani Jogos
+          </h2>
+        </Link>
+        <h1 className="text-5xl max-w-min mx-auto my-5 doodle">
+          PALAVROU
+        </h1>
+      </header>
       <div className="my-2 mx-auto max-w-min whitespace-nowrap text-sm">
         {message}
       </div>
