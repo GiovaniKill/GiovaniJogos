@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const NODE_ENV = process.env.NODE_ENV;
+
 const api = axios.create({
-  baseURL: `http://localhost:${process.env.REACT_APP_API_PORT || '3001'}`,
+  baseURL: NODE_ENV === 'production' ? 'giovanijogos.fun/be' :
+  `http://localhost:${process.env.REACT_APP_API_PORT || '3001'}`,
 });
 
 export const requestData = async (endpoint) => {
