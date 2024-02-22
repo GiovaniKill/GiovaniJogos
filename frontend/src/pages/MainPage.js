@@ -13,8 +13,8 @@ const MainPage = () => {
         <Link to='/palavrou'>
           <img
             className='rounded-lg border-2 border-solid
-          border-black hover:border-yellow-400 hover:border-dashed w-11/12'
-            src='images/palavrou_logo.svg'
+          border-black hover:border-yellow-400 hover:border-dashed w-1/5'
+            src='images/palavrou_logo.png'
           />
         </Link>
       </nav>
