@@ -14,7 +14,7 @@ const MainPage = () => {
           <img
             className='rounded-lg border-2 border-solid
           border-black hover:border-yellow-400 hover:border-dashed'
-            src='images/palavrou_logo.jpg'
+            src='images/palavrou_logo.svg'
           />
         </Link>
       </nav>
