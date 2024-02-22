@@ -29,15 +29,20 @@ export default class Service {
 
     const evaluation: Array<'right' | 'wrong' | 'moved'> = []
 
+    // First find the right and wrong letters, then finds the moved ones
     for (let index = 0; index < answer.length; index++) {
       if (word[index] === normalizedAnswer[index] && answerLetterCounter[word[index]] !== 0) {
         answerLetterCounter[word[index]] -= 1
         evaluation.push('right')
-      } else if (Object.keys(answerLetterCounter).includes(word[index]) && answerLetterCounter[word[index]] !== 0) {
-        answerLetterCounter[word[index]] -= 1
-        evaluation.push('moved')
       } else {
         evaluation.push('wrong')
+      }
+    }
+
+    for (let index = 0; index < answer.length; index++) {
+      if (Object.keys(answerLetterCounter).includes(word[index]) && answerLetterCounter[word[index]] !== 0) {
+        answerLetterCounter[word[index]] -= 1
+        evaluation[index] = 'moved'
       }
     }
 
