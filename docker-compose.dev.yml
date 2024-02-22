@@ -19,7 +19,7 @@ services:
           retries: 5
         environment:
           - CHOKIDAR_USEPOLLING=true
-          - NODE_ENV=production
+          - NODE_ENV=development
     backend:
         container_name: app_backend
         build: ./backend

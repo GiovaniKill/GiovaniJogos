@@ -15,6 +15,9 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
 
   const wordRef = useRef();
 
+  // Hidden input for keyboard trigger in smartphones
+  const hiddenInputRef = useRef();
+
   const validLetters = ['a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e',
     'E', 'f', 'F', 'g', 'G', 'h', 'H', 'i', 'I', 'j', 'J', 'k', 'K',
     'l', 'L', 'm', 'M', 'n', 'N', 'o', 'O', 'p', 'P', 'q', 'Q', 'r',
@@ -185,9 +188,15 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
   return (
     <tr ref={wordRef}>
       <td>
+        <input type='text' className='hidden' ref={hiddenInputRef}/>
+      </td>
+      <td>
         <div ref={inputRefs[0]} className={classNames[0]}
-          id="square1" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(0))}
+          id="square1" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(0);
+            hiddenInputRef.current.focus();
+          }
+          }
         >
           {typedLetters[0]}
         </div>
