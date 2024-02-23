@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const Scoreboard = () => {
+  const [isHidden, setIsHidden] = useState(false);
+
   const score = JSON.parse(localStorage.getItem('score'));
 
   const attemptsPerTry = Object.values(score.attemptsPerTry);
@@ -24,7 +26,13 @@ const Scoreboard = () => {
     <div
       id="scoreboard"
       className=
-        "absolute inset-0 m-auto w-fit h-fit rounded-lg p-5 bg-amber-100">
+        {`absolute inset-0 m-auto w-fit h-fit rounded-lg p-5 bg-amber-100
+        ${isHidden && 'hidden'} border-2 border-black border-double`}>
+      <button
+        onClick={() => setIsHidden(true)}
+        className='absolute top-3 right-5 font-extrabold text-lg hover:text-xl'>
+            X
+      </button>
       <div className="">
         <div>Jogos: {score.timesPlayed}</div>
         <div>Vitórias: {score.wins}</div>
