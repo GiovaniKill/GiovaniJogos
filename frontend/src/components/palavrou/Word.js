@@ -44,6 +44,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       changeSelection('-');
     } else if (e.key === 'Enter') {
       setBlockTyping(true);
+      hiddenInputRef.current.blur();
       checkAttempt(_typedLetters.current.join(''));
     } else if (e.key === 'Backspace') {
       const currentSelection = _classNames.current.
@@ -105,9 +106,14 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       enabledClassNames = enabledClassNames.
           map((name) => `${name} hover:bg-slate-100`);
 
+      // Selects first field by default
       if (!enabledClassNames[0].includes('selected')) {
         enabledClassNames[0] += ' selected';
       }
+
+      // Activates keyboard on smartphones
+      hiddenInputRef.current.focus();
+
       _classNames.current = enabledClassNames;
 
       return enabledClassNames;
@@ -185,12 +191,14 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     }
   }, [response.evaluation]);
 
+  console.log(document.activeElement);
+
   return (
     <tr ref={wordRef}>
-      <td>
-        <input type='text' className='hidden' ref={hiddenInputRef}/>
+      <td className=''>
+        <input type='text' className='absolute w-0' ref={hiddenInputRef}/>
       </td>
-      <td>
+      <td className='z-10'>
         <div ref={inputRefs[0]} className={classNames[0]}
           id="square1" onClick={(e) =>{
             !e.target.classList.contains('disabled') && selectLetter(0);
@@ -203,36 +211,56 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       </td>
       <td>
         <div ref={inputRefs[1]} className={classNames[1]}
-          id="square2" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(1))}>
+          id="square2" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(1);
+            hiddenInputRef.current.focus();
+          }
+          }
+        >
           {typedLetters[1]}
         </div>
       </td>
       <td>
         <div ref={inputRefs[2]} className={classNames[2]}
-          id="square3" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(2))}>
+          id="square3" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(2);
+            hiddenInputRef.current.focus();
+          }
+          }
+        >
           {typedLetters[2]}
         </div>
       </td>
       <td>
         <div ref={inputRefs[3]} className={classNames[3]}
-          id="square4" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(3))}>
+          id="square4" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(3);
+            hiddenInputRef.current.focus();
+          }
+          }
+        >
           {typedLetters[3]}
         </div>
       </td>
       <td>
         <div ref={inputRefs[4]} className={classNames[4]}
-          id="square5" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(4))}>
+          id="square5" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(4);
+            hiddenInputRef.current.focus();
+          }
+          }
+        >
           {typedLetters[4]}
         </div>
       </td>
       <td>
         <div ref={inputRefs[5]} className={classNames[5]}
-          id="square6" onClick={(e) =>
-            (!e.target.classList.contains('disabled') && selectLetter(5))}>
+          id="square6" onClick={(e) =>{
+            !e.target.classList.contains('disabled') && selectLetter(5);
+            hiddenInputRef.current.focus();
+          }
+          }
+        >
           {typedLetters[5]}
         </div>
       </td>
