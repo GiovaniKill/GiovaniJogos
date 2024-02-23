@@ -4,8 +4,9 @@ const Tutorial = () => {
   const [isHidden, setIsHidden] = useState(false);
 
   return (
-    <div className={`absolute inset-0 m-auto w-1/3 h-fit rounded-lg p-5
-    bg-amber-100 flex flex-col items-center ${isHidden && 'hidden'}`}>
+    <div className={`absolute inset-0 m-auto w-4/5 md:w-1/2 h-fit rounded-lg p-5
+    bg-amber-100 flex flex-col items-center ${isHidden && 'hidden'}
+    border-2 border-black border-double`}>
       <button
         onClick={() => setIsHidden(true)}
         className='absolute top-3 right-5 font-extrabold text-lg hover:text-xl'>

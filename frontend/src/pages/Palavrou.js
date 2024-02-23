@@ -85,17 +85,19 @@ const Palavrou = () => {
         <Link to='/'>
           <h2
             className='text-2xl absolute top-5 left-5
-            handrawn hover:text-2.1xl'
+            handrawn hover:text-2.1xl opacity-0 sm:opacity-100'
           >
             Giovani Jogos
           </h2>
         </Link>
 
-        <Tutorial/>
         <h1 className="text-5xl max-w-min mx-auto my-5 doodle">
           PALAVROU
         </h1>
       </header>
+
+      <Tutorial/>
+
       <div className="my-2 mx-auto max-w-min whitespace-nowrap text-sm">
         {message}
       </div>
