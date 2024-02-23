@@ -19,7 +19,7 @@ export default class Service {
       const counter: Record<string, number> = {}
 
       wordToCount.split('').forEach(letter => {
-        counter[letter] !== 0 ? counter[letter] += 1 : counter[letter] = 1
+        counter[letter] !== undefined ? counter[letter] += 1 : counter[letter] = 1
       })
 
       return counter
@@ -29,7 +29,7 @@ export default class Service {
 
     const evaluation: Array<'right' | 'wrong' | 'moved'> = []
 
-    // First find the right and wrong letters, then finds the moved ones
+    // First finds the right and wrong letters, then finds the moved ones
     for (let index = 0; index < answer.length; index++) {
       if (word[index] === normalizedAnswer[index] && answerLetterCounter[word[index]] !== 0) {
         answerLetterCounter[word[index]] -= 1
@@ -40,7 +40,8 @@ export default class Service {
     }
 
     for (let index = 0; index < answer.length; index++) {
-      if (Object.keys(answerLetterCounter).includes(word[index]) && answerLetterCounter[word[index]] !== 0) {
+      if (Object.keys(answerLetterCounter).includes(word[index]) &&
+      answerLetterCounter[word[index]] !== 0 && evaluation[index] !== 'right') {
         answerLetterCounter[word[index]] -= 1
         evaluation[index] = 'moved'
       }
