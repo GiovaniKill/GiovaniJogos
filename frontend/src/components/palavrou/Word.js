@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 
 const Word = ({attemptNumber, wordNumber, checkAttempt,
@@ -8,94 +8,63 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     'disabled letter', 'disabled letter']);
   const _classNames = useRef(classNames);
 
-  const [typedLetters, setTypedLetters] = useState(['', '', '', '', '', '']);
-  const _typedLetters = useRef(typedLetters);
-
   const [isActive, setIsActive] = useState(false);
 
   const wordRef = useRef();
 
-  // Hidden input for keyboard trigger in smartphones
-  const hiddenInputRef = useRef();
+  const validLetters = /[a-zA-Z]/;
 
-  const validLetters = ['a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e',
-    'E', 'f', 'F', 'g', 'G', 'h', 'H', 'i', 'I', 'j', 'J', 'k', 'K',
-    'l', 'L', 'm', 'M', 'n', 'N', 'o', 'O', 'p', 'P', 'q', 'Q', 'r',
-    'R', 's', 'S', 't', 'T', 'u', 'U', 'v', 'V', 'w', 'W', 'x', 'X',
-    'y', 'Y', 'z', 'Z'];
+  const inputRefs = useRef([React.createRef(), React.createRef(),
+    React.createRef(), React.createRef(), React.createRef(),
+    React.createRef()]);
 
-  const inputRefs = [React.createRef(), React.createRef(), React.createRef(),
-    React.createRef(), React.createRef(), React.createRef()];
 
-  const handleKeyPress = useCallback((e) => {
-    if (validLetters.includes(e.key)) {
-      const currentSelection = _classNames.current.
-          findIndex((name) => name.includes('selected'));
-
-      setTypedLetters((prev) => {
-        const newTypedLetters = [...prev];
-        newTypedLetters[currentSelection] = e.key.toUpperCase();
-        return newTypedLetters;
-      });
-      changeSelection('+');
-    } else if (e.key === 'ArrowRight') {
-      changeSelection('+');
+  const handleKeyPress = (e) => {
+    if (e.key === 'ArrowRight') {
+      changeFocus('right');
     } else if (e.key === 'ArrowLeft') {
-      changeSelection('-');
+      changeFocus('left');
     } else if (e.key === 'Enter') {
       setBlockTyping(true);
-      hiddenInputRef.current.blur();
-      checkAttempt(_typedLetters.current.join(''));
-    } else if (e.key === 'Backspace') {
-      const currentSelection = _classNames.current.
-          findIndex((name) => name.includes('selected'));
 
-      setTypedLetters((prev) => {
-        const newTypedLetters = [...prev];
-
-        // Mimics backspace behaviour
-        if (newTypedLetters[currentSelection] === '') {
-          newTypedLetters[currentSelection - 1] = '';
-          changeSelection('-');
-        } else {
-          newTypedLetters[currentSelection] = '';
-        }
-        return newTypedLetters;
-      });
+      const answer = inputRefs.current.
+          map(({current}) => current.value).join('');
+      checkAttempt(answer);
     }
-  }, []);
-
-  const selectLetter = (index) => {
-    setClassNames((prev) => {
-      const newClassNames = [...prev];
-      const unselectedClassNames = newClassNames.
-          map((name) => name.replace('selected', ''));
-      unselectedClassNames[index] += ' selected';
-
-      _classNames.current = unselectedClassNames;
-      return unselectedClassNames;
-    });
   };
 
-  const changeSelection = (direction) => {
-    setClassNames((prev) => {
-      const currentSelection = prev.
-          findIndex((name) => name.includes('selected'));
-      if (currentSelection === -1) return prev;
-      if (direction === '+' && currentSelection === 5) return prev;
-      if (direction === '-' && currentSelection === 0) return prev;
+  // Filters letters, controls backspace behaviour and allows changing
+  // filled field
+  const handleKeyDown = (e, ref) => {
+    if (!validLetters.test(e.key) && e.key !== 'Backspace') {
+      e.preventDefault();
+    } else if (e.key === 'Backspace' && e.target.value === '') {
+      inputRefs.current[ref - 1]?.current.focus();
+    } else if (e.target.value.length > 0 && !validLetters.test(e.key)) {
+      e.target.value = '';
+      // Had to include foreign keys because they trigger onChange
+    }
+  };
 
+  // Advances fields
+  const handleFields = (e, ref) => {
+    e.target.value = e.target.value.toUpperCase();
 
-      const newClassNames = [...prev];
-      newClassNames[currentSelection] = newClassNames[currentSelection].
-          replace('selected', '');
+    if (e.target.value !== '') {
+      inputRefs.current[ref + 1]?.current.focus();
+    }
+  };
 
-      direction === '+' ? newClassNames[currentSelection + 1] += ' selected' :
-          newClassNames[currentSelection - 1] += ' selected';
-
-      _classNames.current = newClassNames;
-      return newClassNames;
-    });
+  const changeFocus = (direction) => {
+    const activeElement = document.activeElement.id;
+    if (activeElement.includes('square')) {
+      const activeElementId = +activeElement.slice(-1);
+      if (direction === 'right' && activeElementId < 5) {
+        inputRefs.current[activeElementId + 1].current.focus();
+      } else if (direction === 'left' && activeElementId > 0) {
+        inputRefs.current[activeElementId - 1].current.focus();
+      }
+    }
   };
 
   const enableLetters = () => {
@@ -104,21 +73,23 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       let enabledClassNames = newClassNames.
           map((name) => name.replace('disabled', ''));
       enabledClassNames = enabledClassNames.
-          map((name) => `${name} hover:bg-slate-100`);
+          map((name) => `${name} sm:hover:border-2`);
 
       // Selects first field by default
-      if (!enabledClassNames[0].includes('selected')) {
-        enabledClassNames[0] += ' selected';
-      }
-
-      // Activates keyboard on smartphones
-      hiddenInputRef.current.focus();
+      inputRefs.current[0].current.focus;
 
       _classNames.current = enabledClassNames;
 
       return enabledClassNames;
     });
+
+    // Couldn't use forEach because of preventExtensions bug
+    for (let i = 0; i < inputRefs.current.length; i++) {
+      inputRefs.current[i].current.disabled = false;
+    }
+
     window.addEventListener('keydown', handleKeyPress);
+
     wordRef.current.scrollIntoView(
         {behavior: 'smooth', block: 'end', inline: 'nearest'},
     );
@@ -127,20 +98,24 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
   const disableLetters = () => {
     setClassNames((prev) => {
       const newClassNames = [...prev];
-      const unselectedClassNames = newClassNames.map((name) =>
-        ( name.includes('selected') ? name.replace('selected', '') : name),
-      );
-      let disabledClassNames = unselectedClassNames.map((name) =>
+      let disabledClassNames = newClassNames.map((name) =>
         (name.includes('disabled') ? name : name + ' disabled'),
       );
       disabledClassNames = disabledClassNames.map((name) =>
-        (name.includes('hover:bg-slate-100') ?
-        name.replace('hover:bg-slate-100', '') : name),
+        (name.includes('md:hover:border-2') ?
+        name.replace('md:hover:border-2', '') : name),
       );
       _classNames.current = disabledClassNames;
 
+
       return disabledClassNames;
     });
+
+    // Couldn't use forEach because of preventExtensions bug
+    for (let i = 0; i < inputRefs.current.length; i++) {
+      inputRefs.current[i].current.disabled = true;
+    }
+
     window.removeEventListener('keydown', handleKeyPress);
   };
 
@@ -172,10 +147,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     _classNames.current = classNames;
   }, [classNames]);
 
-  useEffect(() => {
-    _typedLetters.current = typedLetters;
-  }, [typedLetters]);
-
+  // For when the evaluation comes in
   useEffect(() => {
     if (isActive && response.evaluation.length) {
       // Change classes to correponding colors
@@ -191,78 +163,85 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     }
   }, [response.evaluation]);
 
-  console.log(document.activeElement);
-
   return (
     <tr ref={wordRef}>
       <td className=''>
-        <input type='text' className='absolute w-0' ref={hiddenInputRef}/>
-      </td>
-      <td className='z-10'>
-        <div ref={inputRefs[0]} className={classNames[0]}
-          id="square1" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(0);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[0]}
-        </div>
-      </td>
-      <td>
-        <div ref={inputRefs[1]} className={classNames[1]}
-          id="square2" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(1);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[1]}
-        </div>
+        <input
+          ref={inputRefs.current[0]}
+          type='text'
+          className=
+            {`${classNames[0]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square0"
+          onKeyDown={(e) => handleKeyDown(e, 0)}
+          onChange={(e) => handleFields(e, 0)}
+          maxLength={1}
+        />
       </td>
       <td>
-        <div ref={inputRefs[2]} className={classNames[2]}
-          id="square3" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(2);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[2]}
-        </div>
+        <input
+          ref={inputRefs.current[1]}
+          type='text'
+          className=
+            {`${classNames[1]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square1"
+          onKeyDown={(e) => handleKeyDown(e, 1)}
+          onChange={(e) => handleFields(e, 1)}
+          maxLength={1}
+        />
       </td>
       <td>
-        <div ref={inputRefs[3]} className={classNames[3]}
-          id="square4" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(3);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[3]}
-        </div>
+        <input
+          ref={inputRefs.current[2]}
+          type='text'
+          className=
+            {`${classNames[2]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square2"
+          onKeyDown={(e) => handleKeyDown(e, 2)}
+          onChange={(e) => handleFields(e, 2)}
+          maxLength={1}
+        />
       </td>
       <td>
-        <div ref={inputRefs[4]} className={classNames[4]}
-          id="square5" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(4);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[4]}
-        </div>
+        <input
+          ref={inputRefs.current[3]}
+          type='text'
+          className=
+            {`${classNames[3]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square3"
+          onKeyDown={(e) => handleKeyDown(e, 3)}
+          onChange={(e) => handleFields(e, 3)}
+          maxLength={1}
+        />
       </td>
       <td>
-        <div ref={inputRefs[5]} className={classNames[5]}
-          id="square6" onClick={(e) =>{
-            !e.target.classList.contains('disabled') && selectLetter(5);
-            hiddenInputRef.current.focus();
-          }
-          }
-        >
-          {typedLetters[5]}
-        </div>
+        <input
+          ref={inputRefs.current[4]}
+          type='text'
+          className=
+            {`${classNames[4]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square4"
+          onKeyDown={(e) => handleKeyDown(e, 4)}
+          onChange={(e) => handleFields(e, 4)}
+          maxLength={1}
+        />
+      </td>
+      <td>
+        <input
+          ref={inputRefs.current[5]}
+          type='text'
+          className=
+            {`${classNames[5]} caret-transparent focus:border-2
+          focus:border-amber-500`}
+          id="square5"
+          onKeyDown={(e) => handleKeyDown(e, 5)}
+          onChange={(e) => handleFields(e, 5)}
+          maxLength={1}
+        />
       </td>
     </tr>
   );

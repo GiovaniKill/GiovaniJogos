@@ -26,13 +26,13 @@ const Palavrou = () => {
 
   const checkAttempt = (attempt) => {
     if (attempt.length < 6) {
-      setMessage(() => 'Escreve direito');
+      setMessage(() => '6 letras, S - E - I - S.');
       setBlockTyping(false);
       return;
     }
 
     if (!sixLetteredWords.includes(attempt.toLowerCase())) {
-      setMessage(() => 'Desconheço essa palavra aí');
+      setMessage(() => 'Que palavra é essa? 🧐');
       setBlockTyping(false);
       return;
     }
