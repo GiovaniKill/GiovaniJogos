@@ -10,11 +10,19 @@ import {Tutorial} from '../components/palavrou/Tutorial';
 const Palavrou = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
   const _attemptNumber = useRef(attemptNumber);
-  const [message, setMessage] = useState('');
+  const [message, _setMessage] = useState('');
+  const setMessage = (arg) => {
+    _setMessage(arg);
+    setMessageAnimation(true);
+    setTimeout(() => setMessageAnimation(false), 500);
+  };
+
   const [response, setResponse] =
     useState({evaluation: [], accentuatedAnswer: ''});
   const [showScoreboard, setShowScoreboard] = useState(false);
   const [blockTyping, setBlockTyping] = useState(false);
+
+  const [messageAnimation, setMessageAnimation] = useState(false);
 
   const messages = {
     unknownWord: [
@@ -94,6 +102,7 @@ const Palavrou = () => {
     _attemptNumber.current = attemptNumber;
   }, [attemptNumber]);
 
+
   return (
     <>
       <header className=''>
@@ -113,7 +122,8 @@ const Palavrou = () => {
 
       <Tutorial/>
 
-      <div className="my-2 mx-auto max-w-min whitespace-nowrap text-sm">
+      <div className={`my-2 mx-auto max-w-min
+      whitespace-nowrap text-sm ${(messageAnimation ? 'animate-wiggle' : '')}`}>
         {message}
       </div>
       <div className="flex justify-center align-middle">
