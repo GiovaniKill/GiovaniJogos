@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import PropTypes from 'prop-types';
 
 const Word = ({attemptNumber, wordNumber, checkAttempt,
@@ -19,7 +19,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     React.createRef()]);
 
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = useCallback((e) => {
     if (e.key === 'ArrowRight') {
       changeFocus('right');
     } else if (e.key === 'ArrowLeft') {
@@ -31,7 +31,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           map(({current}) => current.value).join('');
       checkAttempt(answer);
     }
-  };
+  }, []);
 
   // Filters letters, controls backspace behaviour and allows changing
   // filled field
@@ -76,7 +76,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           map((name) => `${name} sm:hover:border-2`);
 
       // Selects first field by default
-      inputRefs.current[0].current.focus;
+      inputRefs.current[0].current.focus();
 
       _classNames.current = enabledClassNames;
 
@@ -156,9 +156,10 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
       }));
       // Reveal accentuated answer
       if (response.evaluation.every((elem) => elem === 'right')) {
-        setTypedLetters(() =>
-          (response.accentuatedAnswer.toUpperCase().split('')),
-        );
+        for (let i = 0; i < inputRefs.current.length; i++) {
+          inputRefs.current[i].current.value = response.
+              accentuatedAnswer[i].toUpperCase();
+        }
       }
     }
   }, [response.evaluation]);
