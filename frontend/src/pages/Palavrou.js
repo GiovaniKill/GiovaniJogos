@@ -16,6 +16,19 @@ const Palavrou = () => {
   const [showScoreboard, setShowScoreboard] = useState(false);
   const [blockTyping, setBlockTyping] = useState(false);
 
+  const messages = {
+    unknownWord: [
+      'Que palavra é essa? 🧐', 'Essa eu não conheço não 😐',
+      'Português, por favor', 'Para de inventar palavra 😤',
+      'Desculpe 😓, não conheço essa palavra',
+      'Essa palavra não existe, certamente...',
+    ],
+    wrongLengthWord: [
+      '6 letras, S - E - I - S. Desculpe, fui grosso 😔',
+      'Número errado de letras', 'A palavra deve conter 6 letras',
+      'Preencha todos os campos', 'A resposta contém 6 letras',
+    ]};
+
   const scoreTemplate = {
     attemptsPerTry: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0},
     wins: 0,
@@ -26,13 +39,15 @@ const Palavrou = () => {
 
   const checkAttempt = (attempt) => {
     if (attempt.length < 6) {
-      setMessage(() => '6 letras, S - E - I - S.');
+      setMessage(() => messages.wrongLengthWord[Math.
+          floor(Math.random() * messages.wrongLengthWord.length)]);
       setBlockTyping(false);
       return;
     }
 
     if (!sixLetteredWords.includes(attempt.toLowerCase())) {
-      setMessage(() => 'Que palavra é essa? 🧐');
+      setMessage(() => messages.unknownWord[Math.
+          floor(Math.random() * messages.unknownWord.length)]);
       setBlockTyping(false);
       return;
     }
