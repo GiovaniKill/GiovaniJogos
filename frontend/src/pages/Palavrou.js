@@ -104,8 +104,8 @@ const Palavrou = () => {
 
 
   return (
-    <>
-      <header className=''>
+    <section className='bg-[#fffbfb] h-screen'>
+      <header className='flex'>
         <Link to='/'>
           <h2
             className='text-2xl absolute top-5 left-5
@@ -173,7 +173,7 @@ const Palavrou = () => {
         </table>
       </div>
       {showScoreboard && <Scoreboard/>}
-    </>
+    </section>
   );
 };
 
