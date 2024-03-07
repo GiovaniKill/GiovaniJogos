@@ -50,6 +50,9 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
   const handleFields = (e, ref) => {
     e.target.value = e.target.value.toUpperCase();
 
+    // For max length does not work on mobile
+    e.target.value = e.target.value.slice(-1);
+
     if (e.target.value !== '') {
       inputRefs.current[ref + 1]?.current.focus();
     }
@@ -176,7 +179,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square0"
           onKeyDown={(e) => handleKeyDown(e, 0)}
           onChange={(e) => handleFields(e, 0)}
-          maxLength={1}
         />
       </td>
       <td>
@@ -189,7 +191,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square1"
           onKeyDown={(e) => handleKeyDown(e, 1)}
           onChange={(e) => handleFields(e, 1)}
-          maxLength={1}
         />
       </td>
       <td>
@@ -202,7 +203,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square2"
           onKeyDown={(e) => handleKeyDown(e, 2)}
           onChange={(e) => handleFields(e, 2)}
-          maxLength={1}
         />
       </td>
       <td>
@@ -215,7 +215,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square3"
           onKeyDown={(e) => handleKeyDown(e, 3)}
           onChange={(e) => handleFields(e, 3)}
-          maxLength={1}
         />
       </td>
       <td>
@@ -228,7 +227,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square4"
           onKeyDown={(e) => handleKeyDown(e, 4)}
           onChange={(e) => handleFields(e, 4)}
-          maxLength={1}
         />
       </td>
       <td>
@@ -241,7 +239,6 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square5"
           onKeyDown={(e) => handleKeyDown(e, 5)}
           onChange={(e) => handleFields(e, 5)}
-          maxLength={1}
         />
       </td>
     </tr>
