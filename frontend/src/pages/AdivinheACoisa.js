@@ -8,7 +8,16 @@ const AdivinheACoisa = () => {
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
 
-  const onQuestionSubmit = (event) => {
+  const scrollChatToBottom = () => {
+    requestAnimationFrame(() => {
+      conversationBox.current.scrollTo(
+          0,
+          conversationBox.current.scrollHeight,
+      );
+    });
+  };
+
+  const onQuestionSubmit = async (event) => {
     event?.preventDefault();
 
     if (textInput.length === 0) {
@@ -23,16 +32,21 @@ const AdivinheACoisa = () => {
 
     setTextInput('');
 
+    scrollChatToBottom();
+
     if (textInput === '//test') {
-      setMessages((prev) => [...prev, {
+      await setMessages((prev) => [...prev, {
         message: 'Teste aí, então.',
         role: 'assistant',
       }]);
 
+      scrollChatToBottom();
+
       return;
     }
 
-    postRequest('adivinheacoisa/ask', {question: textInput})
+
+    await postRequest('adivinheacoisa/ask', {question: textInput})
         .then((response) => setMessages((prev) => [...prev, {
           message: JSON.parse(response),
           role: 'assistant',
@@ -42,6 +56,9 @@ const AdivinheACoisa = () => {
             parece estar descançando agora, tente de novo mais tarde`);
           console.log(error);
         });
+
+    console.log('fim');
+    scrollChatToBottom();
   };
 
   return (
@@ -67,7 +84,8 @@ const AdivinheACoisa = () => {
       >
         <section
           ref={conversationBox}
-          className='w-1/2 border-2 h-3/5 flex flex-col overflow-y-scroll'
+          className={`w-1/2 border-2 h-3/5
+          flex flex-col overflow-y-scroll scroll-smooth`}
         >
           {messages.map((curr, index) => (
             <div key={index}
