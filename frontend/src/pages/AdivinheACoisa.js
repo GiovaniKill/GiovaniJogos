@@ -34,7 +34,7 @@ const AdivinheACoisa = () => {
 
     scrollChatToBottom();
 
-    if (textInput === '//test') {
+    if (textInput.includes('//test')) {
       await setMessages((prev) => [...prev, {
         message: 'Teste aí, então.',
         role: 'assistant',
@@ -62,14 +62,17 @@ const AdivinheACoisa = () => {
   };
 
   return (
-    <div className='flex flex-col justify-center align-middle'>
+    <div className='flex flex-col justify-center align-middle bg-slate-800'>
       <header className='flex'>
         <Link to='/'>
           <h2
-            className='text-2xl absolute top-5 left-5
-            handrawn hover:text-2.1xl opacity-0 sm:opacity-100'
+            className={`absolute top-0 left-0 p-1
+            duration-100 hover:bg-slate-700`}
           >
-            Giovani Jogos
+            <img
+              src='images/arrow_back.svg'
+              className='h-10'
+            />
           </h2>
         </Link>
 
@@ -80,12 +83,13 @@ const AdivinheACoisa = () => {
       <section
         id='chat'
         className='flex flex-col justify-start
-         items-center border-2 h-screen'
+         items-center h-screen'
       >
         <section
           ref={conversationBox}
-          className={`w-1/2 border-2 h-3/5
-          flex flex-col overflow-y-scroll scroll-smooth`}
+          className={`w-1/2 h-3/5
+          flex flex-col overflow-y-scroll scroll-smooth bg-gray-700
+          rounded-lg`}
         >
           {messages.map((curr, index) => (
             <div key={index}
@@ -93,21 +97,31 @@ const AdivinheACoisa = () => {
               ${curr.role === 'user' ?
               'self-end justify-end bg-blue-300 bg-opacity-50' :
               'self-start bg-green-300 bg-opacity-50'} 
-              m-3 w-2/5 rounded-lg p-1`}
+              m-3 w-fit max-w-96 rounded-lg p-1`}
             >
               {curr.message}
             </div>
           ))}
         </section>
-        <form onSubmit={onQuestionSubmit} className='w-1/2'>
+        <form
+          onSubmit={onQuestionSubmit}
+          className='w-1/2 my-1'
+        >
           <input
             type='text'
             onChange={(e) => setTextInput(e.target.value)}
             placeholder='Faça sua pergunta'
             value={textInput}
-            className='w-1/2'
+            className='w-5/6 rounded-s-lg outline-none pl-1'
+            maxLength={60}
           />
-          <button type='submit' onClick={(e) => onQuestionSubmit(e)}>
+          <button
+            type='submit'
+            onClick={(e) => onQuestionSubmit(e)}
+            className={`w-1/6 rounded-e-lg bg-white
+            hover:bg-gray-100 hover:pr-5 transition-all
+            duration-800 hover:font-medium`}
+          >
           Enviar
           </button>
         </form>
