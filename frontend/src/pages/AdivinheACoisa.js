@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {postRequest} from '../services/requests';
+import '../styles/AdivinheACoisa.css';
 
 const AdivinheACoisa = () => {
   const [messages, setMessages] = useState([]);
@@ -57,47 +58,37 @@ const AdivinheACoisa = () => {
           console.log(error);
         });
 
-    console.log('fim');
     scrollChatToBottom();
   };
 
   return (
-    <div className='flex flex-col justify-center align-middle bg-slate-800'>
+    <div className='aac-page'>
       <header className='flex'>
         <Link to='/'>
-          <h2
-            className={`absolute top-0 left-0 p-1
-            duration-100 hover:bg-slate-700`}
+          <div
+            className='home-page-arrow'
           >
             <img
               src='images/arrow_back.svg'
               className='h-10'
             />
-          </h2>
+          </div>
         </Link>
 
-        <h1 className="text-5xl max-w-min mx-auto my-5 doodle">
+        <h1 className='aac-title'>
           Advinhe a coisa
         </h1>
       </header>
-      <section
-        id='chat'
-        className='flex flex-col justify-start
-         items-center h-screen'
-      >
+      <section className='chat'>
         <section
           ref={conversationBox}
-          className={`w-1/2 h-3/5
-          flex flex-col overflow-y-scroll scroll-smooth bg-gray-700
-          rounded-lg`}
+          className='conversation-box'
         >
           {messages.map((curr, index) => (
             <div key={index}
-              className={`flex 
-              ${curr.role === 'user' ?
-              'self-end justify-end bg-blue-300 bg-opacity-50' :
-              'self-start bg-green-300 bg-opacity-50'} 
-              m-3 w-fit max-w-96 rounded-lg p-1`}
+              className={`text-bubble 
+              ${curr.role === 'user' ? 'user-bubble' : 'assistant-bubble'} 
+              `}
             >
               {curr.message}
             </div>
@@ -105,22 +96,20 @@ const AdivinheACoisa = () => {
         </section>
         <form
           onSubmit={onQuestionSubmit}
-          className='w-1/2 my-1'
+          className='w-full my-1'
         >
           <input
             type='text'
             onChange={(e) => setTextInput(e.target.value)}
             placeholder='Faça sua pergunta'
             value={textInput}
-            className='w-5/6 rounded-s-lg outline-none pl-1'
+            className='chat-input'
             maxLength={60}
           />
           <button
             type='submit'
             onClick={(e) => onQuestionSubmit(e)}
-            className={`w-1/6 rounded-e-lg bg-white
-            hover:bg-gray-100 hover:pr-5 transition-all
-            duration-800 hover:font-medium`}
+            className='chat-send-button'
           >
           Enviar
           </button>
@@ -130,4 +119,4 @@ const AdivinheACoisa = () => {
   );
 };
 
-export {AdivinheACoisa};
+export default AdivinheACoisa;
