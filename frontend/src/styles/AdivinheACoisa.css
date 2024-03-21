@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .aac-page {
+        @apply flex flex-col justify-center align-middle items-center bg-slate-800
+    }
+
+    .aac-title {
+        @apply text-5xl max-w-min mx-auto my-5
+    }
+
+    .home-page-arrow {
+        @apply absolute top-0 left-0 p-1 duration-100 hover:bg-slate-700
+    }
+
+    .chat {
+        @apply flex flex-col w-full sm:w-1/2 justify-start items-center h-screen
+    }
+
+    .conversation-box {
+        @apply w-full h-3/5
+        flex flex-col overflow-y-scroll scroll-smooth bg-gray-700
+        rounded-lg
+    }
+
+    .text-bubble {
+        @apply flex m-3 w-fit max-w-96 rounded-lg p-1 shadow-lg
+    }
+
+    .user-bubble {
+        @apply self-end justify-end bg-blue-300 bg-opacity-50 pl-2
+    }
+
+    .assistant-bubble {
+        @apply self-start bg-green-300 bg-opacity-50 pr-2
+    }
+
+    .chat-input {
+        @apply w-5/6 rounded-s-lg outline-none pl-1
+    }
+
+    .chat-send-button {
+        @apply w-1/6 rounded-e-lg bg-white
+        hover:bg-gray-100 hover:pr-5 transition-all
+        hover:font-medium
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}   

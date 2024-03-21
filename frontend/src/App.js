@@ -2,7 +2,7 @@ import {Routes, Route} from 'react-router-dom';
 import React from 'react';
 import Palavrou from './pages/Palavrou';
 import MainPage from './pages/MainPage';
-import {AdivinheACoisa} from './pages/AdivinheACoisa';
+import AdivinheACoisa from './pages/AdivinheACoisa';
 
 /**
  * Routing
