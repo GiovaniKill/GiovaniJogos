@@ -16,12 +16,12 @@
     }
 
     .chat {
-        @apply flex flex-col w-full sm:w-1/2 justify-start items-center h-screen
+        @apply flex flex-col w-full phone:w-4/5 md:w-3/5 lg:w-1/2 justify-start items-center h-screen
     }
 
     .conversation-box {
         @apply w-full h-3/5
-        flex flex-col overflow-y-scroll scroll-smooth bg-gray-700
+        flex flex-col overflow-y-auto scroll-smooth bg-gray-700
         rounded-lg
     }
 
@@ -49,7 +49,7 @@
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
 }
 
 ::-webkit-scrollbar-track {

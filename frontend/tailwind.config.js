@@ -17,6 +17,9 @@ module.exports = {
       animation: {
         wiggle: 'wiggle 0.1s linear infinite',
       },
+      screens: {
+        phone: '420px',
+      },
     },
   },
   plugins: [],
