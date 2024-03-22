@@ -21,10 +21,7 @@ const AdivinheACoisa = () => {
   const onQuestionSubmit = async (event) => {
     event?.preventDefault();
 
-    if (textInput.length === 0) {
-      window.alert('Não deixe a IA no vácuo, digite alguma coisa');
-      return;
-    }
+    if (textInput.length === 0) return;
 
     setMessages((prev) => [...prev, {
       message: textInput,
@@ -63,27 +60,26 @@ const AdivinheACoisa = () => {
 
   return (
     <div className='aac-page'>
-      <header className='flex'>
-        <Link to='/'>
-          <div
-            className='home-page-arrow'
-          >
-            <img
-              src='images/arrow_back.svg'
-              className='h-10'
-            />
-          </div>
-        </Link>
+      <header className='header'>
+        <div className='home-page-arrow-container'>
+          <Link to='/'>
+            <img src='images/arrow_back.svg' className='home-page-arrow'/>
+          </Link>
+        </div>
 
-        <h1 className='aac-title'>
-          Advinhe a coisa
-        </h1>
+        <div className='profile-card'>
+          <img src='images/assistant-profile-pic.svg' className='profile-pic'/>
+          <h1 className='aac-title'>
+            Advinhe a coisa
+          </h1>
+        </div>
+
+        <div className='burger-menu-container'>
+          <img src='images/burger-menu.svg' className='burger-menu'/>
+        </div>
       </header>
       <section className='chat'>
-        <section
-          ref={conversationBox}
-          className='conversation-box'
-        >
+        <section ref={conversationBox} className='conversation-box'>
           {messages.map((curr, index) => (
             <div key={index}
               className={`text-bubble 
@@ -94,10 +90,7 @@ const AdivinheACoisa = () => {
             </div>
           ))}
         </section>
-        <form
-          onSubmit={onQuestionSubmit}
-          className='w-full my-1'
-        >
+        <form onSubmit={onQuestionSubmit} className='chat-form'>
           <input
             type='text'
             onChange={(e) => setTextInput(e.target.value)}
