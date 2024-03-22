@@ -3,30 +3,66 @@
 @tailwind utilities;
 
 @layer base {
-    .aac-page {
-        @apply flex flex-col justify-center align-middle items-center bg-slate-800
+    body {
+        @apply overflow-hidden
     }
 
-    .aac-title {
-        @apply text-5xl max-w-min mx-auto my-5
+    .aac-page {
+        @apply flex flex-col justify-center align-middle items-center
+        bg-slate-800
+    }
+    
+    .header {
+        @apply flex items-center w-full fixed top-0 bg-slate-800
+        h-[10%]
+    }
+    
+    .home-page-arrow-container {
+        @apply flex items-center py-2
+        duration-100 hover:bg-slate-700 h-max
     }
 
     .home-page-arrow {
-        @apply absolute top-0 left-0 p-1 duration-100 hover:bg-slate-700
+        @apply h-10
+    }
+
+    .profile-card {
+        @apply flex items-center transition hover:bg-slate-700 py-2
+        w-full cursor-pointer
+    }
+
+    .profile-pic {
+        @apply  ml-3 mr-2 text-xs w-10 rounded-full hover:outline
+        hover:outline-1 hover:outline-white
+    }
+
+    .aac-title {
+        @apply flex items-center text-xl h-10 text-white
+        font-semibold
+    }
+
+    .burger-menu-container {
+        @apply flex items-center justify-center w-[12%] mx-2
+    }
+
+    .burger-menu {
+        @apply w-10 transition hover:scale-110 cursor-pointer fill-red-700
     }
 
     .chat {
-        @apply flex flex-col w-full phone:w-4/5 md:w-3/5 lg:w-1/2 justify-start items-center h-screen
+        @apply flex flex-col w-full
+        justify-start items-center h-screen
     }
 
     .conversation-box {
-        @apply w-full h-3/5
+        @apply w-full min-h-full
         flex flex-col overflow-y-auto scroll-smooth bg-gray-700
-        rounded-lg
+        pb-8 pt-14
     }
 
     .text-bubble {
         @apply flex m-3 w-fit max-w-96 rounded-lg p-1 shadow-lg
+        text-xl
     }
 
     .user-bubble {
@@ -37,24 +73,27 @@
         @apply self-start bg-green-300 bg-opacity-50 pr-2
     }
 
+    .chat-form {
+        @apply w-full px-2 my-1 absolute bottom-1
+    }
+
     .chat-input {
-        @apply w-5/6 rounded-s-lg outline-none pl-1
+        @apply w-5/6 rounded-s-lg outline-none pl-1 py-1 text-wrap text-xl
     }
 
     .chat-send-button {
         @apply w-1/6 rounded-e-lg bg-white
-        hover:bg-gray-100 hover:pr-5 transition-all
-        hover:font-medium
+        hover:phone:bg-gray-300 py-1 pr-3 hover:pr-5 transition-all
+        text-xl
     }
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+    @apply bg-gray-700
 }
 
 ::-webkit-scrollbar-thumb {
