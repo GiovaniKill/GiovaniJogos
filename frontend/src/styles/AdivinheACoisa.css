@@ -7,13 +7,25 @@
         @apply overflow-hidden
     }
 
-    .aac-page {
+    .adivinhe-a-coisa {
+        @apply flex
+    }
+
+    .chat {
         @apply flex flex-col justify-center align-middle items-center
-        bg-slate-800
+        bg-slate-700
+    }
+
+    .assistant-profile {
+        @apply w-[20%] fixed right-0 h-screen bg-slate-800/80
+    }
+
+    .chats-nav-bar {
+        @apply w-[20%] fixed left-0 h-screen bg-slate-800/80
     }
     
-    .header {
-        @apply flex items-center w-full fixed top-0 bg-slate-800
+    .chat-header {
+        @apply flex items-center w-full relative top-0 bg-slate-800
         h-[10%]
     }
     
@@ -33,10 +45,10 @@
 
     .profile-pic {
         @apply  ml-3 mr-2 text-xs w-10 rounded-full hover:outline
-        hover:outline-1 hover:outline-white
+        hover:outline-1 hover:outline-white transition
     }
 
-    .aac-title {
+    .card-name {
         @apply flex items-center text-xl h-10 text-white
         font-semibold
     }
@@ -49,15 +61,14 @@
         @apply w-10 transition hover:scale-110 cursor-pointer fill-red-700
     }
 
-    .chat {
+    .conversation {
         @apply flex flex-col w-full
         justify-start items-center h-screen
     }
 
     .conversation-box {
-        @apply w-full min-h-full
+        @apply w-full h-[80%]
         flex flex-col overflow-y-auto scroll-smooth bg-gray-700
-        pb-8 pt-14
     }
 
     .text-bubble {
@@ -73,15 +84,15 @@
         @apply self-start bg-green-300 bg-opacity-50 pr-2
     }
 
-    .chat-form {
-        @apply w-full px-2 my-1 absolute bottom-1
+    .conversation-form {
+        @apply w-full px-2 my-1 relative bottom-1
     }
 
-    .chat-input {
+    .conversation-input {
         @apply w-5/6 rounded-s-lg outline-none pl-1 py-1 text-wrap text-xl
     }
 
-    .chat-send-button {
+    .conversation-send-button {
         @apply w-1/6 rounded-e-lg bg-white
         hover:phone:bg-gray-300 py-1 pr-3 hover:pr-5 transition-all
         text-xl
