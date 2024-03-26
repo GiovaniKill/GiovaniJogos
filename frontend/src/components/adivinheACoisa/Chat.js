@@ -1,11 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {Link} from 'react-router-dom';
 import {postRequest} from '../../services/requests';
 import '../../styles/AdivinheACoisa.css';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 
-const Chat = ({setIsProfileActive, isProfileActive}) => {
+const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
   const [messages, setMessages] = useState([]);
 
   const [textInput, setTextInput] = useState('');
@@ -61,14 +60,12 @@ const Chat = ({setIsProfileActive, isProfileActive}) => {
   };
 
   return (
-    <div className={`chat ${isProfileActive ? 'w-[80%]' : 'w-[100%]'}`}>
+    <div
+      className={
+        `chat w-[70%] ${isProfileActive ? 'md:w-[50%]' : 'md:w-[70%]'}`
+      }
+    >
       <header className='chat-header'>
-        <div className='home-page-arrow-container'>
-          <Link to='/'>
-            <img src='images/arrow_back.svg' className='home-page-arrow'/>
-          </Link>
-        </div>
-
         <div
           className='profile-card'
           onClick={() => setIsProfileActive((curr) => !curr)}
@@ -93,9 +90,11 @@ const Chat = ({setIsProfileActive, isProfileActive}) => {
               `}
               initial = {{
                 y: '8vw',
+                opacity: 0.1,
               }}
               animate = {{
                 y: 0,
+                opacity: 1,
               }}
               transition={{
                 type: 'tween',

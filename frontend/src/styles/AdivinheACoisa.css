@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply overflow-hidden
+        @apply overflow-hidden bg-slate-700
     }
 
     .adivinhe-a-coisa {
@@ -17,25 +17,33 @@
     }
 
     .assistant-profile {
-        @apply w-[20%] fixed right-0 h-screen bg-slate-800/80
+        @apply w-[70%] md:w-[20%] fixed right-0 h-screen bg-slate-800/95
+    }
+
+    .assistant-profile-header {
+        @apply h-[10%] bg-slate-800
     }
 
     .chats-nav-bar {
-        @apply w-[20%] fixed left-0 h-screen bg-slate-800/80
+        @apply w-[30%] h-screen bg-gray-700
     }
-    
-    .chat-header {
-        @apply flex items-center w-full relative top-0 bg-slate-800
-        h-[10%]
+
+    .chats-nav-bar-header {
+        @apply h-[10%] bg-slate-800
     }
-    
+        
     .home-page-arrow-container {
         @apply flex items-center py-2
-        duration-100 hover:bg-slate-700 h-max
+        duration-100 hover:bg-slate-700 h-full
     }
 
     .home-page-arrow {
         @apply h-10
+    }
+    
+    .chat-header {
+        @apply flex items-center w-full bg-slate-800
+        h-[10%]
     }
 
     .profile-card {
