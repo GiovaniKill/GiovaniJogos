@@ -6,7 +6,7 @@ const client = new OpenAI({
   apiKey: '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'
 })
 
-const request = async (question: string): Promise<ChatCompletion> => {
+const AIRequest = async (question: string): Promise<ChatCompletion> => {
   const response = await client.chat.completions.create({
     messages: [
       { role: 'system', content: '' },
@@ -18,4 +18,4 @@ const request = async (question: string): Promise<ChatCompletion> => {
   return response
 }
 
-export { request }
+export { AIRequest }

@@ -6,5 +6,6 @@ const adivinheACoisaRouter = Router()
 const service = new Service()
 
 adivinheACoisaRouter.post('/ask', async (req, res) => await service.ask(req, res))
+adivinheACoisaRouter.get('/getassistants', async (req, res) => await service.getAssistants(req, res))
 
 export { adivinheACoisaRouter }
