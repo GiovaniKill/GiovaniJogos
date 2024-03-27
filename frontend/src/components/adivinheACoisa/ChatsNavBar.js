@@ -1,17 +1,12 @@
 import React from 'react';
 import {motion} from 'framer-motion';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const ChatsNavBar = () => {
+const ChatsNavBar = ({assistants}) => {
   return (
     <motion.section
       className='chats-nav-bar'
-      initial={{
-        x: 50,
-      }}
-      animate={{
-        x: 0,
-      }}
     >
       <header className='chats-nav-bar-header'>
         <div className='home-page-arrow-container'>
@@ -22,13 +17,19 @@ const ChatsNavBar = () => {
       </header>
 
       <ol>
-        <li>Conversa 1</li>
-        <li>Conversa 1</li>
-        <li>Conversa 1</li>
-        <li>Conversa 1</li>
+        {assistants.map((curr) => (
+          <div key={curr.name}>
+            <img src={curr.profilePic}/>
+            <p>{curr.name}</p>
+          </div>
+        ))}
       </ol>
     </motion.section>
   );
+};
+
+ChatsNavBar.propTypes = {
+  assistants: PropTypes.string.isRequired,
 };
 
 export {ChatsNavBar};
