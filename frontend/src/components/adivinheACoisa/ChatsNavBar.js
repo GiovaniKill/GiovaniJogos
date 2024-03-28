@@ -4,7 +4,12 @@ import {Link} from 'react-router-dom';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
 const ChatsNavBar = () => {
-  const {setActiveAssistant, assistants} = useContext(AdivinheACoisaContext);
+  const {
+    setActiveAssistant,
+    assistants,
+    lastMessages} = useContext(AdivinheACoisaContext);
+
+  console.log(lastMessages);
 
   return (
     <motion.section
@@ -31,6 +36,10 @@ const ChatsNavBar = () => {
               className='conversation-card-profile-pic'
             />
             <p>{curr.name}</p>
+            <p>
+              {lastMessages[curr.name]?.role === 'assistant' ? '' : 'Você:'}
+            </p>
+            <p>{lastMessages[curr.name]?.message || '-'}</p>
           </div>
         ))}
       </ol>

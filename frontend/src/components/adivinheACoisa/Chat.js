@@ -1,12 +1,12 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {postRequest} from '../../services/requests';
 import '../../styles/AdivinheACoisa.css';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
-const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
-  const {activeAssistant} = useContext(AdivinheACoisaContext);
+const Chat = ({setIsProfileActive, isProfileActive}) => {
+  const {activeAssistant, setLastMessages} = useContext(AdivinheACoisaContext);
 
   const [messages, setMessages] = useState([]);
 
@@ -61,6 +61,14 @@ const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
 
     scrollChatToBottom();
   };
+
+  useEffect(() => {
+    setLastMessages((curr) => (
+      {...curr, [activeAssistant.name]: messages[messages.length - 1]}
+    ));
+
+    console.log(messages[messages.length - 1]);
+  }, [messages]);
 
   return (
     <div
@@ -130,7 +138,6 @@ const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
 };
 
 Chat.propTypes = {
-  isChatNavBarOpen: PropTypes.bool.isRequired,
   isProfileActive: PropTypes.bool.isRequired,
   setIsProfileActive: PropTypes.func.isRequired,
 };

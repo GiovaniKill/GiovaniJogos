@@ -6,6 +6,8 @@ import {getRequest} from '../services/requests';
 const AdivinheACoisaProvider = ({children}) => {
   const [assistants, setAssistants] = useState([]);
 
+  const [lastMessages, setLastMessages] = useState({});
+
   const [activeAssistant, setActiveAssistant] = useState({});
 
   useEffect(() => {
@@ -32,6 +34,8 @@ const AdivinheACoisaProvider = ({children}) => {
         activeAssistant,
         setActiveAssistant,
         assistants,
+        lastMessages,
+        setLastMessages,
       }}
     >
       {children}
