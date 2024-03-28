@@ -1,10 +1,13 @@
-import React, {useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {postRequest} from '../../services/requests';
 import '../../styles/AdivinheACoisa.css';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
+import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
 const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
+  const {activeAssistant} = useContext(AdivinheACoisaContext);
+
   const [messages, setMessages] = useState([]);
 
   const [textInput, setTextInput] = useState('');
@@ -70,9 +73,9 @@ const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
           className='profile-card'
           onClick={() => setIsProfileActive((curr) => !curr)}
         >
-          <img src='images/assistant-profile-pic.svg' className='profile-pic'/>
+          <img src={activeAssistant.profilePic} className='profile-pic'/>
           <h1 className='card-name'>
-            Advinhe a coisa
+            {activeAssistant.name}
           </h1>
         </div>
 
@@ -89,7 +92,7 @@ const Chat = ({setIsProfileActive, isProfileActive, isChatNavBarOpen}) => {
               ${curr.role === 'user' ? 'user-bubble' : 'assistant-bubble'} 
               `}
               initial = {{
-                y: '8vw',
+                y: '4vw',
                 opacity: 0.1,
               }}
               animate = {{
