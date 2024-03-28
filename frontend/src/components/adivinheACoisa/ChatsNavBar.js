@@ -1,35 +1,41 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {motion} from 'framer-motion';
 import {Link} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
-const ChatsNavBar = ({assistants}) => {
+const ChatsNavBar = () => {
+  const {setActiveAssistant, assistants} = useContext(AdivinheACoisaContext);
+
   return (
     <motion.section
       className='chats-nav-bar'
     >
       <header className='chats-nav-bar-header'>
-        <div className='home-page-arrow-container'>
-          <Link to='/'>
+        <Link to='/'>
+          <div className='home-page-arrow-container' title='giovanijogos.fun'>
             <img src='images/arrow_back.svg' className='home-page-arrow'/>
-          </Link>
-        </div>
+          </div>
+        </Link>
+        <p className='mr-10'>Conversas</p>
       </header>
 
       <ol>
         {assistants.map((curr) => (
-          <div key={curr.name}>
-            <img src={curr.profilePic}/>
+          <div
+            key={curr.name}
+            className='conversation-card'
+            onClick={() => setActiveAssistant(curr)}
+          >
+            <img
+              src={curr.profilePic}
+              className='conversation-card-profile-pic'
+            />
             <p>{curr.name}</p>
           </div>
         ))}
       </ol>
     </motion.section>
   );
-};
-
-ChatsNavBar.propTypes = {
-  assistants: PropTypes.string.isRequired,
 };
 
 export {ChatsNavBar};

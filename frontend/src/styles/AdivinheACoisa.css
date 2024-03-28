@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply overflow-hidden bg-slate-700
+        @apply overflow-hidden bg-gray-700
     }
 
     .adivinhe-a-coisa {
@@ -13,47 +13,62 @@
 
     .chat {
         @apply flex flex-col justify-center align-middle items-center
-        bg-slate-700
+        bg-slate-700 h-full
     }
 
     .assistant-profile {
-        @apply w-[70%] md:w-[20%] fixed right-0 h-screen bg-slate-800/95
+        @apply w-[70%] md:w-[20%] fixed right-0 h-full bg-gray-800/20
     }
 
     .assistant-profile-header {
-        @apply h-[10%] bg-slate-800
+        @apply h-[60px] bg-slate-800 border-l border-slate-900/40
+    }
+
+    .assistant-profile-close-button {
+        @apply text-xl p-1 m-1 rounded-full hover:bg-slate-700/30 w-7 h-7
+        transition duration-75
     }
 
     .chats-nav-bar {
-        @apply w-[30%] h-screen bg-gray-700
+        @apply w-[30%] h-screen bg-gray-800/30
     }
 
     .chats-nav-bar-header {
-        @apply h-[10%] bg-slate-800
+        @apply h-[60px] bg-slate-800 flex justify-between items-center text-white
+        border-r border-slate-900/40 overflow-hidden
     }
-        
+
     .home-page-arrow-container {
-        @apply flex items-center py-2
+        @apply flex items-center w-10 py-5
         duration-100 hover:bg-slate-700 h-full
     }
 
     .home-page-arrow {
-        @apply h-10
+        @apply h-full
+    }
+
+    .conversation-card {
+        @apply w-full flex py-1 text-white border-b border-gray-800/30 
+        hover:bg-gray-600/60 transition duration-75 cursor-pointer
+        shadow-sm
+    }
+
+    .conversation-card-profile-pic {
+        @apply ml-3 mr-2 w-10 rounded-full
     }
     
     .chat-header {
         @apply flex items-center w-full bg-slate-800
-        h-[10%]
+        h-[60px]
     }
 
     .profile-card {
-        @apply flex items-center transition hover:bg-slate-700 py-2
+        @apply flex items-center transition hover:bg-slate-700 py-3
         w-full cursor-pointer
     }
 
     .profile-pic {
-        @apply  ml-3 mr-2 text-xs w-10 rounded-full hover:outline
-        hover:outline-1 hover:outline-white transition
+        @apply  ml-3 mr-2 text-xs w-10 rounded-full 
     }
 
     .card-name {
@@ -66,12 +81,12 @@
     }
 
     .burger-menu {
-        @apply w-10 transition hover:scale-110 cursor-pointer fill-red-700
+        @apply w-10 transition hover:scale-110 cursor-pointer
     }
 
     .conversation {
         @apply flex flex-col w-full
-        justify-start items-center h-screen
+        justify-start items-center h-screen bg-gray-700
     }
 
     .conversation-box {
@@ -93,7 +108,7 @@
     }
 
     .conversation-form {
-        @apply w-full px-2 my-1 relative bottom-1
+        @apply w-full px-4 my-1 relative bottom-1
     }
 
     .conversation-input {

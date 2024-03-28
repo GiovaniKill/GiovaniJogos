@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
+import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
 const AssistantProfile = ({setIsProfileActive}) => {
+  const {activeAssistant} = useContext(AdivinheACoisaContext);
+
   return (
     <motion.section
       className='assistant-profile'
@@ -19,12 +22,16 @@ const AssistantProfile = ({setIsProfileActive}) => {
       }}
     >
       <header className='assistant-profile-header'>
-        <button onClick={() => setIsProfileActive((curr) => !curr)}>
-          X
+        <button
+          onClick={() => setIsProfileActive((curr) => !curr)}
+          className='assistant-profile-close-button'
+        >
+          <img src='images/close-x.svg'/>
         </button>
+
       </header>
-      <img src='images/assistant-profile-pic.svg' className='profile-pic'/>
-      <p> assistant name</p>
+      <img src={activeAssistant.profilePic} className='profile-pic'/>
+      <p>{activeAssistant.name}</p>
       <p> this is the description of
           the AI assistant, wether you like it or not</p>
     </motion.section>
