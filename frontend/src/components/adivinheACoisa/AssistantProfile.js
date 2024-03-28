@@ -30,9 +30,22 @@ const AssistantProfile = ({setIsProfileActive}) => {
         </button>
 
       </header>
-      <img src={activeAssistant.profilePic} className='profile-pic'/>
-      <p>{activeAssistant.name}</p>
-      <p>{activeAssistant.description}</p>
+      <section className='assistant-profile-content'>
+        <img
+          src={activeAssistant.profilePic}
+          className='assistant-profile-pic'
+        />
+        <p
+          className='text-xl text-white font-bold mb-2'
+        >
+          {activeAssistant.name}
+        </p>
+        <p
+          className='text-center text-white'
+        >
+          {activeAssistant.description}
+        </p>
+      </section>
     </motion.section>
   );
 };
