@@ -17,7 +17,8 @@
     }
 
     .assistant-profile {
-        @apply w-[70%] md:w-[20%] fixed right-0 h-full bg-gray-800/20
+        @apply w-[70%] md:w-[20%] fixed right-0 h-full
+        bg-gray-700 md:bg-gray-800/20
     }
 
     .assistant-profile-header {
@@ -27,6 +28,14 @@
     .assistant-profile-close-button {
         @apply text-xl p-1 m-1 rounded-full hover:bg-slate-700/30 w-7 h-7
         transition duration-75
+    }
+
+    .assistant-profile-content {
+        @apply flex flex-col items-center p-2
+    }
+
+    .assistant-profile-pic {
+        @apply w-full max-w-[30vw] mb-3
     }
 
     .chats-nav-bar {
@@ -56,6 +65,10 @@
     .conversation-card-profile-pic {
         @apply ml-3 mr-2 w-10 rounded-full
     }
+
+    .conversation-card-name-and-last-message {
+        @apply flex flex-col
+    }
     
     .chat-header {
         @apply flex items-center w-full bg-slate-800
@@ -67,7 +80,7 @@
         w-full cursor-pointer
     }
 
-    .profile-pic {
+    .profile-card-pic {
         @apply  ml-3 mr-2 text-xs w-10 rounded-full 
     }
 

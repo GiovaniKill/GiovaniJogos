@@ -35,11 +35,13 @@ const ChatsNavBar = () => {
               src={curr.profilePic}
               className='conversation-card-profile-pic'
             />
-            <p>{curr.name}</p>
-            <p>
-              {lastMessages[curr.name]?.role === 'assistant' ? '' : 'Você:'}
-            </p>
-            <p>{lastMessages[curr.name]?.message || '-'}</p>
+            <div className='conversation-card-name-and-last-message'>
+              <p>{curr.name}</p>
+              <p className='text-xs'>
+                {lastMessages[curr.name]?.role === 'assistant' ? '' : 'Você: '}
+                {lastMessages[curr.name]?.message || ''}
+              </p>
+            </div>
           </div>
         ))}
       </ol>

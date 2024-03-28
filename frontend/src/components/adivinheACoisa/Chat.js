@@ -81,7 +81,7 @@ const Chat = ({setIsProfileActive, isProfileActive}) => {
           className='profile-card'
           onClick={() => setIsProfileActive((curr) => !curr)}
         >
-          <img src={activeAssistant.profilePic} className='profile-pic'/>
+          <img src={activeAssistant.profilePic} className='profile-card-pic'/>
           <h1 className='card-name'>
             {activeAssistant.name}
           </h1>
