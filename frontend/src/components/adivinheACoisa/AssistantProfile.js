@@ -32,8 +32,7 @@ const AssistantProfile = ({setIsProfileActive}) => {
       </header>
       <img src={activeAssistant.profilePic} className='profile-pic'/>
       <p>{activeAssistant.name}</p>
-      <p> this is the description of
-          the AI assistant, wether you like it or not</p>
+      <p>{activeAssistant.description}</p>
     </motion.section>
   );
 };
