@@ -8,16 +8,14 @@ const AssistantProfile = ({setIsProfileActive}) => {
 
   return (
     <motion.section
+      key={'assistant-profile'}
       className='assistant-profile'
-      initial={{
-        x: 50,
-      }}
-      animate={{
-        x: 0,
-      }}
+      initial={{x: '50vh'}}
+      animate={{x: 0}}
+      exit={{opacity: 0}}
       transition={{
         type: 'spring',
-        duration: 0.5,
+        duration: 0.3,
         ease: 'easeInOut',
       }}
     >
@@ -29,6 +27,12 @@ const AssistantProfile = ({setIsProfileActive}) => {
           <img src='images/close-x.svg'/>
         </button>
 
+        <p
+          className='text-white fullhd:text-3xl fourk:text-6xl text-center pl-5'
+        >
+          Informações do contato
+        </p>
+
       </header>
       <section className='assistant-profile-content'>
         <img
@@ -36,12 +40,13 @@ const AssistantProfile = ({setIsProfileActive}) => {
           className='assistant-profile-pic'
         />
         <p
-          className='text-xl text-white font-bold mb-2'
+          className={`text-xl fullhd:text-4xl fourk:text-7xl 
+          text-white font-bold mb-2`}
         >
           {activeAssistant.name}
         </p>
         <p
-          className='text-center text-white'
+          className='text-center fullhd:text-3xl fourk:text-6xl text-white'
         >
           {activeAssistant.description}
         </p>
@@ -54,4 +59,4 @@ AssistantProfile.propTypes = {
   setIsProfileActive: PropTypes.bool.isRequired,
 };
 
-export {AssistantProfile};
+export default AssistantProfile;

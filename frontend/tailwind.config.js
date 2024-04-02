@@ -19,6 +19,8 @@ module.exports = {
       },
       screens: {
         phone: '420px',
+        fullhd: '1919px',
+        fourk: '2159px',
       },
     },
   },

@@ -1,11 +1,16 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {postRequest} from '../../services/requests';
-import '../../styles/AdivinheACoisa.css';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
-const Chat = ({setIsProfileActive, isProfileActive}) => {
+const Chat = ({
+  setIsProfileActive,
+  isProfileActive,
+  isChatsNavBarActive,
+  setIsChatsNavBarActive,
+  setIsChatActive,
+}) => {
   const {activeAssistant, setLastMessages} = useContext(AdivinheACoisaContext);
 
   const [messages, setMessages] = useState([]);
@@ -71,12 +76,34 @@ const Chat = ({setIsProfileActive, isProfileActive}) => {
   }, [messages]);
 
   return (
-    <div
+    <motion.div
+      key={'chat'}
+      initial={{x: '50vh'}}
+      animate={{x: 0}}
+      exit={{background: 'red', rotate: '180deg'}}
+      transition={{
+        type: 'spring',
+        duration: 0.2,
+        ease: 'easeOut',
+      }}
       className={
-        `chat w-[70%] ${isProfileActive ? 'md:w-[50%]' : 'md:w-[70%]'}`
+        `chat w-[100%] sm:w-[70%]
+        ${isProfileActive ? 'md:w-[50%]' : 'md:w-[70%]'}`
       }
     >
       <header className='chat-header'>
+        <button
+          className='button-to-chats-nav-bar'
+          onClick={() => {
+            setIsChatsNavBarActive(true);
+            setIsChatActive(false);
+          }}
+        >
+          <img
+            src='images/arrow_back.svg'
+            className='button-icon-to-chats-nav-bar'
+          />
+        </button>
         <div
           className='profile-card'
           onClick={() => setIsProfileActive((curr) => !curr)}
@@ -133,13 +160,16 @@ const Chat = ({setIsProfileActive, isProfileActive}) => {
           </button>
         </form>
       </section>
-    </div>
+    </motion.div>
   );
 };
 
 Chat.propTypes = {
   isProfileActive: PropTypes.bool.isRequired,
   setIsProfileActive: PropTypes.func.isRequired,
+  isChatsNavBarActive: PropTypes.bool.isRequired,
+  setIsChatsNavBarActive: PropTypes.func.isRequired,
+  setIsChatActive: PropTypes.func.isRequired,
 };
 
 export default Chat;
