@@ -11,9 +11,9 @@ import AdivinheACoisa from './pages/AdivinheACoisa';
 function App() {
   return (
     <Routes>
-      <Route path="/palavrou" element={ <Palavrou /> } />
+      <Route exact path="/palavrou" element={ <Palavrou /> } />
       <Route exact path="/adivinheacoisa" element={ <AdivinheACoisa /> } />
-      <Route exact path="/" element={ <MainPage /> } />
+      <Route path="/" element={ <MainPage /> } />
     </Routes>
   );
 }

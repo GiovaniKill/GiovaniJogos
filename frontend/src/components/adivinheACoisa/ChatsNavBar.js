@@ -2,18 +2,27 @@ import React, {useContext} from 'react';
 import {motion} from 'framer-motion';
 import {Link} from 'react-router-dom';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
+import PropTypes from 'prop-types';
 
-const ChatsNavBar = () => {
+const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
   const {
     setActiveAssistant,
     assistants,
     lastMessages} = useContext(AdivinheACoisaContext);
 
-  console.log(lastMessages);
-
   return (
     <motion.section
-      className='chats-nav-bar'
+      initial={{x: '-80vh'}}
+      animate={{
+        x: 0,
+        transition: {
+          type: 'spring',
+          duration: 0.3,
+          ease: 'easeOut',
+        },
+      }}
+      exit={{x: '100vh'}}
+      className={`chats-nav-bar`}
     >
       <header className='chats-nav-bar-header'>
         <Link to='/'>
@@ -24,12 +33,22 @@ const ChatsNavBar = () => {
         <p className='mr-10'>Conversas</p>
       </header>
 
-      <ol>
+      <motion.ol
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+      >
         {assistants.map((curr) => (
-          <div
+          <motion.li
+            initial={{opacity: 0}}
+            animate={{opacity: 1, staggerChildren: 0.5}}
+            transition={{duration: 0.5}}
             key={curr.name}
             className='conversation-card'
-            onClick={() => setActiveAssistant(curr)}
+            onClick={() => {
+              setActiveAssistant(curr);
+              setIsChatsNavBarActive(false);
+              setIsChatActive(true);
+            }}
           >
             <img
               src={curr.profilePic}
@@ -37,16 +56,22 @@ const ChatsNavBar = () => {
             />
             <div className='conversation-card-name-and-last-message'>
               <p>{curr.name}</p>
-              <p className='text-xs'>
+              <p className='conversation-card-last-message'>
                 {lastMessages[curr.name]?.role === 'assistant' ? '' : 'Você: '}
                 {lastMessages[curr.name]?.message || ''}
               </p>
             </div>
-          </div>
+          </motion.li>
         ))}
-      </ol>
+      </motion.ol>
     </motion.section>
   );
 };
 
-export {ChatsNavBar};
+ChatsNavBar.propTypes = {
+  isChatsNavBarActive: PropTypes.bool.isRequired,
+  setIsChatsNavBarActive: PropTypes.func.isRequired,
+  setIsChatActive: PropTypes.func.isRequired,
+};
+
+export default ChatsNavBar;

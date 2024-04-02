@@ -7,27 +7,26 @@
         @apply overflow-hidden bg-gray-700
     }
 
-    .adivinhe-a-coisa {
-        @apply flex
+    img {
+        @apply fourk:p-5
     }
 
-    .chat {
-        @apply flex flex-col justify-center align-middle items-center
-        bg-slate-700 h-full
+    .adivinhe-a-coisa {
+        @apply flex h-screen
     }
 
     .assistant-profile {
-        @apply w-[70%] md:w-[20%] fixed right-0 h-full
+        @apply w-[100%] sm:w-[70%] md:w-[20%] fixed right-0 h-full
         bg-gray-700 md:bg-gray-800/20
     }
 
     .assistant-profile-header {
-        @apply h-[60px] bg-slate-800 border-l border-slate-900/40
+        @apply h-[10vh] bg-slate-800 border-l border-slate-900/40 flex items-center
     }
 
     .assistant-profile-close-button {
-        @apply text-xl p-1 m-1 rounded-full hover:bg-slate-700/30 w-7 h-7
-        transition duration-75
+        @apply p-1 m-1 rounded-full hover:bg-slate-700/30 w-[2vw]
+        transition duration-75 self-start
     }
 
     .assistant-profile-content {
@@ -39,62 +38,80 @@
     }
 
     .chats-nav-bar {
-        @apply w-[30%] h-screen bg-gray-800/30
+        @apply w-[100%] sm:w-[30%] h-screen bg-gray-800/30
     }
 
     .chats-nav-bar-header {
-        @apply h-[60px] bg-slate-800 flex justify-between items-center text-white
-        border-r border-slate-900/40 overflow-hidden
+        @apply h-[10vh] bg-slate-800 flex justify-between items-center text-white
+        border-r border-slate-900/40 overflow-hidden fullhd:text-4xl fourk:text-7xl
     }
 
     .home-page-arrow-container {
-        @apply flex items-center w-10 py-5
+        @apply flex items-center w-fit px-2 py-8
         duration-100 hover:bg-slate-700 h-full
     }
 
     .home-page-arrow {
-        @apply h-full
+        @apply h-[7vh]
     }
 
     .conversation-card {
         @apply w-full flex py-1 text-white border-b border-gray-800/30 
         hover:bg-gray-600/60 transition duration-75 cursor-pointer
-        shadow-sm
+        shadow-sm fullhd:text-4xl fourk:text-7xl
+        h-[8vh]
     }
 
     .conversation-card-profile-pic {
-        @apply ml-3 mr-2 w-10 rounded-full
+        @apply ml-3 mr-2 w-[4vw] rounded-full
     }
 
     .conversation-card-name-and-last-message {
-        @apply flex flex-col
+        @apply flex flex-col justify-evenly fourk:pl-5
+    }
+
+    .conversation-card-last-message {
+        @apply text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl truncate max-w-[15vw] whitespace-nowrap
+    }
+
+    .chat {
+        @apply flex flex-col justify-center align-middle items-center
+        bg-slate-700 h-full
     }
     
     .chat-header {
         @apply flex items-center w-full bg-slate-800
-        h-[60px]
+        h-[10vh] min-h-[10vh]
+    }
+
+    .button-to-chats-nav-bar {
+        @apply h-full duration-100 hover:bg-slate-700 sm:w-0
+    }
+
+    .button-icon-to-chats-nav-bar {
+        @apply w-[7vw] sm:w-0
     }
 
     .profile-card {
-        @apply flex items-center transition hover:bg-slate-700 py-3
+        @apply flex items-center transition hover:bg-slate-700 py-10
         w-full cursor-pointer
     }
 
     .profile-card-pic {
-        @apply  ml-3 mr-2 text-xs w-10 rounded-full 
+        @apply  ml-3 mr-2 w-[4vw] rounded-full 
     }
 
     .card-name {
         @apply flex items-center text-xl h-10 text-white
-        font-semibold
+        font-semibold fullhd:text-4xl fourk:text-7xl
     }
 
     .burger-menu-container {
-        @apply flex items-center justify-center w-[12%] mx-2
+        @apply flex items-center justify-center w-[3vw] fullhd:w-[5vw] mx-2
     }
 
     .burger-menu {
-        @apply w-10 transition hover:scale-110 cursor-pointer
+        @apply w-[3vw] fullhd:w-[5vw] transition hover:scale-110 cursor-pointer
     }
 
     .conversation {
@@ -103,35 +120,38 @@
     }
 
     .conversation-box {
-        @apply w-full h-[80%]
+        @apply w-full h-[83vh]
         flex flex-col overflow-y-auto scroll-smooth bg-gray-700
     }
 
     .text-bubble {
-        @apply flex m-3 w-fit max-w-96 rounded-lg p-1 shadow-lg
-        text-xl
+        @apply flex m-3 w-fit max-w-[60vh] rounded-lg p-1 shadow-lg
+        text-xl fullhd:text-4xl fullhd:p-2 fourk:text-7xl fourk:p-4
     }
 
     .user-bubble {
-        @apply self-end justify-end bg-blue-300 bg-opacity-50 pl-2
+        @apply self-end justify-end bg-blue-300 bg-opacity-50 
+        pl-2 fourk:pl-4
     }
 
     .assistant-bubble {
-        @apply self-start bg-green-300 bg-opacity-50 pr-2
+        @apply self-start bg-green-300 bg-opacity-50
+        pr-2 fourk:pr-4
     }
 
     .conversation-form {
-        @apply w-full px-4 my-1 relative bottom-1
+        @apply w-full h-[5vh] px-4 my-1 relative bottom-1
     }
 
     .conversation-input {
-        @apply w-5/6 rounded-s-lg outline-none pl-1 py-1 text-wrap text-xl
+        @apply w-5/6 rounded-s-lg outline-none pl-1 py-1 text-wrap
+        text-xl fullhd:text-4xl fourk:text-7xl fourk:h-[5vh]
     }
 
     .conversation-send-button {
         @apply w-1/6 rounded-e-lg bg-white
         hover:phone:bg-gray-300 py-1 pr-3 hover:pr-5 transition-all
-        text-xl
+        text-xl fullhd:text-4xl fourk:text-7xl fourk:h-[5vh]
     }
 }
 
