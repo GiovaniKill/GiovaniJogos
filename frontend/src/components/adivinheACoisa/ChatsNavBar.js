@@ -8,7 +8,8 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
   const {
     setActiveAssistant,
     assistants,
-    lastMessages} = useContext(AdivinheACoisaContext);
+    allMessages,
+  } = useContext(AdivinheACoisaContext);
 
   return (
     <motion.section
@@ -57,8 +58,9 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
             <div className='conversation-card-name-and-last-message'>
               <p>{curr.name}</p>
               <p className='conversation-card-last-message'>
-                {lastMessages[curr.name]?.role === 'assistant' ? '' : 'Você: '}
-                {lastMessages[curr.name]?.message || ''}
+                {allMessages[curr.name]?.role === 'assistant' ? '' : 'Você: '}
+                {allMessages[curr.name]?.
+                    [allMessages[curr.name].length - 1]?.message || ''}
               </p>
             </div>
           </motion.li>

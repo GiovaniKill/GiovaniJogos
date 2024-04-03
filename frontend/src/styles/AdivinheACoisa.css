@@ -21,11 +21,11 @@
     }
 
     .assistant-profile-header {
-        @apply h-[10vh] bg-slate-800 border-l border-slate-900/40 flex items-center
+        @apply h-[10vh] bg-slate-800 border-l border-slate-900/40 flex items-center justify-between
     }
 
     .assistant-profile-close-button {
-        @apply p-1 m-1 rounded-full hover:bg-slate-700/30 w-[2vw]
+        @apply p-1 m-1 rounded-full hover:bg-slate-700/30 w-[10vw] phone:w-[3vw] xl:w-[2vw] fourk:w-[3vw]
         transition duration-75 self-start
     }
 
@@ -59,19 +59,20 @@
         @apply w-full flex py-1 text-white border-b border-gray-800/30 
         hover:bg-gray-600/60 transition duration-75 cursor-pointer
         shadow-sm fullhd:text-4xl fourk:text-7xl
-        h-[8vh]
+        h-[10vh]
     }
 
     .conversation-card-profile-pic {
-        @apply ml-3 mr-2 w-[4vw] rounded-full
+        @apply ml-3 mr-2 w-[15vw] phone:w-[4vw] rounded-full
     }
 
     .conversation-card-name-and-last-message {
-        @apply flex flex-col justify-evenly fourk:pl-5
+        @apply flex flex-col justify-evenly fourk:pl-5 w-full
     }
 
     .conversation-card-last-message {
-        @apply text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl truncate max-w-[15vw] whitespace-nowrap
+        @apply text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl truncate
+        w-[95%] whitespace-nowrap
     }
 
     .chat {
@@ -85,11 +86,11 @@
     }
 
     .button-to-chats-nav-bar {
-        @apply h-full duration-100 hover:bg-slate-700 sm:w-0
+        @apply h-full w-fit duration-100 hover:bg-slate-700 sm:w-0
     }
 
     .button-icon-to-chats-nav-bar {
-        @apply w-[7vw] sm:w-0
+        @apply h-[7vh] sm:w-0
     }
 
     .profile-card {
@@ -98,20 +99,28 @@
     }
 
     .profile-card-pic {
-        @apply  ml-3 mr-2 w-[4vw] rounded-full 
+        @apply  ml-3 mr-2 w-[15vw] phone:w-[4vw] rounded-full 
+    }
+
+    .card-name-and-typing-status {
+        @apply flex flex-col justify-evenly
     }
 
     .card-name {
-        @apply flex items-center text-xl h-10 text-white
+        @apply flex items-center text-xl text-white
         font-semibold fullhd:text-4xl fourk:text-7xl
     }
 
+    .typing-status {
+        @apply text-white
+    }
+
     .burger-menu-container {
-        @apply flex items-center justify-center w-[3vw] fullhd:w-[5vw] mx-2
+        @apply flex items-center justify-center w-[10vw] phone:w-[3vw] fullhd:w-[5vw] mx-2
     }
 
     .burger-menu {
-        @apply w-[3vw] fullhd:w-[5vw] transition hover:scale-110 cursor-pointer
+        @apply  w-[10vw] phone:w-[3vw] fullhd:w-[4vw] transition hover:scale-110 cursor-pointer
     }
 
     .conversation {
@@ -140,7 +149,7 @@
     }
 
     .conversation-form {
-        @apply w-full h-[5vh] px-4 my-1 relative bottom-1
+        @apply w-full h-[5vh] px-1 phone:px-4 my-1 relative bottom-1
     }
 
     .conversation-input {
