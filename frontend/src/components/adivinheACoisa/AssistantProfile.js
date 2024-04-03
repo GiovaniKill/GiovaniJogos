@@ -28,7 +28,7 @@ const AssistantProfile = ({setIsProfileActive}) => {
         </button>
 
         <p
-          className='text-white fullhd:text-3xl fourk:text-6xl text-center pl-5'
+          className='text-white fullhd:text-3xl fourk:text-6xl text-center px-5'
         >
           Informações do contato
         </p>

@@ -11,9 +11,11 @@ const Chat = ({
   setIsChatsNavBarActive,
   setIsChatActive,
 }) => {
-  const {activeAssistant, setLastMessages} = useContext(AdivinheACoisaContext);
+  const {activeAssistant, setAllMessages} = useContext(AdivinheACoisaContext);
 
   const [messages, setMessages] = useState([]);
+
+  const [isTyping, setIsTyping] = useState(false);
 
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
@@ -27,6 +29,16 @@ const Chat = ({
     });
   };
 
+  const setLocalStorageMessages = () => {
+    const pastMessages = JSON.parse(localStorage.getItem('chatMessages')) || {};
+    if (messages.length !== 0) {
+      localStorage.setItem('chatMessages', JSON.stringify({
+        ...pastMessages,
+        [activeAssistant.name]: messages,
+      }));
+    }
+  };
+
   const onQuestionSubmit = async (event) => {
     event?.preventDefault();
 
@@ -38,7 +50,6 @@ const Chat = ({
     }]);
 
     setTextInput('');
-
     scrollChatToBottom();
 
     if (textInput.includes('//test')) {
@@ -52,13 +63,18 @@ const Chat = ({
       return;
     }
 
+    setIsTyping(true);
 
     await postRequest('adivinheacoisa/ask', {question: textInput})
-        .then((response) => setMessages((prev) => [...prev, {
-          message: JSON.parse(response),
-          role: 'assistant',
-        }]))
+        .then((response) => {
+          setMessages((prev) => [...prev, {
+            message: JSON.parse(response),
+            role: 'assistant',
+          }]);
+          setIsTyping(false);
+        })
         .catch((error) => {
+          setIsTyping(false);
           window.alert(`A tão temida inteligência artificial
             parece estar descançando agora, tente de novo mais tarde`);
           console.log(error);
@@ -67,13 +83,23 @@ const Chat = ({
     scrollChatToBottom();
   };
 
+
   useEffect(() => {
-    setLastMessages((curr) => (
-      {...curr, [activeAssistant.name]: messages[messages.length - 1]}
+    setAllMessages((curr) => (
+      {...curr, [activeAssistant.name]: messages}
     ));
 
-    console.log(messages[messages.length - 1]);
+    setLocalStorageMessages();
   }, [messages]);
+
+
+  useEffect(() => {
+    const localStorageMessages = JSON.parse(
+        localStorage.getItem('chatMessages'))?.
+        [activeAssistant.name] || [];
+
+    setMessages(localStorageMessages);
+  }, [activeAssistant]);
 
   return (
     <motion.div
@@ -109,9 +135,12 @@ const Chat = ({
           onClick={() => setIsProfileActive((curr) => !curr)}
         >
           <img src={activeAssistant.profilePic} className='profile-card-pic'/>
-          <h1 className='card-name'>
-            {activeAssistant.name}
-          </h1>
+          <div className='card-name-and-typing-status'>
+            <h1 className='card-name'>
+              {activeAssistant.name}
+            </h1>
+            {isTyping && <p className='typing-status'>Digitando...</p>}
+          </div>
         </div>
 
         <div className='burger-menu-container'>
