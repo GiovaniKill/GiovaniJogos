@@ -23,6 +23,16 @@ const Chat = ({
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
 
+  const deleteMessages = () => {
+    setAllMessages((curr) => ({
+      ...curr,
+      [activeAssistant.name]: [],
+    }));
+    setMessages([]);
+
+    localStorage.setItem('chatMessages', JSON.stringify(allMessages));
+  };
+
   const scrollChatToBottom = () => {
     requestAnimationFrame(() => {
       conversationBox.current.scrollTo(
@@ -142,7 +152,7 @@ const Chat = ({
           </div>
         </div>
 
-        <DropDownMenu/>
+        <DropDownMenu deleteMessages={deleteMessages}/>
       </header>
       <section className='conversation'>
         <section ref={conversationBox} className='conversation-box'>

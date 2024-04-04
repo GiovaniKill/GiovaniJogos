@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
+import PropTypes from 'prop-types';
 
-const DropDownMenu = () => {
+const DropDownMenu = ({deleteMessages}) => {
   const [isMenuActive, setIsMenuActive] = useState(false);
 
   const listVariants = {
@@ -50,11 +51,11 @@ const DropDownMenu = () => {
       className='menu-container'
       onClick={() => setIsMenuActive((curr) => !curr)}
     >
-      <img src='images/menu.svg' className='menu'/>
+      <img src='images/menu.svg' className='menu-icon'/>
       <AnimatePresence>
         {isMenuActive &&
        <motion.ol
-         className='menu-options'
+         className='menu-list'
          variants={listVariants}
          initial='initial'
          animate='animate'
@@ -63,6 +64,7 @@ const DropDownMenu = () => {
          <motion.li
            className='menu-option'
            variants={optionsVariants}
+           onClick={deleteMessages}
          >
             Excluir mensagens
          </motion.li>
@@ -76,6 +78,10 @@ const DropDownMenu = () => {
       </AnimatePresence>
     </div>
   );
+};
+
+DropDownMenu.propTypes = {
+  deleteMessages: PropTypes.func.isRequired,
 };
 
 export default DropDownMenu;
