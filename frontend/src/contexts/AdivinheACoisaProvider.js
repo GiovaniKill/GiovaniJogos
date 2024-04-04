@@ -28,6 +28,13 @@ const AdivinheACoisaProvider = ({children}) => {
         });
   }, []);
 
+  useEffect(() => {
+    const localStorageMessages = JSON.parse(
+        localStorage.getItem('chatMessages')) || [];
+
+    setAllMessages(localStorageMessages);
+  }, []);
+
   return (
     <AdivinheACoisaContext.Provider
       value={{
