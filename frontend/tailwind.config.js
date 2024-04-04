@@ -3,6 +3,7 @@ module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   content: [],
+  darkMode: 'selector',
   theme: {
     extend: {
       fontSize: {

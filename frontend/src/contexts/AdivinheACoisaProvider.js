@@ -10,7 +10,10 @@ const AdivinheACoisaProvider = ({children}) => {
 
   const [activeAssistant, setActiveAssistant] = useState({});
 
+  const [isDarkModeOn, setIsDarkModeOn] = useState(false);
+
   useEffect(() => {
+    // Getting assistant from API
     getRequest('adivinheacoisa/getassistants')
         .then(async (data) => {
           const parsedAssistants = await JSON.parse(data);
@@ -26,14 +29,30 @@ const AdivinheACoisaProvider = ({children}) => {
           window.alert('Zap caiu 😮‍💨, tente de novo mais tarde');
           console.log(e);
         });
-  }, []);
 
-  useEffect(() => {
+    // Retrieving messages from local storage
     const localStorageMessages = JSON.parse(
         localStorage.getItem('chatMessages')) || [];
 
     setAllMessages(localStorageMessages);
+
+    // Setting prefered theme
+    if (window.matchMedia('prefers-color-scheme:dark').matches) {
+      setIsDarkModeOn(true);
+    } else {
+      setIsDarkModeOn(false);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isDarkModeOn) {
+      if (!document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.add('dark');
+      }
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkModeOn]);
 
   return (
     <AdivinheACoisaContext.Provider
@@ -43,6 +62,8 @@ const AdivinheACoisaProvider = ({children}) => {
         assistants,
         allMessages,
         setAllMessages,
+        isDarkModeOn,
+        setIsDarkModeOn,
       }}
     >
       {children}

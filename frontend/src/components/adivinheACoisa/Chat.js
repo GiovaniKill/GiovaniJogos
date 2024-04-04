@@ -102,10 +102,8 @@ const Chat = ({
     const {scrollTop, scrollHeight, clientHeight} = e.target;
     if (scrollHeight - clientHeight > scrollTop) {
       setShowScrollBottomButton(true);
-      console.log('céu');
     } else {
       setShowScrollBottomButton(false);
-      console.log('chão ');
     }
   };
 
