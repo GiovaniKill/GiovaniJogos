@@ -15,6 +15,8 @@
         @apply flex h-screen
     }
 
+    /* --------------- Assistant profile --------------- */
+
     .assistant-profile {
         @apply w-[100%] sm:w-[70%] md:w-[20%] fixed right-0 h-full
         bg-gray-700 md:bg-gray-800/20
@@ -36,6 +38,8 @@
     .assistant-profile-pic {
         @apply w-full max-w-[30vw] mb-3
     }
+
+    /* --------------- Chats Nav Bar --------------- */
 
     .chats-nav-bar {
         @apply w-[100%] sm:w-[30%] h-screen bg-gray-800/30
@@ -63,7 +67,7 @@
     }
 
     .conversation-card-profile-pic {
-        @apply ml-3 mr-2 w-[15vw] phone:w-[4vw] rounded-full
+        @apply ml-2 mr-1 w-[15vw] phone:w-[6vw] rounded-full
     }
 
     .conversation-card-name-and-last-message {
@@ -74,6 +78,8 @@
         @apply text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl truncate
         w-[95%] whitespace-nowrap
     }
+
+    /* --------------- Chat --------------- */
 
     .chat {
         @apply flex flex-col justify-center align-middle items-center
@@ -99,7 +105,7 @@
     }
 
     .profile-card-pic {
-        @apply  ml-3 mr-2 w-[15vw] phone:w-[4vw] rounded-full 
+        @apply  ml-3 mr-2 w-[15vw] phone:w-[10vw] md:w-[4vw] fullhd:w-[4vw] rounded-full 
     }
 
     .card-name-and-typing-status {
@@ -115,12 +121,22 @@
         @apply text-white
     }
 
-    .burger-menu-container {
-        @apply flex items-center justify-center w-[10vw] phone:w-[3vw] fullhd:w-[5vw] mx-2
+    .menu-container {
+        @apply flex items-center justify-center w-[10vw] phone:w-[7vw] md:w-[4vw] mx-2
     }
 
-    .burger-menu {
-        @apply  w-[10vw] phone:w-[3vw] fullhd:w-[4vw] transition hover:scale-110 cursor-pointer
+    .menu {
+        @apply  w-[10vw] phone:w-[7vw] md:w-[4vw] transition hover:scale-110 cursor-pointer
+    }
+
+    .menu-options {
+        @apply absolute shadow-lg bg-gray-600 top-[9vh] right-[10vw] phone:right-[3vw] fullhd:right-[4vw]
+        origin-top
+        
+    }
+
+    .menu-option {
+        @apply hover:bg-gray-500 px-[1vw] duration-100 cursor-pointer
     }
 
     .conversation {
