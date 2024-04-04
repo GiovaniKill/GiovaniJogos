@@ -28,7 +28,7 @@ const AssistantProfile = ({setIsProfileActive}) => {
         </button>
 
         <p
-          className='text-white fullhd:text-3xl fourk:text-6xl text-center px-5'
+          className='contact-details-text'
         >
           Informações do contato
         </p>
@@ -40,13 +40,12 @@ const AssistantProfile = ({setIsProfileActive}) => {
           className='assistant-profile-pic'
         />
         <p
-          className={`text-xl fullhd:text-4xl fourk:text-7xl 
-          text-white font-bold mb-2`}
+          className='assistant-profile-name'
         >
           {activeAssistant.name}
         </p>
         <p
-          className='text-center fullhd:text-3xl fourk:text-6xl text-white'
+          className='assistant-profile-description'
         >
           {activeAssistant.description}
         </p>

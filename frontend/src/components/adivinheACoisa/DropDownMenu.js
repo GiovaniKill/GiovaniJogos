@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import PropTypes from 'prop-types';
+import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
 const DropDownMenu = ({deleteMessages}) => {
+  const {isDarkModeOn, setIsDarkModeOn} = useContext(AdivinheACoisaContext);
+
   const [isMenuActive, setIsMenuActive] = useState(false);
 
   const listVariants = {
@@ -71,8 +74,9 @@ const DropDownMenu = ({deleteMessages}) => {
          <motion.li
            className='menu-option'
            variants={optionsVariants}
+           onClick={() => setIsDarkModeOn((curr) => !curr)}
          >
-            Habilitar modo escuro
+           {isDarkModeOn ? 'Ativar modo claro' : 'Ativar modo escuro'}
          </motion.li>
        </motion.ol>}
       </AnimatePresence>
