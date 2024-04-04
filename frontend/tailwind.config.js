@@ -18,7 +18,7 @@ module.exports = {
         wiggle: 'wiggle 0.1s linear infinite',
       },
       screens: {
-        phone: '420px',
+        phone: '431px',
         fullhd: '1919px',
         fourk: '2159px',
       },

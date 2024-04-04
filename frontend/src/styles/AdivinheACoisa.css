@@ -174,7 +174,7 @@
     }
 
     .scroll-bottom-icon {
-        @apply w-[5vw] animate-bounce 
+        @apply w-[13vw] phone:w-[5vw] animate-bounce 
     }
 
     .conversation-input {
