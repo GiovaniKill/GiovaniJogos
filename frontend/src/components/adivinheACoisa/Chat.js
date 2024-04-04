@@ -12,7 +12,9 @@ const Chat = ({
   setIsChatsNavBarActive,
   setIsChatActive,
 }) => {
-  const {activeAssistant, setAllMessages} = useContext(AdivinheACoisaContext);
+  const {activeAssistant,
+    setAllMessages,
+    allMessages} = useContext(AdivinheACoisaContext);
 
   const [messages, setMessages] = useState([]);
 
@@ -95,11 +97,7 @@ const Chat = ({
 
 
   useEffect(() => {
-    const localStorageMessages = JSON.parse(
-        localStorage.getItem('chatMessages'))?.
-        [activeAssistant.name] || [];
-
-    setMessages(localStorageMessages);
+    setMessages(allMessages[activeAssistant?.name]);
   }, [activeAssistant]);
 
   return (
