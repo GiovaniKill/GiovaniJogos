@@ -79,7 +79,7 @@
     }
 
     .conversation-card-profile-pic {
-        @apply ml-2 mr-1 w-[15vw] phone:w-[6vw] rounded-full
+        @apply ml-2 mr-1 min-w-[15vw] phone:min-w-[6vw] rounded-full
     }
 
     .conversation-card-name-and-last-message {
@@ -88,7 +88,7 @@
 
     .conversation-card-last-message {
         @apply text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl truncate
-        w-[95%] whitespace-nowrap
+        w-[70%]
     }
 
     /* --------------- Chat --------------- */
@@ -151,6 +151,11 @@
     .menu-option {
         @apply hover:bg-slate-300 dark:hover:bg-gray-500 duration-100 cursor-pointer
         p-3 lg:px-[1vw] lg:p-0 fullhd:text-3xl fullhd:py-2 fourk:text-6xl fourk:py-5 whitespace-nowrap
+    }
+
+    .tries-left {
+        @apply absolute top-[10vh] w-fit px-[2vw] bg-slate-100/80 dark:bg-slate-900/80 dark:text-white 
+        rounded-b-3xl text-center fullhd:text-4xl fourk:text-7xl shadow-md
     }
 
     .conversation {
