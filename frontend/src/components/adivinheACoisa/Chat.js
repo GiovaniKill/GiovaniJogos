@@ -108,7 +108,9 @@ const Chat = ({
 
   useEffect(() => {
     setMessages(allMessages[activeAssistant?.name]);
+    scrollChatToBottom();
   }, [activeAssistant]);
+
 
   return (
     <motion.div
