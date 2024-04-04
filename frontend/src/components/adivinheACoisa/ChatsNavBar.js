@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
   const {
+    activeAssistant,
     setActiveAssistant,
     assistants,
     allMessages,
@@ -44,7 +45,11 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
             animate={{opacity: 1, staggerChildren: 0.5}}
             transition={{duration: 0.5}}
             key={curr.name}
-            className='conversation-card'
+            className={`
+            conversation-card 
+            ${activeAssistant === curr &&
+              'bg-slate-300/70 dark:bg-gray-600/80'}
+            `}
             onClick={() => {
               setActiveAssistant(curr);
               setIsChatsNavBarActive(false);
