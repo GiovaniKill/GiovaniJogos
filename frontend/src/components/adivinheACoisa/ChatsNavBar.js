@@ -28,7 +28,7 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
       <header className='chats-nav-bar-header'>
         <Link to='/'>
           <div className='home-page-arrow-container' title='giovanijogos.fun'>
-            <img src='images/arrow_back.svg' className='home-page-arrow'/>
+            <img src='images/arrow-back.svg' className='home-page-arrow'/>
           </div>
         </Link>
         <p className='mr-10'>Conversas</p>

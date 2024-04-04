@@ -169,6 +169,14 @@
         @apply w-full h-[5vh] px-1 phone:px-4 my-1 relative bottom-1
     }
 
+    .scroll-bottom-button {
+        @apply absolute left-0 right-0 ml-auto mr-auto bottom-[5vh] w-fit
+    }
+
+    .scroll-bottom-icon {
+        @apply w-[5vw] animate-bounce 
+    }
+
     .conversation-input {
         @apply w-5/6 rounded-s-lg outline-none pl-1 py-1 text-wrap
         text-xl fullhd:text-4xl fourk:text-7xl fourk:h-[5vh]

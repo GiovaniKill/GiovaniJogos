@@ -17,7 +17,7 @@ const Tutorial = () => {
         Seu objetivo é encontrar a palavra secreta de 6 letras em 8 tentativas.
         Para isso, digite seu palpite nos quadradinhos, letra por letra. Após
         enviar, será revelado o quão próximo você chegou da resposta através
-        de cores <img src='images/tutorial_word.png' className='h-5 inline'/>.
+        de cores <img src='images/tutorial-word.png' className='h-5 inline'/>.
         Se o campo ficar verde,
         você acertou a letra. Se ficar amarelo, a resposta contém a sua letra,
         mas em uma posição diferente à do seu palpite. Se ficar vermelho, a
