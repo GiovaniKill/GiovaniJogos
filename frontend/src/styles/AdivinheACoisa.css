@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply overflow-hidden bg-gray-700
+        @apply overflow-hidden dark:bg-gray-700
     }
 
     img {
@@ -23,8 +23,7 @@
     }
 
     .assistant-profile-header {
-        @apply h-[10vh] bg-slate-200 dark:bg-slate-800 border-l border-slate-400/40 dark:border-slate-900/40
-        flex items-center justify-between
+        @apply h-[10vh] bg-slate-200 dark:bg-slate-800 flex items-center justify-between
     }
 
     .assistant-profile-close-button {
@@ -101,7 +100,7 @@
     
     .chat-header {
         @apply flex items-center w-full bg-slate-200 dark:bg-slate-800
-        h-[10vh] min-h-[10vh] border-l border-slate-400/40 dark:border-slate-900/40
+        h-[10vh] min-h-[10vh] border-x border-slate-400/40 dark:border-slate-900/40
     }
 
     .button-to-chats-nav-bar {
@@ -156,7 +155,8 @@
 
     .conversation {
         @apply flex flex-col w-full
-        justify-start items-center h-screen bg-stone-200 dark:bg-gray-700
+        justify-start items-center h-screen 
+        bg-[url('/public/images/background-light-mode.svg')] dark:bg-[url('/public/images/background-dark-mode.svg')]
     }
 
     .conversation-box {
