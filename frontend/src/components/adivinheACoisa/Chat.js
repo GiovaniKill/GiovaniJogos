@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {postRequest} from '../../services/requests';
-import {motion} from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 import DropDownMenu from './DropDownMenu';
@@ -19,6 +19,8 @@ const Chat = ({
   const [messages, setMessages] = useState([]);
 
   const [isTyping, setIsTyping] = useState(false);
+
+  const [showScrollBottomButton, setShowScrollBottomButton] = useState(false);
 
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
@@ -96,6 +98,17 @@ const Chat = ({
     scrollChatToBottom();
   };
 
+  const handleScroll = (e) => {
+    const {scrollTop, scrollHeight, clientHeight} = e.target;
+    if (scrollHeight - clientHeight > scrollTop) {
+      setShowScrollBottomButton(true);
+      console.log('céu');
+    } else {
+      setShowScrollBottomButton(false);
+      console.log('chão ');
+    }
+  };
+
 
   useEffect(() => {
     setAllMessages((curr) => (
@@ -137,7 +150,7 @@ const Chat = ({
           }}
         >
           <img
-            src='images/arrow_back.svg'
+            src='images/arrow-back.svg'
             className='button-icon-to-chats-nav-bar'
           />
         </button>
@@ -157,7 +170,11 @@ const Chat = ({
         <DropDownMenu deleteMessages={deleteMessages}/>
       </header>
       <section className='conversation'>
-        <section ref={conversationBox} className='conversation-box'>
+        <section
+          ref={conversationBox}
+          className='conversation-box'
+          onScroll={(e) => handleScroll(e) }
+        >
           {messages.map((curr, index) => (
             <motion.div
               key={index}
@@ -180,7 +197,21 @@ const Chat = ({
             </motion.div>
           ))}
         </section>
+
         <form onSubmit={onQuestionSubmit} className='conversation-form'>
+          <AnimatePresence>
+            {showScrollBottomButton &&
+          <motion.button
+            onClick={scrollChatToBottom}
+            className='scroll-bottom-button'
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0, transition: {duration: 0.1}}}
+          >
+            <img src='images/arrow-down.svg' className='scroll-bottom-icon'/>
+          </motion.button>
+            }
+          </AnimatePresence>
           <input
             type='text'
             onChange={(e) => setTextInput(e.target.value)}
