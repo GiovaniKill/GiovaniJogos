@@ -25,6 +25,8 @@ const Chat = ({
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
 
+  const [triesLeft, setTriesLeft] = useState(30);
+
   const deleteMessages = () => {
     setAllMessages((curr) => ({
       ...curr,
@@ -74,19 +76,22 @@ const Chat = ({
       }]);
 
       scrollChatToBottom();
+      if (triesLeft > 0) setTriesLeft(triesLeft - 1);
 
       return;
     }
 
     setIsTyping(true);
 
-    await postRequest('adivinheacoisa/ask', {question: textInput})
+    await postRequest('adivinheacoisa/ask',
+        {question: textInput, assistant: activeAssistant.name})
         .then((response) => {
           setMessages((prev) => [...prev, {
             message: JSON.parse(response),
             role: 'assistant',
           }]);
           setIsTyping(false);
+          if (triesLeft > 0) setTriesLeft(triesLeft - 1);
         })
         .catch((error) => {
           setIsTyping(false);
@@ -168,6 +173,7 @@ const Chat = ({
         <DropDownMenu deleteMessages={deleteMessages}/>
       </header>
       <section className='conversation'>
+        <div className='tries-left'>Tentativas restantes: {triesLeft}</div>
         <section
           ref={conversationBox}
           className='conversation-box'
