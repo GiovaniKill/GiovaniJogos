@@ -3,6 +3,7 @@ import {postRequest} from '../../services/requests';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
+import DropDownMenu from './DropDownMenu';
 
 const Chat = ({
   setIsProfileActive,
@@ -143,9 +144,7 @@ const Chat = ({
           </div>
         </div>
 
-        <div className='burger-menu-container'>
-          <img src='images/burger-menu.svg' className='burger-menu'/>
-        </div>
+        <DropDownMenu/>
       </header>
       <section className='conversation'>
         <section ref={conversationBox} className='conversation-box'>
