@@ -144,6 +144,7 @@ const Chat = ({
     const date = `${day}/${month}/${year}`;
 
     if (Object.keys(priorGames).some((curr) => curr === date)) {
+      setTriesLeft( priorGames[date].triesLeft);
       return;
     }
 
