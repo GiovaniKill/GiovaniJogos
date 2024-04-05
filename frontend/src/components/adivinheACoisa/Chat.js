@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {postRequest} from '../../services/requests';
+import {getRequest, postRequest} from '../../services/requests';
 import {AnimatePresence, motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
@@ -15,6 +15,8 @@ const Chat = ({
   const {activeAssistant,
     setAllMessages,
     allMessages} = useContext(AdivinheACoisaContext);
+
+  const [wordID, setWordID] = useState('');
 
   const [messages, setMessages] = useState([]);
 
@@ -84,7 +86,7 @@ const Chat = ({
     setIsTyping(true);
 
     await postRequest('adivinheacoisa/ask',
-        {question: textInput, assistant: activeAssistant.name})
+        {question: textInput, assistant: activeAssistant.name, wordID})
         .then((response) => {
           setMessages((prev) => [...prev, {
             message: JSON.parse(response),
@@ -126,6 +128,12 @@ const Chat = ({
     setMessages(allMessages[activeAssistant?.name]);
     scrollChatToBottom();
   }, [activeAssistant]);
+
+  useEffect(() => {
+    getRequest('adivinheacoisa/getthingid')
+        .then((response) => setWordID(response))
+        .catch((e) => console.log(e));
+  }, []);
 
 
   return (
@@ -222,7 +230,7 @@ const Chat = ({
             placeholder='Faça sua pergunta'
             value={textInput}
             className='conversation-input'
-            maxLength={60}
+            maxLength={80}
           />
           <button
             type='submit'

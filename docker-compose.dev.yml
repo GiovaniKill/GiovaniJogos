@@ -30,6 +30,9 @@ services:
           - ./backend:/backend
         environment:
           - APP_PORT=3001
+          - THING_PASSWORD=s1e2r3i4o5u6s7
+          - OPENAI_ORG=org-DUp3EHv0fsQo7k3BMgxtH906
+          - OPENAI_API_KEY=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
         healthcheck:
           test: ["CMD", "lsof", "-t", "-i:3001"]
           timeout: 10s
