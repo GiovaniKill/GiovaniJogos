@@ -10,19 +10,27 @@ export default class Service {
   async ask (req: Request, res: Response): Promise<Response> {
     const { question, assistant, wordID } = req.body
 
-    const thing = IDToWord(JSON.stringify(wordID), JSON.stringify(process.env.THING_PASSWORD) ?? '')
+    if (typeof wordID !== 'string' ||
+    typeof question !== 'string' ||
+    typeof assistant !== 'string' ||
+    typeof wordID !== 'string') {
+      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    }
 
-    console.log('------' + thing + '------')
+    const treatedWordID = wordID.replace('"', '')
+    const answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
+
+    const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
     const assistantInstructions = `O(A) jogador(a) te fará perguntas de sim ou não com o objetivo de
-      encontrar uma "coisa" secreta, que hoje é "${thing}".
+      encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
       Responda com respostas simples como "Sim", "Não", "Também", "Provavelmente sim",
       "Provavelmente não", "Pode ser", "Em partes, sim", "Essa pergunta não pode ser respondida com sim ou não",
       "Não sei responder" ou "Depende de [alguma coisa que você queira completar]". Nunca revele demais sobre a
       "coisa", ela é secreta. Sempre adicione personalidade às suas respostas e use emojis com moderação, mas seja breve.
-      Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${thing}".
-      Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${thing}" ou use emojis que
-      a representem "${thing}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
+      Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
+      Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${accentuatedAnswer}" ou use emojis que
+      a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
       dele(a)`
 
     const personality = assistants.find(
@@ -56,6 +64,6 @@ export default class Service {
     const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)]
     const normalizedAnswer = answer.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
-    return res.status(200).json(wordToID(JSON.stringify(normalizedAnswer), JSON.stringify(process.env.THING_PASSWORD) ?? ''))
+    return res.status(200).json(JSON.stringify(wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')))
   }
 }
