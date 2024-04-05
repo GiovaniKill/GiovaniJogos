@@ -16,7 +16,9 @@ const Chat = ({
     setAllMessages,
     allMessages} = useContext(AdivinheACoisaContext);
 
-  const [wordID, setWordID] = useState('');
+  const [currentWordID, setCurrentWordID] = useState('');
+
+  const [currentDate, setCurrentDate] = useState('');
 
   const [messages, setMessages] = useState([]);
 
@@ -58,6 +60,22 @@ const Chat = ({
     }
   };
 
+  const discountTriesLeft = () => {
+    const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
+
+    setTriesLeft((curr) => {
+      localStorage.setItem('gameHistory', JSON.stringify({
+        ...priorGames,
+        [currentDate]: {
+          ...priorGames[currentDate],
+          triesLeft: curr - 1,
+        },
+      }));
+
+      return curr - 1;
+    });
+  };
+
   const onQuestionSubmit = async (event) => {
     event?.preventDefault();
 
@@ -78,7 +96,9 @@ const Chat = ({
       }]);
 
       scrollChatToBottom();
-      if (triesLeft > 0) setTriesLeft(triesLeft - 1);
+      if (triesLeft > 0) {
+        discountTriesLeft();
+      };
 
       return;
     }
@@ -86,14 +106,18 @@ const Chat = ({
     setIsTyping(true);
 
     await postRequest('adivinheacoisa/ask',
-        {question: textInput, assistant: activeAssistant.name, wordID})
+        {question: textInput,
+          assistant: activeAssistant.name,
+          wordID: currentWordID})
         .then((response) => {
           setMessages((prev) => [...prev, {
             message: JSON.parse(response),
             role: 'assistant',
           }]);
           setIsTyping(false);
-          if (triesLeft > 0) setTriesLeft(triesLeft - 1);
+          if (triesLeft > 0) {
+            discountTriesLeft();
+          };
         })
         .catch((error) => {
           setIsTyping(false);
@@ -114,6 +138,25 @@ const Chat = ({
     }
   };
 
+  const handleGameHistory = (wordID, day, month, year) => {
+    const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
+
+    const date = `${day}/${month}/${year}`;
+
+    if (Object.keys(priorGames).some((curr) => curr === date)) {
+      return;
+    }
+
+    localStorage.setItem('gameHistory', JSON.stringify({
+      ...priorGames,
+      [date]: {
+        wordID,
+        date,
+        triesLeft: 30,
+      },
+    }));
+  };
+
 
   useEffect(() => {
     setAllMessages((curr) => (
@@ -129,10 +172,23 @@ const Chat = ({
     scrollChatToBottom();
   }, [activeAssistant]);
 
+
+  // Component did mount
   useEffect(() => {
-    getRequest('adivinheacoisa/getthingid')
-        .then((response) => setWordID(response))
-        .catch((e) => console.log(e));
+    getRequest('adivinheacoisa/getthinginfo')
+        .then((response) => {
+          response = JSON.parse(response);
+          setCurrentWordID(response.wordID);
+          handleGameHistory(response.wordID, response.day,
+              response.month + 1, response.year);
+          setCurrentDate(
+              `${response.day}/${response.month + 1}/${response.year}`);
+        })
+        .catch((e) => {
+          console.log(e);
+          window.alert(
+              'Programador ta de férias 😴. Tente novamente mais tarde.');
+        });
   }, []);
 
 
