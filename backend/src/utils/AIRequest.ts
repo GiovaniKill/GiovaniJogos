@@ -1,9 +1,10 @@
 import { OpenAI } from 'openai'
 import type { ChatCompletion } from 'openai/resources'
+import 'dotenv/config'
 
 const client = new OpenAI({
-  organization: 'org-DUp3EHv0fsQo7k3BMgxtH906',
-  apiKey: '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'
+  organization: process.env.OPENAI_ORG,
+  apiKey: process.env.OPENAI_API_KEY
 })
 
 const AIRequest = async (question: string, instructions: string, thing: string): Promise<ChatCompletion> => {
