@@ -16,6 +16,8 @@ const Chat = ({
     setAllMessages,
     allMessages} = useContext(AdivinheACoisaContext);
 
+  const [isGameOver, setIsGameOver] = useState(false);
+
   const [currentWordID, setCurrentWordID] = useState('');
 
   const [currentDate, setCurrentDate] = useState('');
@@ -103,28 +105,51 @@ const Chat = ({
       return;
     }
 
-    setIsTyping(true);
+    if (!isGameOver) {
+      setIsTyping(true);
 
-    await postRequest('adivinheacoisa/ask',
-        {question: textInput,
-          assistant: activeAssistant.name,
-          wordID: currentWordID})
-        .then((response) => {
-          setMessages((prev) => [...prev, {
-            message: JSON.parse(response),
-            role: 'assistant',
-          }]);
-          setIsTyping(false);
-          if (triesLeft > 0) {
-            discountTriesLeft();
-          };
-        })
-        .catch((error) => {
-          setIsTyping(false);
-          window.alert(`A tão temida inteligência artificial
+      await postRequest('adivinheacoisa/ask',
+          {question: textInput,
+            assistant: activeAssistant.name,
+            wordID: currentWordID})
+          .then((response) => {
+            setMessages((prev) => [...prev, {
+              message: JSON.parse(response),
+              role: 'assistant',
+            }]);
+            setIsTyping(false);
+            if (triesLeft > 0) {
+              discountTriesLeft();
+            };
+
+            // Game over message
+            setTimeout(async () => {
+              setIsTyping(true);
+              await getRequest('adivinheacoisa/getgameovermessage',
+                  {assistant: activeAssistant.name,
+                    wordID: currentWordID})
+                  .then((response) => {
+                    setMessages((prev) => [...prev, {
+                      message: JSON.parse(response),
+                      role: 'assistant',
+                    }]);
+                    setIsTyping(false);
+                  })
+                  .catch((error) => {
+                    setIsTyping(false);
+                    window.alert(`A tão temida inteligência artificial
+              parece estar descançando agora, tente de novo mais tarde`);
+                    console.log(error);
+                  });
+            }, 1000);
+          })
+          .catch((error) => {
+            setIsTyping(false);
+            window.alert(`A tão temida inteligência artificial
             parece estar descançando agora, tente de novo mais tarde`);
-          console.log(error);
-        });
+            console.log(error);
+          });
+    }
 
     scrollChatToBottom();
   };
@@ -169,10 +194,16 @@ const Chat = ({
 
 
   useEffect(() => {
-    setMessages(allMessages[activeAssistant?.name]);
+    setMessages(allMessages[activeAssistant?.name] || []);
     scrollChatToBottom();
   }, [activeAssistant]);
 
+  // Game over
+  useEffect(() => {
+    if (triesLeft === 0) {
+      setIsGameOver(true);
+    }
+  }, [triesLeft]);
 
   // Component did mount
   useEffect(() => {

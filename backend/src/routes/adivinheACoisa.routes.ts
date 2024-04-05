@@ -8,5 +8,6 @@ const service = new Service()
 adivinheACoisaRouter.post('/ask', async (req, res) => await service.ask(req, res))
 adivinheACoisaRouter.get('/getassistants', async (req, res) => await service.getAssistants(req, res))
 adivinheACoisaRouter.get('/getthinginfo', async (req, res) => await service.getThingInfo(req, res))
+adivinheACoisaRouter.get('/getgameovermessage', async (req, res) => await service.getGameOverMessage(req, res))
 
 export { adivinheACoisaRouter }
