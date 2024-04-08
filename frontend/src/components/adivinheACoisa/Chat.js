@@ -4,6 +4,8 @@ import {AnimatePresence, motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 import DropDownMenu from './DropDownMenu';
+import ChatMessage from './ChatMessage';
+import DateDivisor from './DateDivisor';
 
 const Chat = ({
   setIsProfileActive,
@@ -18,6 +20,8 @@ const Chat = ({
 
   const [isGameOver, setIsGameOver] = useState(false);
 
+  const [isFormBlocked, setIsFormBlocked] = useState(false);
+
   const [currentWordID, setCurrentWordID] = useState('');
 
   const [currentDate, setCurrentDate] = useState('');
@@ -30,6 +34,7 @@ const Chat = ({
 
   const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
+  const textInputField = useRef();
 
   const [triesLeft, setTriesLeft] = useState(30);
 
@@ -62,6 +67,27 @@ const Chat = ({
     }
   };
 
+  const addNewMessage = async (newMessage) => {
+    await setMessages((prev) => {
+      const pastMessages = [...prev];
+      const formatedNewMessageDate = newMessage?.date?.split('/')
+          .reverse().join('/');
+      const formatedLastMessageDate = pastMessages[pastMessages.length - 1]
+          ?.date.split('/').reverse().join('/');
+
+      console.log(formatedLastMessageDate);
+
+      // Adds a date divisor
+      if (formatedNewMessageDate > formatedLastMessageDate ||
+        formatedLastMessageDate === undefined ||
+        newMessage.message.includes('//newdate')) {
+        pastMessages.push({role: 'date', date: newMessage?.date});
+      }
+
+      return [...pastMessages, newMessage];
+    });
+  };
+
   const discountTriesLeft = () => {
     const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
 
@@ -84,10 +110,11 @@ const Chat = ({
         {assistant: activeAssistant.name,
           wordID: currentWordID})
         .then((response) => {
-          setMessages((prev) => [...prev, {
+          addNewMessage({
             message: JSON.parse(response),
             role: 'assistant',
-          }]);
+            date: currentDate,
+          });
           setIsTyping(false);
           scrollChatToBottom();
         })
@@ -104,19 +131,21 @@ const Chat = ({
 
     if (textInput.length === 0) return;
 
-    setMessages((prev) => [...prev, {
+    addNewMessage({
       message: textInput,
       role: 'user',
-    }]);
+      date: currentDate,
+    });
 
     setTextInput('');
     scrollChatToBottom();
 
     if (textInput.includes('//test')) {
-      await setMessages((prev) => [...prev, {
+      await addNewMessage({
         message: 'Teste aí, então.',
         role: 'assistant',
-      }]);
+        date: currentDate,
+      });
 
       scrollChatToBottom();
       if (triesLeft > 0) {
@@ -128,23 +157,25 @@ const Chat = ({
 
     if (!isGameOver) {
       setIsTyping(true);
+      setIsFormBlocked(true);
+
 
       await postRequest('adivinheacoisa/ask',
           {question: textInput,
             assistant: activeAssistant.name,
             wordID: currentWordID})
           .then((response) => {
-            setMessages((prev) => [...prev, {
+            addNewMessage({
               message: JSON.parse(response),
               role: 'assistant',
-            }]);
+              date: currentDate,
+            });
             setIsTyping(false);
             if (triesLeft > 0) {
               discountTriesLeft();
             };
 
-            // Game over message, timeout for realism
-            setTimeout(async () => getGameOverMessage(), 1000);
+            setIsFormBlocked(false);
           })
           .catch((error) => {
             setIsTyping(false);
@@ -205,7 +236,11 @@ const Chat = ({
   useEffect(() => {
     if (triesLeft === 0) {
       setIsGameOver(true);
+      // Timeout for realism
+      setTimeout(async () => getGameOverMessage(), 1000);
     }
+
+    textInputField.current.focus();
   }, [triesLeft]);
 
   // Component did mount
@@ -221,8 +256,8 @@ const Chat = ({
         })
         .catch((e) => {
           console.log(e);
-          window.alert(
-              'Programador ta de férias 😴. Tente novamente mais tarde.');
+          window.alert(`Programador aparentemente ta de férias 😴.
+           Tente novamente mais tarde.`);
         });
   }, []);
 
@@ -279,25 +314,11 @@ const Chat = ({
           onScroll={(e) => handleScroll(e) }
         >
           {messages.map((curr, index) => (
-            <motion.div
-              key={index}
-              className={`text-bubble 
-              ${curr.role === 'user' ? 'user-bubble' : 'assistant-bubble'} 
-              `}
-              initial = {{
-                y: '4vw',
-                opacity: 0.1,
-              }}
-              animate = {{
-                y: 0,
-                opacity: 1,
-              }}
-              transition={{
-                type: 'tween',
-              }}
-            >
-              {curr.message}
-            </motion.div>
+            <>
+              {curr.role === 'date' ?
+              <DateDivisor date={curr.date}/> :
+              <ChatMessage key={index} message={curr}/>}
+            </>
           ))}
         </section>
 
@@ -317,16 +338,19 @@ const Chat = ({
           </AnimatePresence>
           <input
             type='text'
+            ref={textInputField}
             onChange={(e) => setTextInput(e.target.value)}
             placeholder='Faça sua pergunta'
             value={textInput}
             className='conversation-input'
             maxLength={80}
+            disabled={isFormBlocked}
           />
           <button
             type='submit'
             onClick={(e) => onQuestionSubmit(e)}
             className='conversation-send-button'
+            disabled={isFormBlocked}
           >
           Enviar
           </button>

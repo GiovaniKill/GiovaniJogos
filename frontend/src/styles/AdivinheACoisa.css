@@ -169,6 +169,15 @@
         flex flex-col overflow-y-auto scroll-smooth 
     }
 
+    .date-divisor {
+        @apply self-center py-[5vh] text-xl fullhd:text-4xl fullhd:p-2 fourk:text-7xl fourk:p-4
+        text-gray-500 flex items-center justify-evenly
+    }
+
+    .date-divisor-line {
+        @apply w-[30vw] phone:w-[20vw] h-[0.1vh] my-8 bg-gray-400 border-0 rounded 
+    }
+
     .text-bubble {
         @apply flex m-3 w-fit max-w-[60vh] rounded-lg p-1 shadow-lg
         text-xl fullhd:text-4xl fullhd:p-2 fourk:text-7xl fourk:p-4
