@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { type Request, type Response } from 'express'
-import { AIRequest } from '../utils/AIRequest'
+import { askAI, instructAI } from '../utils/AIRequest'
 import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants'
 import * as fs from 'fs'
 import { wordToID, IDToWord } from '../utils/handleID'
@@ -35,7 +35,7 @@ export default class Service {
     const personality = assistants.find(
       (curr) => curr.name === assistant)?.personality
 
-    const response = await AIRequest(
+    const response = await askAI(
       JSON.stringify(question),
       JSON.stringify(personality + ' ' + assistantInstructions) ?? '',
       answer, 'gpt-4-0125-preview')
@@ -88,16 +88,14 @@ export default class Service {
     }
 
     const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa". Anuncie a derrota dele(a),
-    revele que a "coisa" secreta, que ele não adivinhou, era "${answer}" e fale que você só volta amanhã e que o(a)
+    revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
     aguarda para jogar novamente. Dẽ personalidade à sua mensagem e manere nos emojis.`
 
     const personality = assistants.find(
       (curr) => curr.name === assistant)?.personality
 
-    const response = await AIRequest(
-      JSON.stringify('perdi'),
-      JSON.stringify(personality + ' ' + assistantInstructions) ?? '',
-      answer, 'gpt-3.5-turbo-0125')
+    const response = await instructAI(
+      JSON.stringify(personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
 
     return res.status(200).json(JSON.stringify(response.choices[0].message.content))
   }

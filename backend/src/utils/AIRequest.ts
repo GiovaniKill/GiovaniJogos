@@ -7,7 +7,7 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
-const AIRequest = async (question: string, instructions: string, thing: string, model: string): Promise<ChatCompletion> => {
+const askAI = async (question: string, instructions: string, thing: string, model: string): Promise<ChatCompletion> => {
   const response = await client.chat.completions.create({
     messages: [
       { role: 'system', content: instructions },
@@ -20,9 +20,18 @@ const AIRequest = async (question: string, instructions: string, thing: string, 
     model
   })
 
-  console.log(response)
+  return response
+}
+
+const instructAI = async (instructions: string, model: string): Promise<ChatCompletion> => {
+  const response = await client.chat.completions.create({
+    messages: [
+      { role: 'system', content: instructions }
+    ],
+    model
+  })
 
   return response
 }
 
-export { AIRequest }
+export { askAI, instructAI }
