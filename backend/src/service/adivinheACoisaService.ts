@@ -89,7 +89,7 @@ export default class Service {
 
     const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa". Anuncie a derrota dele(a),
     revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
-    aguarda para jogar novamente. Dẽ personalidade à sua mensagem e manere nos emojis.`
+    aguarda para jogar novamente. Dẽ personalidade à sua mensagem e maneire nos emojis.`
 
     const personality = assistants.find(
       (curr) => curr.name === assistant)?.personality

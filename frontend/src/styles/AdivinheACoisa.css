@@ -145,7 +145,7 @@
         @apply absolute shadow-lg bg-stone-100 dark:bg-gray-600 
         top-[9vh] right-[10vw] phone:right-[3vw] fullhd:right-[4vw]
         origin-top grid grid-cols-1 divide-y fourk:divide-y-4 divide-slate-200 dark:divide-gray-700
-        min-w-[60vw] lg:min-w-[15vw] fullhd:min-w-[20vw]
+        min-w-[60vw] lg:min-w-[15vw] fullhd:min-w-[20vw] z-10
     }
 
     .menu-option {
@@ -155,7 +155,7 @@
 
     .tries-left {
         @apply absolute top-[10vh] w-fit px-[2vw] bg-slate-100/80 dark:bg-slate-900/80 dark:text-white 
-        rounded-b-3xl text-center fullhd:text-4xl fourk:text-7xl shadow-md
+        rounded-b-3xl text-center fullhd:text-4xl fourk:text-7xl shadow-md z-0
     }
 
     .conversation {
