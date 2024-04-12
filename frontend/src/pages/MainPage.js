@@ -14,7 +14,14 @@ const MainPage = () => {
           <img
             className='rounded-lg border-2 border-solid
           border-black hover:border-yellow-400 hover:border-dashed'
-            src='images/palavrou-logo.png'
+            src='images/palavrou-logo.svg'
+          />
+        </Link>
+        <Link to='/adivinheacoisa'>
+          <img
+            className='rounded-lg border-2 border-solid
+          border-black hover:border-yellow-400 hover:border-dashed'
+            src='images/adivinheacoisa-logo.svg'
           />
         </Link>
       </nav>
