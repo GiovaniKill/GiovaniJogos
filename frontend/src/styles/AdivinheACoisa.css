@@ -184,11 +184,13 @@
     }
 
     .user-bubble {
+        border-top-right-radius: 0;
         @apply self-end justify-end bg-blue-300 bg-opacity-50 
         pl-2 fourk:pl-4
     }
 
     .assistant-bubble {
+        border-top-left-radius: 0;
         @apply self-start bg-green-300 bg-opacity-50
         pr-2 fourk:pr-4
     }
