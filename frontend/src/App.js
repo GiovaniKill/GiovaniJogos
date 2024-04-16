@@ -2,6 +2,8 @@ import {Routes, Route} from 'react-router-dom';
 import React from 'react';
 import Palavrou from './pages/Palavrou';
 import MainPage from './pages/MainPage';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 /**
  * Routing
@@ -11,6 +13,8 @@ function App() {
   return (
     <Routes>
       <Route path="/palavrou" element={ <Palavrou /> } />
+      <Route path="/termosdeservico" element={ <TermsOfService /> } />
+      <Route path="/politicadeprivacidade" element={ <PrivacyPolicy /> } />
       <Route exact path="/" element={ <MainPage /> } />
     </Routes>
   );

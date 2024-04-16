@@ -111,7 +111,7 @@ const Palavrou = () => {
             className='text-2xl absolute top-5 left-5
             handrawn hover:text-2.1xl opacity-0 sm:opacity-100'
           >
-            Giovani Jogos
+            &lt;- Giovani Jogos
           </h2>
         </Link>
 
