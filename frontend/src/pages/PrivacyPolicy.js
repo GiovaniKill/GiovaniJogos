@@ -326,7 +326,7 @@ const PrivacyPolicy = () => {
       </p>
 
       <p className='indent-3 py-5'>
-        <span className='block py-5'>&#x2022; Email: giovanijogos@outlook.com.br</span>
+        <span className='block py-1'>&#x2022; Email: giovanijogos@outlook.com.br</span>
       </p>
 
       <p className='indent-3 py-5'>
@@ -335,8 +335,8 @@ const PrivacyPolicy = () => {
       </p>
 
       <p className='indent-3 py-5'>
-        <span className='block py-5'>Nome: Giovani Souza Kill</span>
-        <span className='block py-5'>Email: giovanijogos@outlook.com.br</span>
+        <span className='block py-1'>Nome: Giovani Souza Kill</span>
+        <span className='block py-1'>Email: giovanijogos@outlook.com.br</span>
       </p>
 
       <p className='indent-3 py-5'>

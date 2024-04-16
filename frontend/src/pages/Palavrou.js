@@ -6,6 +6,7 @@ import sixLetteredWords from '../sixLetteredWords';
 import {Scoreboard} from '../components/palavrou/Scoreboard';
 import {Link} from 'react-router-dom';
 import {Tutorial} from '../components/palavrou/Tutorial';
+import Footer from '../components/Footer';
 
 const Palavrou = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
@@ -104,76 +105,79 @@ const Palavrou = () => {
 
 
   return (
-    <section className='bg-[#fffbfb] h-screen'>
-      <header className='flex'>
-        <Link to='/'>
-          <h2
-            className='text-2xl absolute top-5 left-5
+    <div className='overflow-x-hidden'>
+      <section className='bg-[#fffbfb] h-screen'>
+        <header className='flex'>
+          <Link to='/'>
+            <h2
+              className='text-2xl absolute top-5 left-5
             handrawn hover:text-2.1xl opacity-0 sm:opacity-100'
-          >
+            >
             &lt;- Giovani Jogos
-          </h2>
-        </Link>
+            </h2>
+          </Link>
 
-        <h1 className="text-5xl max-w-min mx-auto my-5 doodle">
+          <h1 className="text-5xl max-w-min mx-auto my-5 doodle">
           PALAVROU
-        </h1>
-      </header>
+          </h1>
+        </header>
 
-      <Tutorial/>
+        <Tutorial/>
 
-      <div className={`my-2 mx-auto max-w-min
+        <div className={`my-2 mx-auto max-w-min
       whitespace-nowrap text-sm ${(messageAnimation ? 'animate-wiggle' : '')}`}>
-        {message}
-      </div>
-      <div className="flex justify-center align-middle">
-        <table>
-          <tbody>
-            <Word
-              wordNumber={0} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={1} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={2} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={3} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={4} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={5} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={6} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-            <Word
-              wordNumber={7} attemptNumber={attemptNumber} response={response}
-              checkAttempt={checkAttempt} blockTyping={blockTyping}
-              setBlockTyping={setBlockTyping}
-            />
-          </tbody>
-        </table>
-      </div>
-      {showScoreboard && <Scoreboard/>}
-    </section>
+          {message}
+        </div>
+        <div className="flex justify-center align-middle">
+          <table>
+            <tbody>
+              <Word
+                wordNumber={0} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={1} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={2} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={3} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={4} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={5} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={6} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+              <Word
+                wordNumber={7} attemptNumber={attemptNumber} response={response}
+                checkAttempt={checkAttempt} blockTyping={blockTyping}
+                setBlockTyping={setBlockTyping}
+              />
+            </tbody>
+          </table>
+        </div>
+        {showScoreboard && <Scoreboard/>}
+      </section>
+      <Footer/>
+    </div>
   );
 };
 
