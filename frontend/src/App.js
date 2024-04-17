@@ -3,6 +3,8 @@ import React from 'react';
 import Palavrou from './pages/Palavrou';
 import MainPage from './pages/MainPage';
 import AdivinheACoisa from './pages/AdivinheACoisa';
+import GiovaniJogosProvider from './contexts/GiovaniJogosProvider';
+
 
 /**
  * Routing
@@ -10,11 +12,13 @@ import AdivinheACoisa from './pages/AdivinheACoisa';
  */
 function App() {
   return (
-    <Routes>
-      <Route exact path="/palavrou" element={ <Palavrou /> } />
-      <Route exact path="/adivinheacoisa" element={ <AdivinheACoisa /> } />
-      <Route path="/" element={ <MainPage /> } />
-    </Routes>
+    <GiovaniJogosProvider>
+      <Routes>
+        <Route exact path="/palavrou" element={ <Palavrou /> } />
+        <Route exact path="/adivinheacoisa" element={ <AdivinheACoisa /> } />
+        <Route path="/" element={ <MainPage /> } />
+      </Routes>
+    </GiovaniJogosProvider>
   );
 }
 
