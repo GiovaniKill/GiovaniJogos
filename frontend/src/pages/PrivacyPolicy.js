@@ -272,7 +272,7 @@ const PrivacyPolicy = () => {
 
         <p className='indent-3 py-5'>
         A atual versão da Política de Privacidade foi formulada e atualizada pela última vez em:
-          <span className='font-bold'> 15/04/2024 (quinze de abril de dois mil e vinte e quatro). </span>
+          <span className='font-bold'> 17/04/2024 (dezessete de abril de dois mil e vinte e quatro). </span>
         Reservamos o direito de modificar essa Política de Privacidade a qualquer tempo, principalmente
         em função da adequação a eventuais alterações feitas em nosso site ou em âmbito legislativo.
         Recomendamos que você a revise com frequência.

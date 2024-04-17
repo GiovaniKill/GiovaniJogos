@@ -194,7 +194,7 @@ const TermsOfService = () => {
 
         <p className='py-5'>
           <span className='font-bold'>23.</span> A atual versão deste documento foi formulada e atualizada pela última vez em:
-          <span className='font-bold'> 15/04/2024 (quinze de abril de dois mil
+          <span className='font-bold'> 17/04/2024 (dezessete de abril de dois mil
         e vinte e quatro).</span>
         </p>
 
