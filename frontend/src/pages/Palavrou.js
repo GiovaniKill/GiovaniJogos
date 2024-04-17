@@ -105,8 +105,8 @@ const Palavrou = () => {
 
 
   return (
-    <div className='overflow-x-hidden'>
-      <section className='bg-[#fffbfb] h-screen'>
+    <div className='overflow-hidden flex flex-col'>
+      <section className='bg-[#fffbfb] h-screen flex-grow'>
         <header className='flex'>
           <Link to='/'>
             <h2

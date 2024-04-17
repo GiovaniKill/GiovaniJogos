@@ -6,7 +6,7 @@ const Footer = () => {
     <footer
       className={`
         flex justify-evenly w-[100vw] bg-orange-900
-        py-[2vh]
+        py-[2vh] mt-[50vh]
       `}
     >
       <Link to='/politicadeprivacidade' className='hover:underline'>
