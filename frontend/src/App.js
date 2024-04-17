@@ -4,6 +4,7 @@ import Palavrou from './pages/Palavrou';
 import MainPage from './pages/MainPage';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import CookiesPolicy from './pages/CookiesPolicy';
 
 /**
  * Routing
@@ -15,6 +16,7 @@ function App() {
       <Route path="/palavrou" element={ <Palavrou /> } />
       <Route path="/termosdeservico" element={ <TermsOfService /> } />
       <Route path="/politicadeprivacidade" element={ <PrivacyPolicy /> } />
+      <Route path="/politicadecookies" element={ <CookiesPolicy /> } />
       <Route exact path="/" element={ <MainPage /> } />
     </Routes>
   );

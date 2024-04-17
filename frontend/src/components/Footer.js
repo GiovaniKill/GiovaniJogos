@@ -1,21 +1,33 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer
       className={`
         flex justify-evenly w-[100vw] bg-orange-900
-        py-[2vh] mt-[50vh]
+        py-[2vh] mt-[10vh]
       `}
     >
-      <Link to='/politicadeprivacidade' className='hover:underline'>
+      <a
+        href='https://giovanijogos.fun/politicadeprivacidade'
+        className='hover:underline'
+      >
         Política de privacidade
-      </Link>
+      </a>
 
-      <Link to='/termosdeservico' className='hover:underline'>
+      <a
+        href='https://giovanijogos.fun/termosdeservico'
+        className='hover:underline'
+      >
         Termos de serviço
-      </Link>
+      </a>
+
+      <a
+        href='https://giovanijogos.fun/politicadecookies'
+        className='hover:underline'
+      >
+        Política de cookies
+      </a>
     </footer>
   );
 };
