@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <footer
       className={`
-        flex justify-evenly w-[100vw] bg-orange-900
-        py-[2vh] mt-[10vh]
+        flex justify-evenly items-center w-[100vw] bg-orange-900
+        p-[2vh] mt-[10vh]
       `}
     >
       <a
