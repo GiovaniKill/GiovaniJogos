@@ -28,7 +28,7 @@ const DateDivisor = ({date}) => {
 };
 
 DateDivisor.propTypes = {
-  date: PropTypes.object.isRequired,
+  date: PropTypes.string.isRequired,
 };
 
 export default DateDivisor;

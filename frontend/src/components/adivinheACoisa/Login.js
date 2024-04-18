@@ -23,7 +23,8 @@ const Login = () => {
     <div
       className='absolute w-screen h-full bg-black bg-opacity-30 z-50'
     >
-      <section className='absolute inset-0 m-auto w-[35vw] h-[50vh]
+      <section className='absolute inset-0 m-auto
+        w-[90vw] phone:h-[50vh] md:w-[35vw] h-[50vh]
         p-[1.5vw] bg-white dark:bg-gray-800 dark:text-white
         flex flex-col items-center justify-between shadow-lg fullhd:text-3xl
         fourk:text-5xl'>
@@ -67,6 +68,7 @@ const Login = () => {
           <a
             href='https://giovanijogos.fun/termosdeservico'
             className='text-blue-600 hover:text-blue-700 hover:underline'
+            target='popup'
           >
             Termos de Serviço
           </a>
@@ -74,6 +76,7 @@ const Login = () => {
           <a
             href='https://giovanijogos.fun/politicadeprivacidade'
             className='text-blue-600 hover:text-blue-700 hover:underline'
+            target='popup'
           >
             Política de Privacidade
           </a>
@@ -81,6 +84,7 @@ const Login = () => {
           <a
             href='https://giovanijogos.fun/politicadecookies'
             className='text-blue-600 hover:text-blue-700 hover:underline'
+            target='popup'
           >
             Política de Cookies
           </a>
