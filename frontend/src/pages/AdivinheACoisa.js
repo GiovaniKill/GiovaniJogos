@@ -4,6 +4,7 @@ import Chat from '../components/adivinheACoisa/Chat';
 import AssistantProfile from '../components/adivinheACoisa/AssistantProfile';
 import ChatsNavBar from '../components/adivinheACoisa/ChatsNavBar';
 import AdivinheACoisaProvider from '../contexts/AdivinheACoisaProvider';
+import Login from '../components/adivinheACoisa/Login';
 
 const AdivinheACoisa = () => {
   const [isProfileActive, setIsProfileActive] = useState(false);
@@ -20,6 +21,7 @@ const AdivinheACoisa = () => {
 
   return (
     <AdivinheACoisaProvider>
+      <Login/>
       <div className='adivinhe-a-coisa'>
         {(isChatsNavBarActive || !isMobile()) &&
         <ChatsNavBar
