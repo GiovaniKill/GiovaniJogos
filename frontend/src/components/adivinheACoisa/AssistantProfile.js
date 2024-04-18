@@ -55,7 +55,7 @@ const AssistantProfile = ({setIsProfileActive}) => {
 };
 
 AssistantProfile.propTypes = {
-  setIsProfileActive: PropTypes.bool.isRequired,
+  setIsProfileActive: PropTypes.func.isRequired,
 };
 
 export default AssistantProfile;
