@@ -26,7 +26,7 @@ const Login = () => {
       <section className='absolute inset-0 m-auto
         w-[90vw] phone:h-[50vh] md:w-[35vw] h-[50vh]
         p-[1.5vw] bg-white dark:bg-gray-800 dark:text-white
-        flex flex-col items-center justify-between shadow-lg fullhd:text-3xl
+        flex flex-col items-center justify-between shadow-2xl fullhd:text-3xl
         fourk:text-5xl'>
 
         <h1>Para jogar, faça Login</h1>

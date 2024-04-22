@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "ES2022",
     "module": "CommonJS",
     "sourceMap": true,                     
     "outDir": "./build",
@@ -18,8 +18,9 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "paths": {
-      "*": ["node_modules/*", "src/*.ts"]
+      "*": ["node_modules/*"]
     }
   },
   "include": ["src/**/*", "src/routes/palavrou.routes.ts"],
+  "exclude": ["node_modules", "build"]
 }

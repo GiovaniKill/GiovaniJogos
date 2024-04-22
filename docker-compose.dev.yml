@@ -7,7 +7,7 @@ services:
         platform: linux/x86_64
         working_dir: /frontend
         volumes: 
-          - ./frontend:/frontend
+          - ./frontend/src:/frontend/src
           - ./:/react-docker:delegated
           - /node_modules
         depends_on:
@@ -27,13 +27,36 @@ services:
         platform: linux/x86_64
         working_dir: /backend
         volumes: 
-          - ./backend:/backend
+          - ./backend/src:/backend/src
         environment:
           - APP_PORT=3001
           - THING_PASSWORD=s1e2r3i4o5u6s7
           - OPENAI_ORG=org-DUp3EHv0fsQo7k3BMgxtH906
           - OPENAI_API_KEY=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
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=admin
+          - MYSQL_DATABASE=giovani_jogos
+          - MYSQL_HOST=localhost
+          - MYSQL_PORT=3306
         healthcheck:
           test: ["CMD", "lsof", "-t", "-i:3001"]
+          timeout: 10s
+          retries: 5
+        depends_on:
+          db:
+            condition: service_healthy  
+    db:
+        image: mysql:8.0.21
+        container_name: db
+        platform: linux/x86_64
+        ports:
+          - 3306:3306
+        expose:
+          - '3306'
+        environment:
+          - MYSQL_ROOT_PASSWORD=admin
+        restart: 'always'
+        healthcheck:
+          test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
           timeout: 10s
           retries: 5
