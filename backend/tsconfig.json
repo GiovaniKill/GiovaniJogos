@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "sourceMap": true,                     
     "outDir": "./build",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": ".",
@@ -14,13 +14,9 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
     "paths": {
       "*": ["node_modules/*"]
     }
   },
   "include": ["src/**/*", "src/routes/palavrou.routes.ts"],
-  "exclude": ["node_modules", "build"]
 }
