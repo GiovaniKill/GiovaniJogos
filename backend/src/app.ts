@@ -1,6 +1,6 @@
-import express = require('express')
-import routes from './routes'
-import errorHandler from './middlewares/errorHandler'
+import express from 'express'
+import routes from './routes/index.js'
+import errorHandler from './middlewares/errorHandler.js'
 
 class App {
   public app: express.Express
@@ -31,4 +31,4 @@ class App {
   }
 }
 
-export { App }
+export default App

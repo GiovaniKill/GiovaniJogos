@@ -1,4 +1,5 @@
-import { AES, enc } from 'crypto-js'
+import pkg from 'crypto-js'
+const { AES, enc } = pkg
 
 const wordToID = (word: string, passphrase: string): string => {
   return AES.encrypt(word, passphrase).toString()

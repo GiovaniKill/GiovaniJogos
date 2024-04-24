@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "/build/server",
+  "main": "./build/server.js",
   "scripts": {
     "build": "npx -y tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rimraf tsconfig.tsbuildinfo",
+    "clean": "rimraf build && rimraf tsconfig.tsbuildinfo",
     "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "sequelize": "ts-node --compiler-options '{\"module\":\"ES2022\"}' ./node_modules/.bin/sequelize",
-    "prestart": "mkdir build && npx -y tsc",
+    "prestart": "npm run clean && npm run build",
     "start": "node .",
     "predev": "npm run build",
     "dev": "nodemon --watch \"./src/**\" ./src/server.ts"
