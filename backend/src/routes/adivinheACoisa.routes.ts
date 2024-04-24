@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
-import Service from '../service/adivinheACoisaService'
+import Service from '../service/adivinheACoisaService.js'
 
 const adivinheACoisaRouter = Router()
 const service = new Service()

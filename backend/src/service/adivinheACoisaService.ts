@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import { type Request, type Response } from 'express'
-import { askAI, instructAI } from '../utils/AIRequest'
-import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants'
+import { askAI, instructAI } from '../utils/AIRequest.js'
+import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants.js'
 import * as fs from 'fs'
-import { wordToID, IDToWord } from '../utils/handleID'
-import answers from '../data/adivinheACoisa/answers'
+import { wordToID, IDToWord } from '../utils/handleID.js'
+import answers from '../data/adivinheACoisa/answers.js'
 
 export default class Service {
   async ask (req: Request, res: Response): Promise<Response> {
