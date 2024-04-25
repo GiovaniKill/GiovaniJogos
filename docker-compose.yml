@@ -37,7 +37,7 @@ services:
           - MYSQL_USER=root
           - MYSQL_PASSWORD=r4H5sDs7sd4jv24T8
           - MYSQL_DATABASE=giovani_jogos
-          - MYSQL_HOST=localhost
+          - MYSQL_HOST=db
         healthcheck:
           test: ["CMD", "lsof", "-t", "-i:3001"]
           timeout: 10s

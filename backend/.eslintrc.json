@@ -8,7 +8,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["index.js"],
+    "ignorePatterns": ["index.js", "index.ts"],
     "rules": {
     }
 }

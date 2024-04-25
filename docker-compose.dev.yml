@@ -38,7 +38,7 @@ services:
           - MYSQL_USER=root
           - MYSQL_PASSWORD=admin
           - MYSQL_DATABASE=giovani_jogos
-          - MYSQL_HOST=localhost
+          - MYSQL_HOST=db
           - MYSQL_PORT=3306
         healthcheck:
           test: ["CMD", "lsof", "-t", "-i:3001"]
@@ -53,8 +53,6 @@ services:
         platform: linux/x86_64
         ports:
           - 3306:3306
-        expose:
-          - '3306'
         environment:
           - MYSQL_ROOT_PASSWORD=admin
         restart: 'always'

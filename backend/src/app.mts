@@ -1,6 +1,6 @@
 import express from 'express'
-import routes from './routes/index.js'
-import errorHandler from './middlewares/errorHandler.js'
+import routes from './routes/index.mjs'
+import errorHandler from './middlewares/errorHandler.mjs'
 
 class App {
   public app: express.Express
