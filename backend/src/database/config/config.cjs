@@ -1,4 +1,5 @@
-import 'dotenv/config'
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('dotenv/config')
 
 const config = {
   username: process.env.MYSQL_USER,
@@ -9,8 +10,9 @@ const config = {
   dialect: 'mysql'
 }
 
+console.log(config)
 module.exports = {
-  development: { ...config, logging: console.log },
+  development: config,
   test: config,
   production: config
 }

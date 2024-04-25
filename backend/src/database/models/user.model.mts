@@ -1,5 +1,6 @@
 import { Model, INTEGER, STRING } from 'sequelize'
-import db from '.'
+// @ts-expect-error: Is not detecting type file before compilation
+import db from './index.mjs'
 
 class Users extends Model {
   declare id: number

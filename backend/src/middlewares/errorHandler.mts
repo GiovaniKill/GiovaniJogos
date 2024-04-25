@@ -1,5 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import type HTTPError from '../utils/HTTPError.js'
+import type HTTPError from '../utils/HTTPError.mjs'
 
 const errorHandler = (err: HTTPError, req: Request, res: Response, _next: NextFunction): Response => {
   if (err.status !== undefined) return res.status(err.status).json({ message: err.message })

@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import answers from '../data/palavrou/answers.js'
+import answers from '../data/palavrou/answers.mjs'
 
 export default class Service {
   check (req: Request, res: Response): Response {

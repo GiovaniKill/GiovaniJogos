@@ -1,6 +1,6 @@
 import { type Application } from 'express'
-import { palavrouRouter } from './palavrou.routes.js'
-import { adivinheACoisaRouter } from './adivinheACoisa.routes.js'
+import { palavrouRouter } from './palavrou.routes.mjs'
+import { adivinheACoisaRouter } from './adivinheACoisa.routes.mjs'
 
 export default (app: Application): void => {
   app.use('/palavrou', palavrouRouter)
