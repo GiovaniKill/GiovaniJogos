@@ -2,7 +2,7 @@ import '../styles/Palavrou.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {Word} from '../components/palavrou/Word';
 import {requestData} from '../services/requests';
-import sixLetteredWords from '../sixLetteredWords';
+import sixLetteredWords from '../sixLetteredWords.json';
 import {Scoreboard} from '../components/palavrou/Scoreboard';
 import {Link} from 'react-router-dom';
 import {Tutorial} from '../components/palavrou/Tutorial';
