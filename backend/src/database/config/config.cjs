@@ -10,7 +10,6 @@ const config = {
   dialect: 'mysql'
 }
 
-console.log(config)
 module.exports = {
   development: config,
   test: config,

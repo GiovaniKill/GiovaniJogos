@@ -2,46 +2,41 @@ import { Model, INTEGER, STRING } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
 import db from './index.mjs'
 
-class Users extends Model {
+class Assistants extends Model {
   declare id: number
-  declare firstName: string
-  declare lastName: string
-  declare email: string
-  declare password: string
-  declare subscription: string
+  declare name: string
+  declare personality: string
+  declare profilePicPath: string
+  declare description: string
 }
 
-Users.init({
+Assistants.init({
   id: {
     primaryKey: true,
     autoIncrement: true,
     type: INTEGER
   },
-  firstName: {
-    allowNull: true,
-    type: STRING
-  },
-  lastName: {
-    allowNull: true,
-    type: STRING
-  },
-  email: {
+  name: {
     allowNull: false,
     type: STRING
   },
-  password: {
-    allowNull: true,
+  personality: {
+    allowNull: false,
     type: STRING
   },
-  subscription: {
-    allowNull: true,
+  profilePicPath: {
+    allowNull: false,
+    type: STRING
+  },
+  description: {
+    allowNull: false,
     type: STRING
   }
 }, {
   underscored: true,
   sequelize: db,
   timestamps: true,
-  modelName: 'users'
+  modelName: 'assistants'
 })
 
-export default Users
+export default Assistants
