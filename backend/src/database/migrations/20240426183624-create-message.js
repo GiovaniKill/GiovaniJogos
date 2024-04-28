@@ -20,7 +20,8 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        field: 'user_id'
       },
       assistantId: {
         allowNull: false,
@@ -30,7 +31,18 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        field: 'assistant_id'
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'updated_at'
       }
     })
   },

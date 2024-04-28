@@ -11,12 +11,14 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        field: 'user_id'
       },
       triesLeft: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        defaultValue: 30
+        defaultValue: 30,
+        field: 'tries_left'
       },
       answer: {
         primaryKey: true,
@@ -32,6 +34,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
         defaultValue: 'unfinished'
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'updated_at'
       }
     })
   },

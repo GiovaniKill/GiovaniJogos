@@ -18,12 +18,14 @@ GamesHistory.init({
       model: 'users',
       key: 'id'
     },
-    primaryKey: true
+    primaryKey: true,
+    field: 'user_id'
   },
   triesLeft: {
     allowNull: false,
     type: INTEGER,
-    defaultValue: 30
+    defaultValue: 30,
+    field: 'tries_left'
   },
   answer: {
     allowNull: false,
@@ -40,6 +42,16 @@ GamesHistory.init({
     allowNull: false,
     type: STRING,
     defaultValue: 'unfinished'
+  },
+  createdAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'updated_at'
   }
 }, {
   underscored: true,

@@ -1,4 +1,4 @@
-import { Model, INTEGER, STRING } from 'sequelize'
+import { Model, INTEGER, STRING, DATE } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
 import db from './index.mjs'
 
@@ -25,7 +25,8 @@ Messages.init({
     references: {
       model: 'users',
       key: 'id'
-    }
+    },
+    field: 'user_id'
   },
   assistantId: {
     allowNull: false,
@@ -33,7 +34,18 @@ Messages.init({
     references: {
       model: 'assistants',
       key: 'id'
-    }
+    },
+    field: 'assistant_id'
+  },
+  createdAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'updated_at'
   }
 }, {
   underscored: true,
