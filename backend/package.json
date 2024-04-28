@@ -11,7 +11,7 @@
     "prestart": "npm run clean && npm run build",
     "start": "node .",
     "predev": "npm run build",
-    "dev": "nodemon --watch \"./src/**\" ./src/server.ts"
+    "dev": "nodemon --config nodemon.json --exec \"npm start\" -V -L"
   },
   "keywords": [],
   "author": "",

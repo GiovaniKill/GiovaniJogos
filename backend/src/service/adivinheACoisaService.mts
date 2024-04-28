@@ -5,8 +5,16 @@ import { assistants, type responseAssistant } from '../data/adivinheACoisa/assis
 import * as fs from 'fs'
 import { wordToID, IDToWord } from '../utils/handleID.mjs'
 import answers from '../data/adivinheACoisa/answers.mjs'
+import type IUsersRepository from '../repositories/IUsers.repository.mjs'
+import HTTPError from '../utils/HTTPError.mjs'
 
 export default class Service {
+  private readonly repository: IUsersRepository
+
+  constructor (repository: IUsersRepository) {
+    this.repository = repository
+  }
+
   async ask (req: Request, res: Response): Promise<Response> {
     const { question, assistant, wordID } = req.body
 
@@ -98,5 +106,17 @@ export default class Service {
       JSON.stringify(personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
 
     return res.status(200).json(JSON.stringify(response.choices[0].message.content))
+  }
+
+  async createUser (req: Request, res: Response): Promise<Response> {
+    const { email, password, subscription } = req.body
+
+    if (typeof email !== 'string' || (typeof password !== 'string' || typeof subscription !== 'string')) {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    await this.repository.createUser({ email, password, subscription })
+
+    return res.status(200).json()
   }
 }
