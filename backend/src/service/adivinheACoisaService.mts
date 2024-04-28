@@ -25,7 +25,7 @@ export default class Service {
     }
 
     const treatedWordID = wordID.replace('"', '')
-    const answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
+    const answer = IDToWord(treatedWordID, process.env.ANSWER_PASSWORD ?? '')
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
