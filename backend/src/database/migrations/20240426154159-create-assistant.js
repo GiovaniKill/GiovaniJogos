@@ -18,11 +18,22 @@ module.exports = {
       },
       profilePicPath: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        field: 'profile_pic_path'
       },
       description: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'updated_at'
       }
     })
   },

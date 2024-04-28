@@ -10,11 +10,13 @@ module.exports = {
       },
       firstName: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        field: 'first_name'
       },
       lastName: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        field: 'last_name'
       },
       email: {
         allowNull: false,
@@ -27,6 +29,16 @@ module.exports = {
       subscription: {
         allowNull: true,
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        field: 'updated_at'
       }
     })
   },

@@ -111,8 +111,8 @@ export default class Service {
   async createUser (req: Request, res: Response): Promise<Response> {
     const { email, password, subscription } = req.body
 
-    if (typeof email !== 'string' || (typeof password !== 'string' || typeof subscription !== 'string')) {
-      throw new HTTPError(400, `email: ${typeof email}`)
+    if (typeof email !== 'string' || (typeof password !== 'string' && typeof subscription !== 'string')) {
+      throw new HTTPError(400, 'Malformed request')
     }
 
     await this.repository.createUser({ email, password, subscription })

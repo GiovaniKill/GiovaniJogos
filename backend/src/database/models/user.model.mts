@@ -1,4 +1,4 @@
-import { Model, INTEGER, STRING } from 'sequelize'
+import { Model, INTEGER, STRING, DATE } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
 import db from '../../../src/database/models/index.mjs'
 
@@ -19,11 +19,13 @@ Users.init({
   },
   firstName: {
     allowNull: true,
-    type: STRING
+    type: STRING,
+    field: 'first_name'
   },
   lastName: {
     allowNull: true,
-    type: STRING
+    type: STRING,
+    field: 'last_name'
   },
   email: {
     allowNull: false,
@@ -36,6 +38,16 @@ Users.init({
   subscription: {
     allowNull: true,
     type: STRING
+  },
+  createdAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'created_at'
+  },
+  updatedAt: {
+    allowNull: true,
+    type: DATE,
+    field: 'updated_at'
   }
 }, {
   underscored: true,

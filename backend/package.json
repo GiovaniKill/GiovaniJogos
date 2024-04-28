@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build && rimraf tsconfig.tsbuildinfo",
     "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "prestart": "npm run clean && npm run build",
+    "prestart": "npm run clean && npm run build && npm run db:reset",
     "start": "node .",
     "predev": "npm run build",
     "dev": "nodemon --config nodemon.json --exec \"npm start\" -V -L"
