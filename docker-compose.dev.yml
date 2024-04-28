@@ -19,6 +19,7 @@ services:
           retries: 5
         environment:
           - CHOKIDAR_USEPOLLING=true
+          - NODE_ENV=development
     backend:
         build:
           context: ./backend
@@ -32,7 +33,8 @@ services:
           - ./backend/src:/backend/src
         environment:
           - APP_PORT=3001
-          - THING_PASSWORD=s1e2r3i4o5u6s7
+          - NODE_ENV=development
+          - ANSWER_PASSWORD=s1e2r3i4o5u6s7
           - OPENAI_ORG=org-DUp3EHv0fsQo7k3BMgxtH906
           - OPENAI_API_KEY=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
           - MYSQL_USER=root
