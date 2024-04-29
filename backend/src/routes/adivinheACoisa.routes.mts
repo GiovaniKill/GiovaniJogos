@@ -11,7 +11,7 @@ const service = new AdivinheACoisaService(usersRepository)
 const controller = new AdivinheACoisaController(service)
 
 adivinheACoisaRouter.post('/ask', tokenVerification, async (req, res) => await controller.ask(req, res))
-adivinheACoisaRouter.post('/getgameovermessage', tokenVerification, async (req, res) => await service.getGameOverMessage(req, res)) // change to MSC
+adivinheACoisaRouter.post('/getgameovermessage', tokenVerification, async (req, res) => await controller.getGameOverMessage(req, res))
 adivinheACoisaRouter.get('/getassistants', async (req, res) => await controller.getAssistants(req, res))
 
 adivinheACoisaRouter.post('/login', async (req, res) => await controller.login(req, res))

@@ -9,26 +9,6 @@ export default class AdivinheACoisaController {
     this.service = service
   }
 
-  async ask (req: Request, res: Response): Promise<Response> {
-    const { question, assistant, wordID } = req.body
-
-    if (typeof wordID !== 'string' ||
-    typeof question !== 'string' ||
-    typeof assistant !== 'string') {
-      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
-    }
-
-    const result = await this.service.ask({ question, assistant, wordID })
-
-    return res.status(200).json(JSON.stringify(result))
-  }
-
-  async getAssistants (req: Request, res: Response): Promise<Response> {
-    const result = await this.service.getAssistants()
-
-    return res.status(200).json(JSON.stringify(result))
-  }
-
   async createUser (req: Request, res: Response): Promise<Response> {
     let { email, subscription } = req.body
 
@@ -63,5 +43,37 @@ export default class AdivinheACoisaController {
     })
 
     return res.status(202).json(JSON.stringify({ message: 'Login accepted', token }))
+  }
+
+  async ask (req: Request, res: Response): Promise<Response> {
+    const { question, assistant, wordID } = req.body
+
+    if (typeof wordID !== 'string' ||
+    typeof question !== 'string' ||
+    typeof assistant !== 'string') {
+      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    }
+
+    const result = await this.service.ask({ question, assistant, wordID })
+
+    return res.status(200).json(JSON.stringify(result))
+  }
+
+  async getAssistants (req: Request, res: Response): Promise<Response> {
+    const result = await this.service.getAssistants()
+
+    return res.status(200).json(JSON.stringify(result))
+  }
+
+  async getGameOverMessage (req: Request, res: Response): Promise<Response> {
+    const { wordID, assistant } = req.body
+
+    if (typeof wordID !== 'string' || typeof assistant !== 'string') {
+      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    }
+
+    const response = await this.service.getGameOverMessage({ wordID, assistant })
+
+    return res.status(200).json(JSON.stringify(response))
   }
 }
