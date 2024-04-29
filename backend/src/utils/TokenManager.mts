@@ -20,6 +20,6 @@ export const validateToken = (token: string): string | jwt.JwtPayload => {
     const result = jwt.verify(token, secret)
     return result
   } catch (e) {
-    throw new HTTPError(401, 'Token must be a valid token')
+    throw new HTTPError(401, 'Token must be valid')
   }
 }
