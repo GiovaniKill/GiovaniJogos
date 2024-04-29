@@ -7,4 +7,5 @@ export default interface IUser {
   subscription?: string
   created_at?: Date
   updated_at?: Date
+  profilePicPath?: string
 }

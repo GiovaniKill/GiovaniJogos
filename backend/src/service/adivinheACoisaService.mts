@@ -7,24 +7,48 @@ import { wordToID, IDToWord } from '../utils/handleID.mjs'
 import answers from '../data/adivinheACoisa/answers.mjs'
 import type IUsersRepository from '../repositories/IUsers.repository.mjs'
 import HTTPError from '../utils/HTTPError.mjs'
+import type ICreateUser from '../entities/ICreateUser.mjs'
+import type IUser from '../entities/IUser.mjs'
+import type IAskParams from '../entities/IAskParams.mjs'
+import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
+import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
+import { createToken } from '../utils/TokenManager.mjs'
 
-export default class Service {
-  private readonly repository: IUsersRepository
+export default class AdivinheACoisaService {
+  private readonly usersRepository: IUsersRepository
+  private readonly assistantsRepository: IAssistantsRepository
 
   constructor (repository: IUsersRepository) {
-    this.repository = repository
+    this.usersRepository = repository
   }
 
-  async ask (req: Request, res: Response): Promise<Response> {
-    const { question, assistant, wordID } = req.body
+  async login (email: string, subscription: string): Promise<string> {
+    const user = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
 
-    if (typeof wordID !== 'string' ||
-    typeof question !== 'string' ||
-    typeof assistant !== 'string') {
-      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
     }
 
-    const treatedWordID = wordID.replace('"', '')
+    const date = new Date()
+    const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)]
+    const normalizedAnswer = answer.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+    const payload = {
+      day: date.getDate(),
+      month: date.getMonth(),
+      year: date.getFullYear(),
+      wordID: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
+    }
+
+    const token = createToken({ email, ...payload })
+
+    return token
+  }
+
+  async ask (params: IAskParams): Promise<string | null> {
+    const { question, wordID, assistant } = params
+
+    const treatedWordID: string = wordID.replace('"', '')
     const answer = IDToWord(treatedWordID, process.env.ANSWER_PASSWORD ?? '')
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
@@ -48,11 +72,13 @@ export default class Service {
       JSON.stringify(personality + ' ' + assistantInstructions) ?? '',
       answer, 'gpt-4-0125-preview')
 
-    return res.status(200).json(JSON.stringify(response.choices[0].message.content))
+    return response.choices[0].message.content
   }
 
-  async getAssistants (req: Request, res: Response): Promise<Response> {
-    const response = assistants.map((curr) => {
+  async getAssistants (): Promise<IResponseAssistant[] | undefined> {
+    const assistants = await this.assistantsRepository.getAssistants()
+
+    const response = assistants?.map((curr) => {
       const { personality, ...rest } = curr
       const image = fs.readFileSync(curr.profilePicPath)
       const base64Image = Buffer.from(image).toString('base64')
@@ -63,7 +89,7 @@ export default class Service {
       return newObj
     })
 
-    return res.status(200).json(JSON.stringify(response))
+    return response
   }
 
   async getThingInfo (req: Request, res: Response): Promise<Response> {
@@ -108,15 +134,20 @@ export default class Service {
     return res.status(200).json(JSON.stringify(response.choices[0].message.content))
   }
 
-  async createUser (req: Request, res: Response): Promise<Response> {
-    const { email, password, subscription } = req.body
+  async createUser (newUser: ICreateUser): Promise<IUser> {
+    const { email, subscription } = newUser
+    const user = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
 
-    if (typeof email !== 'string' || (typeof password !== 'string' && typeof subscription !== 'string')) {
-      throw new HTTPError(400, 'Malformed request')
+    if (user !== null) {
+      throw new HTTPError(409, 'User already exists')
     }
 
-    await this.repository.createUser({ email, password, subscription })
+    const result = await this.usersRepository.createUser(newUser)
 
-    return res.status(200).json()
+    if (result instanceof Error || typeof result === 'undefined') {
+      throw new HTTPError(500, 'Internal Error')
+    }
+
+    return result
   }
 }
