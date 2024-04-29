@@ -10,4 +10,9 @@ export default class SequelizeUsers implements IUsersRepository {
     const response = await this.model.create({ ...user })
     return response
   }
+
+  async findUserByEmailAndSubscription (email: string, subscription: string): Promise<IUser | null> {
+    const response = await this.model.findOne({ where: { email, subscription } })
+    return response
+  }
 }

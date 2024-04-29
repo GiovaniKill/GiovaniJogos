@@ -29,7 +29,8 @@ Users.init({
   },
   email: {
     allowNull: false,
-    type: STRING
+    type: STRING,
+    unique: true
   },
   password: {
     allowNull: true,
@@ -37,7 +38,13 @@ Users.init({
   },
   subscription: {
     allowNull: true,
-    type: STRING
+    type: STRING,
+    unique: true
+  },
+  profilePicPath: {
+    allowNull: true,
+    type: STRING,
+    field: 'profile_pic_path'
   },
   createdAt: {
     allowNull: true,

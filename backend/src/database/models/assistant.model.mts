@@ -18,7 +18,8 @@ Assistants.init({
   },
   name: {
     allowNull: false,
-    type: STRING
+    type: STRING,
+    unique: true
   },
   personality: {
     allowNull: false,

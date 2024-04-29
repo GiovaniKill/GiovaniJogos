@@ -20,7 +20,8 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       password: {
         allowNull: true,
@@ -28,7 +29,13 @@ module.exports = {
       },
       subscription: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
+      },
+      profilePicPath: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        field: 'profile_pic_path'
       },
       createdAt: {
         allowNull: true,
