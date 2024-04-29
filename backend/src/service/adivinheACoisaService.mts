@@ -13,6 +13,7 @@ import type IAskParams from '../entities/IAskParams.mjs'
 import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
 import { createToken } from '../utils/TokenManager.mjs'
+import type ILoginUser from '../entities/ILoginUser.mjs'
 
 export default class AdivinheACoisaService {
   private readonly usersRepository: IUsersRepository
@@ -22,10 +23,12 @@ export default class AdivinheACoisaService {
     this.usersRepository = repository
   }
 
-  async login (email: string, subscription: string): Promise<string> {
-    const user = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
+  async login (loginUser: ILoginUser): Promise<string> {
+    const { email, subscription } = loginUser
 
-    if (user === null) {
+    const response = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
+
+    if (response === null) {
       throw new HTTPError(404, 'User not found')
     }
 

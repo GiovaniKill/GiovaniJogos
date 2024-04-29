@@ -9,11 +9,12 @@ const usersRepository = new SequelizeUsers()
 const service = new AdivinheACoisaService(usersRepository)
 const controller = new AdivinheACoisaController(service)
 
-adivinheACoisaRouter.post('/ask', async (req, res) => await service.ask(req, res))
-adivinheACoisaRouter.post('/getgameovermessage', async (req, res) => await service.getGameOverMessage(req, res))
-adivinheACoisaRouter.get('/getassistants', async (req, res) => await service.getAssistants(req, res))
+adivinheACoisaRouter.post('/ask', async (req, res) => await controller.ask(req, res))
+adivinheACoisaRouter.post('/getgameovermessage', async (req, res) => await service.getGameOverMessage(req, res)) // change to MSC
+adivinheACoisaRouter.get('/getassistants', async (req, res) => await controller.getAssistants(req, res))
 adivinheACoisaRouter.get('/getthinginfo', async (req, res) => await service.getThingInfo(req, res))
 
+adivinheACoisaRouter.post('/login', async (req, res) => await controller.login(req, res))
 adivinheACoisaRouter.post('/createuser', async (req, res) => await controller.createUser(req, res))
 
 export { adivinheACoisaRouter }
