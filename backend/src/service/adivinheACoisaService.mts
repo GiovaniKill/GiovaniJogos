@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import { type Request, type Response } from 'express'
 import { askAI, instructAI } from '../utils/AIRequest.mjs'
 import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants.mjs'
 import * as fs from 'fs'
@@ -14,6 +13,7 @@ import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
 import { createToken } from '../utils/TokenManager.mjs'
 import type ILoginUser from '../entities/ILoginUser.mjs'
+import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
 
 export default class AdivinheACoisaService {
   private readonly usersRepository: IUsersRepository
@@ -95,12 +95,8 @@ export default class AdivinheACoisaService {
     return response
   }
 
-  async getGameOverMessage (req: Request, res: Response): Promise<Response> {
-    const { wordID, assistant } = req.body
-
-    if (typeof wordID !== 'string' || typeof assistant !== 'string') {
-      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
-    }
+  async getGameOverMessage (params: IGameOverMessageParams): Promise<string | null> {
+    const { wordID, assistant } = params
 
     const treatedWordID = wordID.replace('"', '')
     let answer = ''
@@ -108,7 +104,7 @@ export default class AdivinheACoisaService {
     try {
       answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
     } catch (error) {
-      return res.status(400).json(JSON.stringify({ error: 'Invalid word ID' }))
+      throw new HTTPError(400, 'Malformed request')
     }
 
     const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa". Anuncie a derrota dele(a),
@@ -121,7 +117,7 @@ export default class AdivinheACoisaService {
     const response = await instructAI(
       JSON.stringify(personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
 
-    return res.status(200).json(JSON.stringify(response.choices[0].message.content))
+    return response.choices[0].message.content
   }
 
   async createUser (newUser: ICreateUser): Promise<IUser> {
