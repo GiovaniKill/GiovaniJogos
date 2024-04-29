@@ -54,8 +54,14 @@ export default class AdivinheACoisaController {
     email = email.trim()
     subscription = subscription.trim()
 
-    const result = await this.service.login({ email, subscription })
+    const token = await this.service.login({ email, subscription })
 
-    return res.status(202).json(JSON.stringify({ message: 'Login accepted', token: result }))
+    res.cookie('jwt_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict'
+    })
+
+    return res.status(202).json(JSON.stringify({ message: 'Login accepted', token }))
   }
 }

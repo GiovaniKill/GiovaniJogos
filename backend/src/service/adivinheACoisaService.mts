@@ -95,19 +95,6 @@ export default class AdivinheACoisaService {
     return response
   }
 
-  async getThingInfo (req: Request, res: Response): Promise<Response> {
-    const date = new Date()
-    const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)]
-    const normalizedAnswer = answer.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-
-    return res.status(200).json(JSON.stringify({
-      day: date.getDate(),
-      month: date.getMonth(),
-      year: date.getFullYear(),
-      wordID: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
-    }))
-  }
-
   async getGameOverMessage (req: Request, res: Response): Promise<Response> {
     const { wordID, assistant } = req.body
 

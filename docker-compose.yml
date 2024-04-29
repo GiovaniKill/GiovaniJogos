@@ -39,6 +39,7 @@ services:
           - MYSQL_PASSWORD=r4H5sDs7sd4jv24T8
           - MYSQL_DATABASE=giovani_jogos
           - MYSQL_HOST=db
+          - JWT_SECRET=st84238h42vh4t4hv1v1454h
         healthcheck:
           test: ["CMD", "lsof", "-t", "-i:3001"]
           timeout: 10s
