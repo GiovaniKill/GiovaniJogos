@@ -30,11 +30,14 @@ export default class AdivinheACoisaController {
   }
 
   async createUser (req: Request, res: Response): Promise<Response> {
-    const { email, subscription } = req.body
+    let { email, subscription } = req.body
 
     if (typeof email !== 'string' || typeof subscription !== 'string') {
       throw new HTTPError(400, 'Malformed request')
     }
+
+    email = email.trim()
+    subscription = subscription.trim()
 
     const result = await this.service.createUser({ email, subscription })
 
@@ -42,6 +45,17 @@ export default class AdivinheACoisaController {
   }
 
   async login (req: Request, res: Response): Promise<Response> {
-    return res.status(
+    let { email, subscription } = req.body
+
+    if (typeof email !== 'string' || typeof subscription !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    email = email.trim()
+    subscription = subscription.trim()
+
+    const result = await this.service.login({ email, subscription })
+
+    return res.status(202).json(JSON.stringify({ message: 'Login accepted', token: result }))
   }
 }
