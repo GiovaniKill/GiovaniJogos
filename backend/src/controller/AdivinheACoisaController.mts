@@ -1,6 +1,8 @@
 import { type Request, type Response } from 'express'
 import type AdivinheACoisaService from '../service/adivinheACoisaService.mjs'
 import HTTPError from '../utils/HTTPError.mjs'
+import { decodeToken } from '../utils/TokenManager.mjs'
+import { getCookie } from '../utils/handleCookies.mjs'
 
 export default class AdivinheACoisaController {
   private readonly service: AdivinheACoisaService
@@ -40,6 +42,21 @@ export default class AdivinheACoisaController {
     })
 
     return res.status(202).json(JSON.stringify({ message: 'Login accepted', token }))
+  }
+
+  async validateAndRenew (req: Request, res: Response): Promise<Response> {
+    // After middleware validation
+
+    const { email } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const token = this.service.generateToken(email as string)
+
+    res.cookie('jwt_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict'
+    })
+
+    return res.status(202).json()
   }
 
   async ask (req: Request, res: Response): Promise<Response> {

@@ -8,7 +8,7 @@ export default class SequelizeUsers implements IUsersRepository {
   private readonly model = UsersModel
 
   async createUser (user: ICreateUser): Promise<IUser | undefined> {
-    const response = await this.model.create({ ...user })
+    const response = await this.model.create({ email: user.email, subscription: user.subscription })
     return response
   }
 

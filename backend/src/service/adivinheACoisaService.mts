@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { askAI, instructAI } from '../utils/AIRequest.mjs'
 import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants.mjs'
 import * as fs from 'fs'
-import { wordToID, IDToWord } from '../utils/handleID.mjs'
+import { IDToWord, wordToID } from '../utils/handleID.mjs'
 import answers from '../data/adivinheACoisa/answers.mjs'
 import type IUsersRepository from '../repositories/IUsers.repository.mjs'
 import HTTPError from '../utils/HTTPError.mjs'
@@ -11,7 +11,7 @@ import type IUser from '../entities/IUser.mjs'
 import type IAskParams from '../entities/IAskParams.mjs'
 import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
-import { createToken, decodeGoogleToken } from '../utils/TokenManager.mjs'
+import { createToken, decodeToken } from '../utils/TokenManager.mjs'
 import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
 
 export default class AdivinheACoisaService {
@@ -24,14 +24,24 @@ export default class AdivinheACoisaService {
   }
 
   async googleLogin (googleJWT: string): Promise<string> {
-    const { email, sub: subscription } = decodeGoogleToken(googleJWT)
+    const { email, sub: subscription, picture, email_verified: emailVerified } = decodeToken(googleJWT).payload
+
+    if (emailVerified === false) {
+      throw new HTTPError(403, 'User not verified')
+    }
 
     const response = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
 
     if (response === null) {
-      await this.createUser({ email, subscription })
+      await this.createUser({ email, subscription, picture })
     }
 
+    const token = await this.generateToken(email as string)
+
+    return token
+  }
+
+  async generateToken (email: string): Promise<string> {
     const date = new Date()
     const answer = answers[Math.floor((date.getTime() / 86400000) % answers.length)]
     const normalizedAnswer = answer.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
