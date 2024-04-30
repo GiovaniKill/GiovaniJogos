@@ -8,13 +8,15 @@ const Login = ({setIsAuthenticated}) => {
         {googleJWT: response.credential}, true)
         .then((r) => {
           setIsAuthenticated(true);
-          const cookies = r.headers['set-cookie'];
-          console.log(cookies);
-          console.log(r);
-          cookies?.forEach((cookie) => document.cookie = cookie);
         })
-        .catch((r) => window.alert(`Falha com o login do Google,
-        tente novamente mais tarde. Detalhes: ${r}`));
+        .catch((r) => {
+          if (r.message === 'User not verified') {
+            window.alert(`Sua conta google deve ser verificada`);
+          } else {
+            window.alert(`Falha com o login com Google,
+              tente novamente mais tarde. Detalhes: ${r}`);
+          }
+        });
   };
 
   useEffect(() => {

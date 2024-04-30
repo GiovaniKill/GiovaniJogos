@@ -5,7 +5,7 @@ import AssistantProfile from '../components/adivinheACoisa/AssistantProfile';
 import ChatsNavBar from '../components/adivinheACoisa/ChatsNavBar';
 import AdivinheACoisaProvider from '../contexts/AdivinheACoisaProvider';
 import Login from '../components/adivinheACoisa/Login';
-import {jwtDecode} from 'jwt-decode';
+import {getRequest} from '../services/requests';
 
 const AdivinheACoisa = () => {
   const [isProfileActive, setIsProfileActive] = useState(false);
@@ -13,22 +13,17 @@ const AdivinheACoisa = () => {
   const [isChatActive, setIsChatActive] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const validateAuthentication = (cookies) => {
-    const token = cookies?.split('; ')
-        .find((c) => c.startsWith('jwtToken')).split('=')[1];
-    if (token) {
-      try {
-        jwtDecode(token);
-      } catch (error) {
-        setIsAuthenticated(false);
-        return;
-      }
-    } else {
-      setIsAuthenticated(false);
-      return;
-    }
-
-    setIsAuthenticated(true);
+  const validateAuthentication = () => {
+    getRequest('adivinheacoisa/validateandrenew')
+        .then((response) => {
+          if (response.status === 202) {
+            setIsAuthenticated(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsAuthenticated(false);
+        });
   };
 
   const isMobile = () => {
@@ -39,7 +34,7 @@ const AdivinheACoisa = () => {
   useEffect(() => {
     setIsChatActive(!isMobile());
 
-    validateAuthentication(document.cookies);
+    validateAuthentication();
   }, []);
 
   return (

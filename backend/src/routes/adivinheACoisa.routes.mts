@@ -18,5 +18,6 @@ adivinheACoisaRouter.get('/getassistants', async (req, res) => await controller.
 
 adivinheACoisaRouter.post('/googlelogin', async (req, res) => await controller.googleLogin(req, res))
 adivinheACoisaRouter.post('/createuser', async (req, res) => await controller.createUser(req, res))
+adivinheACoisaRouter.get('/validateandrenew', tokenVerification, async (req, res) => await controller.validateAndRenew(req, res))
 
 export { adivinheACoisaRouter }

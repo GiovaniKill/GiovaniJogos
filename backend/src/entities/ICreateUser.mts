@@ -3,5 +3,5 @@ export default interface ICreateUser {
   lastName?: string
   email: string
   subscription: string
-  profilePicPath?: string
+  picture?: string
 }
