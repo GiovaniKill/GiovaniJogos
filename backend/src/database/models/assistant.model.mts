@@ -1,6 +1,6 @@
 import { Model, INTEGER, STRING, DATE } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
-import db from './index.mjs'
+import db from '../../../src/database/models/index.mjs'
 
 class Assistants extends Model {
   declare id: number

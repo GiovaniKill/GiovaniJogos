@@ -23,3 +23,8 @@ export const validateToken = (token: string): string | jwt.JwtPayload => {
     throw new HTTPError(401, 'Token must be valid')
   }
 }
+
+export const decodeGoogleToken = (token: string): any => {
+  const result = jwt.decode(token)
+  return result
+}

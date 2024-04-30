@@ -24,17 +24,14 @@ export default class AdivinheACoisaController {
     return res.status(201).json(JSON.stringify({ email: result.email, message: 'User created succesfully' }))
   }
 
-  async login (req: Request, res: Response): Promise<Response> {
-    let { email, subscription } = req.body
+  async googleLogin (req: Request, res: Response): Promise<Response> {
+    const { googleJWT } = req.body
 
-    if (typeof email !== 'string' || typeof subscription !== 'string') {
-      throw new HTTPError(400, 'Malformed request')
+    if (typeof googleJWT !== 'string') {
+      throw new HTTPError(400, 'Malformed request: ' + typeof googleJWT)
     }
 
-    email = email.trim()
-    subscription = subscription.trim()
-
-    const token = await this.service.login({ email, subscription })
+    const token = await this.service.googleLogin(googleJWT)
 
     res.cookie('jwt_token', token, {
       httpOnly: true,
