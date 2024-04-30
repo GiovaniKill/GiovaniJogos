@@ -45,7 +45,7 @@ const AdivinheACoisa = () => {
   return (
     <AdivinheACoisaProvider>
       {!isAuthenticated ?
-      <Login /> :
+      <Login setIsAuthenticated={setIsAuthenticated}/> :
       <div className='adivinhe-a-coisa'>
         {(isChatsNavBarActive || !isMobile()) &&
         <ChatsNavBar
