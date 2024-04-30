@@ -21,9 +21,10 @@ class App {
 
   private config (): void {
     const accessControl: express.RequestHandler = (_req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*')
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+      res.header('Access-Control-Allow-Credentials', 'true')
       res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT,PATCH')
-      res.header('Access-Control-Allow-Headers', '*')
+      res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers')
       next()
     }
 

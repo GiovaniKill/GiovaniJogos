@@ -8,12 +8,12 @@ const api = axios.create({
 });
 
 export const getRequest = async (endpoint) => {
-  const {data} = await api.get(endpoint);
+  const {data} = await api.get(endpoint, {withCredentials: true});
   return data;
 };
 
 export const postRequest = async (endpoint, body) => {
-  const {data} = await api.post(endpoint, body);
+  const {data} = await api.post(endpoint, body, {withCredentials: true});
   return data;
 };
 
