@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
+import {postRequest} from '../../services/requests';
 
 const Login = () => {
   const handleCredentialResponse = (response) => {
-    console.log('token: ' + response.credential);
+    postRequest('adivinheacoisa/googlelogin', {googleJWT: response.credential})
+        .then((r) => console.log(r))
+        .catch((r) => console.log(r));
   };
 
   useEffect(() => {

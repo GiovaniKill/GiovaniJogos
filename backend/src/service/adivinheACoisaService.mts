@@ -11,25 +11,25 @@ import type IUser from '../entities/IUser.mjs'
 import type IAskParams from '../entities/IAskParams.mjs'
 import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
-import { createToken } from '../utils/TokenManager.mjs'
-import type ILoginUser from '../entities/ILoginUser.mjs'
+import { createToken, decodeGoogleToken } from '../utils/TokenManager.mjs'
 import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
 
 export default class AdivinheACoisaService {
   private readonly usersRepository: IUsersRepository
   private readonly assistantsRepository: IAssistantsRepository
 
-  constructor (repository: IUsersRepository) {
-    this.usersRepository = repository
+  constructor (usersRepository: IUsersRepository, assistantsRepository: IAssistantsRepository) {
+    this.usersRepository = usersRepository
+    this.assistantsRepository = assistantsRepository
   }
 
-  async login (loginUser: ILoginUser): Promise<string> {
-    const { email, subscription } = loginUser
+  async googleLogin (googleJWT: string): Promise<string> {
+    const { email, sub: subscription } = decodeGoogleToken(googleJWT)
 
     const response = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
 
     if (response === null) {
-      throw new HTTPError(404, 'User not found')
+      await this.createUser({ email, subscription })
     }
 
     const date = new Date()
