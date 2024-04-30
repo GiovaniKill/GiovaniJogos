@@ -1,11 +1,16 @@
 import React, {useEffect} from 'react';
 import {postRequest} from '../../services/requests';
+import PropTypes from 'prop-types';
 
-const Login = () => {
+const Login = ({setIsAuthenticated}) => {
   const handleCredentialResponse = (response) => {
     postRequest('adivinheacoisa/googlelogin', {googleJWT: response.credential})
-        .then((r) => console.log(r))
-        .catch((r) => console.log(r));
+        .then((r) => {
+          setIsAuthenticated(true);
+          console.log(document.cookie);
+        })
+        .catch((r) => window.alert(`Falha com o login do Google,
+        tente novamente mais tarde. Detalhes: ${r}`));
   };
 
   useEffect(() => {
@@ -97,5 +102,10 @@ const Login = () => {
     </div>
   );
 };
+
+Login.propTypes = {
+  setIsAuthenticated: PropTypes.func.isRequired,
+};
+
 
 export default Login;

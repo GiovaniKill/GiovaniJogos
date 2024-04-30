@@ -7,7 +7,10 @@ const config = {
   database: process.env.MYSQL_DATABASE,
   host: process.env.MYSQL_HOST,
   port: Number(process.env.MYSQL_PORT),
-  dialect: 'mysql'
+  dialect: 'mysql',
+  query: {
+    raw: true
+  }
 }
 
 module.exports = {

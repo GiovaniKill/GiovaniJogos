@@ -15,7 +15,7 @@ module.exports = {
       },
       personality: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('medium')
       },
       profilePicPath: {
         allowNull: false,
