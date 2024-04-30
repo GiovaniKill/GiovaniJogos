@@ -7,7 +7,7 @@ const Login = ({setIsAuthenticated}) => {
     postRequest('adivinheacoisa/googlelogin', {googleJWT: response.credential})
         .then((r) => {
           setIsAuthenticated(true);
-          console.log(document.cookie);
+          console.log(r);
         })
         .catch((r) => window.alert(`Falha com o login do Google,
         tente novamente mais tarde. Detalhes: ${r}`));
