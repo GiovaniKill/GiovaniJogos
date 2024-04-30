@@ -4,10 +4,14 @@ import PropTypes from 'prop-types';
 
 const Login = ({setIsAuthenticated}) => {
   const handleCredentialResponse = (response) => {
-    postRequest('adivinheacoisa/googlelogin', {googleJWT: response.credential})
+    postRequest('adivinheacoisa/googlelogin',
+        {googleJWT: response.credential}, true)
         .then((r) => {
           setIsAuthenticated(true);
+          const cookies = r.headers['set-cookie'];
+          console.log(cookies);
           console.log(r);
+          cookies?.forEach((cookie) => document.cookie = cookie);
         })
         .catch((r) => window.alert(`Falha com o login do Google,
         tente novamente mais tarde. Detalhes: ${r}`));
