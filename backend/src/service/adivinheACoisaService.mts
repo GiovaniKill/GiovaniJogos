@@ -13,14 +13,18 @@ import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
 import { createToken, decodeToken } from '../utils/TokenManager.mjs'
 import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
+import type IGamesHistoryRepository from '../repositories/IGamesHistory.repository.mjs'
+import type IGameHistory from '../entities/IGameHistory.mjs'
 
 export default class AdivinheACoisaService {
   private readonly usersRepository: IUsersRepository
   private readonly assistantsRepository: IAssistantsRepository
+  private readonly gamesHistoryRepository: IGamesHistoryRepository
 
-  constructor (usersRepository: IUsersRepository, assistantsRepository: IAssistantsRepository) {
+  constructor (usersRepository: IUsersRepository, assistantsRepository: IAssistantsRepository, gamesHistoryRepository: IGamesHistoryRepository) {
     this.usersRepository = usersRepository
     this.assistantsRepository = assistantsRepository
+    this.gamesHistoryRepository = gamesHistoryRepository
   }
 
   async googleLogin (googleJWT: string): Promise<string> {
@@ -145,5 +149,63 @@ export default class AdivinheACoisaService {
     }
 
     return result
+  }
+
+  async getGameHistory (email: string, wordID: string, date: string): Promise<IGameHistory | null> {
+    const treatedWordID = wordID.replace('"', '')
+    let answer = ''
+
+    try {
+      answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
+    } catch (error) {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const history = await this.gamesHistoryRepository.getGame(user.id, answer, date)
+
+    if (history === null) {
+      const newGame = await this.gamesHistoryRepository.createGame(user.id, answer, date)
+      const { triesLeft, status } = newGame
+      return { triesLeft, date, status }
+    }
+
+    return history
+  }
+
+  async decreaseTriesLeft (email: string, wordID: string, date: string): Promise<[affectedCount: number]> {
+    const treatedWordID = wordID.replace('"', '')
+    let answer = ''
+
+    try {
+      answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
+    } catch (error) {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const game = await this.gamesHistoryRepository.getGame(user.id, answer, date)
+
+    if (game === null || game.status === 'finished' || game.triesLeft === 0) {
+      throw new HTTPError(400, 'The game is either finished or non existent')
+    }
+
+    const affectedRows = await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
+
+    if (affectedRows[0] === 0) {
+      throw new HTTPError(400, 'Error changing the number of tries left')
+    }
+
+    return affectedRows
   }
 }

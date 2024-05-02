@@ -21,7 +21,6 @@ const AdivinheACoisa = () => {
           }
         })
         .catch((error) => {
-          console.log(error);
           setIsAuthenticated(false);
         });
   };

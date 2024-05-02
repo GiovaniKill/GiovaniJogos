@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('games-history', {
+    await queryInterface.createTable('games_history', {
       userId: {
         primaryKey: true,
         type: Sequelize.INTEGER,
@@ -27,8 +27,7 @@ module.exports = {
       },
       date: {
         primaryKey: true,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.STRING
       },
       status: {
         allowNull: false,

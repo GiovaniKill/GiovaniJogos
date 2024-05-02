@@ -43,7 +43,7 @@ export default class AdivinheACoisaController {
     const { googleJWT } = req.body
 
     if (typeof googleJWT !== 'string') {
-      throw new HTTPError(400, 'Malformed request: ' + typeof googleJWT)
+      throw new HTTPError(400, 'Malformed request')
     }
 
     const token = await this.service.googleLogin(googleJWT)
@@ -104,5 +104,25 @@ export default class AdivinheACoisaController {
     const response = await this.service.getGameOverMessage({ wordID, assistant })
 
     return res.status(200).json(JSON.stringify(response))
+  }
+
+  async getGameHistory (req: Request, res: Response): Promise<Response> {
+    const { payload: { data: { wordID, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    const date = `${year}/${month}/${day}`
+
+    const history = await this.service.getGameHistory(email as string, wordID as string, date)
+
+    return res.status(200).json(JSON.stringify(history))
+  }
+
+  async decreaseTriesLeft (req: Request, res: Response): Promise<Response> {
+    const { payload: { data: { wordID, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    const date = `${year}/${month}/${day}`
+
+    const response = await this.service.decreaseTriesLeft(email as string, wordID as string, date)
+
+    return res.status(200).json(JSON.stringify({ response }))
   }
 }
