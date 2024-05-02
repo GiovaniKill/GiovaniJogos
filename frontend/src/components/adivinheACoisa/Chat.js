@@ -191,27 +191,6 @@ const Chat = ({
     }
   };
 
-  const handleGameHistory = (wordID, day, month, year) => {
-    const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
-
-    const date = `${day}/${month}/${year}`;
-
-    if (Object.keys(priorGames).some((curr) => curr === date)) {
-      setTriesLeft(priorGames[date]?.triesLeft || 30);
-      return;
-    }
-
-    localStorage.setItem('gameHistory', JSON.stringify({
-      ...priorGames,
-      [date]: {
-        wordID,
-        date,
-        triesLeft: 30,
-      },
-    }));
-  };
-
-
   useEffect(() => {
     setAllMessages((curr) => (
       {...curr, [activeAssistant.name]: messages}
@@ -239,11 +218,9 @@ const Chat = ({
 
   // Component did mount
   useEffect(() => {
-    getRequest('adivinheacoisa/getthinginfo')
+    getRequest('adivinheacoisa/getsessioninfo')
         .then((response) => {
           response = JSON.parse(response);
-          handleGameHistory(response.wordID, response.day,
-              response.month + 1, response.year);
           setCurrentDate(
               `${response.day}/${response.month + 1}/${response.year}`);
         })
@@ -309,7 +286,7 @@ const Chat = ({
           {messages.map((curr, index) => (
             <>
               {curr.role === 'date' ?
-              <DateDivisor date={curr.date}/> :
+              <DateDivisor key={curr.date} date={curr.date}/> :
               <ChatMessage key={index} message={curr}/>}
             </>
           ))}

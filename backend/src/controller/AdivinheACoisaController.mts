@@ -11,6 +11,19 @@ export default class AdivinheACoisaController {
     this.service = service
   }
 
+  async getSessionInfo (req: Request, res: Response): Promise<Response> {
+    const date = new Date()
+
+    const day = date.getDate().toString()
+    const month = date.getMonth().toString()
+
+    return res.status(200).json(JSON.stringify({
+      day: day.length === 1 ? '0' + day : day,
+      month: month.length === 1 ? '0' + month : month,
+      year: date.getFullYear().toString()
+    }))
+  }
+
   async createUser (req: Request, res: Response): Promise<Response> {
     let { email, subscription } = req.body
 
@@ -47,7 +60,7 @@ export default class AdivinheACoisaController {
   async validateAndRenew (req: Request, res: Response): Promise<Response> {
     // After middleware validation
 
-    const { email } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
     const token = this.service.generateToken(email as string)
 
     res.cookie('jwt_token', token, {
@@ -61,7 +74,7 @@ export default class AdivinheACoisaController {
 
   async ask (req: Request, res: Response): Promise<Response> {
     const { question, assistant } = req.body
-    const { wordID } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { payload: { data: { wordID } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof wordID !== 'string' ||
     typeof question !== 'string' ||
@@ -82,7 +95,7 @@ export default class AdivinheACoisaController {
 
   async getGameOverMessage (req: Request, res: Response): Promise<Response> {
     const { assistant } = req.body
-    const { wordID } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { payload: { data: { wordID } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof wordID !== 'string' || typeof assistant !== 'string') {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
