@@ -61,7 +61,7 @@ export default class AdivinheACoisaController {
     // After middleware validation
 
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
-    const token = this.service.generateToken(email as string)
+    const token = await this.service.generateToken(email as string)
 
     res.cookie('jwt_token', token, {
       httpOnly: true,

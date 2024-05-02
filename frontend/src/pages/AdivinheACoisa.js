@@ -14,7 +14,7 @@ const AdivinheACoisa = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const validateAuthentication = () => {
-    getRequest('adivinheacoisa/validateandrenew')
+    getRequest('adivinheacoisa/validateandrenew', true)
         .then((response) => {
           if (response.status === 202) {
             setIsAuthenticated(true);
