@@ -15,6 +15,7 @@ const controller = new AdivinheACoisaController(service)
 adivinheACoisaRouter.post('/ask', tokenVerification, async (req, res) => await controller.ask(req, res))
 adivinheACoisaRouter.post('/getgameovermessage', tokenVerification, async (req, res) => await controller.getGameOverMessage(req, res))
 adivinheACoisaRouter.get('/getassistants', async (req, res) => await controller.getAssistants(req, res))
+adivinheACoisaRouter.get('/getsessioninfo', async (req, res) => await controller.getSessionInfo(req, res))
 
 adivinheACoisaRouter.post('/googlelogin', async (req, res) => await controller.googleLogin(req, res))
 adivinheACoisaRouter.post('/createuser', async (req, res) => await controller.createUser(req, res))

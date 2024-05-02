@@ -18,9 +18,6 @@ export const validateToken = (token: string): string | jwt.JwtPayload => {
   const secret = process.env.JWT_SECRET ?? 'secret' as jwt.Secret
   try {
     const result = jwt.verify(token, secret)
-    console.log(token)
-
-    console.log(decodeToken(token))
     return result
   } catch (e) {
     throw new HTTPError(401, 'Token must be valid')
