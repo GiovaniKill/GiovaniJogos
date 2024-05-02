@@ -60,7 +60,8 @@ export default class AdivinheACoisaController {
   }
 
   async ask (req: Request, res: Response): Promise<Response> {
-    const { question, assistant, wordID } = req.body
+    const { question, assistant } = req.body
+    const { wordID } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof wordID !== 'string' ||
     typeof question !== 'string' ||
@@ -80,7 +81,8 @@ export default class AdivinheACoisaController {
   }
 
   async getGameOverMessage (req: Request, res: Response): Promise<Response> {
-    const { wordID, assistant } = req.body
+    const { assistant } = req.body
+    const { wordID } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof wordID !== 'string' || typeof assistant !== 'string') {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
