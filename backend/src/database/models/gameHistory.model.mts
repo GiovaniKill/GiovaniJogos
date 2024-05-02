@@ -1,6 +1,7 @@
-import { Model, INTEGER, STRING, DATE, NOW } from 'sequelize'
+import { Model, INTEGER, STRING, DATE } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
-import db from './index.mjs'
+import db from '../../../src/database/models/index.mjs'
+import Users from './user.model.mjs'
 
 class GamesHistory extends Model {
   declare userId: number
@@ -34,8 +35,7 @@ GamesHistory.init({
   },
   date: {
     allowNull: false,
-    type: DATE,
-    defaultValue: NOW,
+    type: STRING,
     primaryKey: true
   },
   status: {
@@ -57,7 +57,11 @@ GamesHistory.init({
   underscored: true,
   sequelize: db,
   timestamps: true,
-  modelName: 'games-history'
+  modelName: 'games_history',
+  tableName: 'games_history'
 })
+
+GamesHistory.belongsTo(Users)
+Users.hasMany(GamesHistory)
 
 export default GamesHistory

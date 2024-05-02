@@ -16,4 +16,9 @@ export default class SequelizeUsers implements IUsersRepository {
     const response = await this.model.findOne({ where: { email: user.email, subscription: user.subscription } })
     return response
   }
+
+  async findUserByEmail (email: string): Promise<IUser | null> {
+    const response = await this.model.findOne({ where: { email } })
+    return response
+  }
 }

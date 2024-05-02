@@ -225,7 +225,6 @@ const Chat = ({
               `${response.day}/${response.month + 1}/${response.year}`);
         })
         .catch((e) => {
-          console.log(e);
           window.alert(`Programador aparentemente está de férias 😴.
            Tente novamente mais tarde.`);
         });
