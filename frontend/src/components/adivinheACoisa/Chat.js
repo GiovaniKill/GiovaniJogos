@@ -22,8 +22,6 @@ const Chat = ({
 
   const [isFormBlocked, setIsFormBlocked] = useState(false);
 
-  const [currentWordID, setCurrentWordID] = useState('');
-
   const [currentDate, setCurrentDate] = useState('');
 
   const [messages, setMessages] = useState([]);
@@ -70,17 +68,15 @@ const Chat = ({
   const addNewMessage = async (newMessage) => {
     await setMessages((prev) => {
       const pastMessages = [...prev];
-      const formatedNewMessageDate = newMessage?.date?.split('/')
+      const newMessageDate = newMessage?.date?.split('/')
           .reverse().join('/');
-      const formatedLastMessageDate = pastMessages[pastMessages.length - 1]
+      const lastMessageDate = pastMessages[pastMessages.length - 1]
           ?.date.split('/').reverse().join('/');
 
-      console.log(formatedLastMessageDate);
-
-      // Adds a date divisor
-      if (formatedNewMessageDate > formatedLastMessageDate ||
-        formatedLastMessageDate === undefined ||
-        newMessage.message.includes('//newdate')) {
+      // Adds DateDivisor
+      if (newMessageDate > lastMessageDate ||
+        lastMessageDate === undefined ||
+        newMessage.message.includes('//newdate') /** For testing */) {
         pastMessages.push({role: 'date', date: newMessage?.date});
       }
 
@@ -107,8 +103,7 @@ const Chat = ({
   const getGameOverMessage = async () => {
     setIsTyping(true);
     await postRequest('adivinheacoisa/getgameovermessage',
-        {assistant: activeAssistant.name,
-          wordID: currentWordID})
+        {assistant: activeAssistant.name})
         .then((response) => {
           addNewMessage({
             message: JSON.parse(response),
@@ -162,8 +157,7 @@ const Chat = ({
 
       await postRequest('adivinheacoisa/ask',
           {question: textInput,
-            assistant: activeAssistant.name,
-            wordID: currentWordID})
+            assistant: activeAssistant.name})
           .then((response) => {
             addNewMessage({
               message: JSON.parse(response),
@@ -248,7 +242,6 @@ const Chat = ({
     getRequest('adivinheacoisa/getthinginfo')
         .then((response) => {
           response = JSON.parse(response);
-          setCurrentWordID(response.wordID);
           handleGameHistory(response.wordID, response.day,
               response.month + 1, response.year);
           setCurrentDate(
@@ -256,7 +249,7 @@ const Chat = ({
         })
         .catch((e) => {
           console.log(e);
-          window.alert(`Programador aparentemente ta de férias 😴.
+          window.alert(`Programador aparentemente está de férias 😴.
            Tente novamente mais tarde.`);
         });
   }, []);
