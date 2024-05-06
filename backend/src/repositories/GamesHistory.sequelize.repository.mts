@@ -25,4 +25,11 @@ export default class GamesHistoryRepository implements IGamesHistoryRepository {
       { where: { userId, answer, date } })
     return newGame
   }
+
+  async endGame (userId: number, answer: string, date: string): Promise<[affectedCount: number]> {
+    const newGame = await this.model.update(
+      { status: 'finished' },
+      { where: { userId, answer, date } })
+    return newGame
+  }
 }
