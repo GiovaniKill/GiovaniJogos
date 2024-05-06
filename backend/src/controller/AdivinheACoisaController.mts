@@ -74,7 +74,9 @@ export default class AdivinheACoisaController {
 
   async ask (req: Request, res: Response): Promise<Response> {
     const { question, assistant } = req.body
-    const { payload: { data: { wordID } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { payload: { data: { wordID, day, month, year, email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    const date = `${year}/${month}/${day}`
 
     if (typeof wordID !== 'string' ||
     typeof question !== 'string' ||
@@ -82,7 +84,7 @@ export default class AdivinheACoisaController {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
     }
 
-    const result = await this.service.ask({ question, assistant, wordID })
+    const result = await this.service.ask({ question, assistant, wordID, date, email })
 
     return res.status(200).json(JSON.stringify(result))
   }
