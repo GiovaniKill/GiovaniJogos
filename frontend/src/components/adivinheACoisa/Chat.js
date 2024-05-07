@@ -84,7 +84,7 @@ const Chat = ({
     });
   };
 
-  const discountTriesLeft = () => {
+  const decreaseTriesLeft = () => {
     const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
 
     setTriesLeft((curr) => {
@@ -115,7 +115,7 @@ const Chat = ({
         })
         .catch((error) => {
           setIsTyping(false);
-          window.alert(`A tão temida inteligência artificial
+          window.alert(`A tão temida inteligência artificial\
               parece estar descançando agora, tente de novo mais tarde`);
           console.log(error);
         });
@@ -144,7 +144,7 @@ const Chat = ({
 
       scrollChatToBottom();
       if (triesLeft > 0) {
-        discountTriesLeft();
+        decreaseTriesLeft();
       };
 
       return;
@@ -166,14 +166,14 @@ const Chat = ({
             });
             setIsTyping(false);
             if (triesLeft > 0) {
-              discountTriesLeft();
+              decreaseTriesLeft();
             };
 
             setIsFormBlocked(false);
           })
           .catch((error) => {
             setIsTyping(false);
-            window.alert(`A tão temida inteligência artificial
+            window.alert(`A tão temida inteligência artificial\
             parece estar descançando agora, tente de novo mais tarde`);
             console.log(error);
           });
@@ -218,14 +218,19 @@ const Chat = ({
 
   // Component did mount
   useEffect(() => {
-    getRequest('adivinheacoisa/getsessioninfo')
+    getRequest('adivinheacoisa/getgame')
         .then((response) => {
           response = JSON.parse(response);
           setCurrentDate(
-              `${response.day}/${response.month + 1}/${response.year}`);
+              (response.day.length === 2 ? response.day : '0' + response.day) +
+          '/' +
+          (response.month.length === 2 ?
+            response.month : '0' + response.month) +
+          '/' +
+          response.year);
         })
         .catch((e) => {
-          window.alert(`Programador aparentemente está de férias 😴.
+          window.alert(`Programador aparentemente está de férias 😴.\
            Tente novamente mais tarde.`);
         });
   }, []);
