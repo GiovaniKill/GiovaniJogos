@@ -51,9 +51,9 @@ export default class AdivinheACoisaService {
     const normalizedAnswer = answer.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
     const payload = {
-      day: date.getDate(),
-      month: date.getMonth(),
-      year: date.getFullYear(),
+      day: date.getDate().toString(),
+      month: (date.getMonth() + 1).toString(),
+      year: date.getFullYear().toString(),
       wordID: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
     }
 
@@ -72,7 +72,8 @@ export default class AdivinheACoisaService {
       throw new HTTPError(404, 'User not found')
     }
 
-    await this.validateTriesLeft(user.id, answer, date)
+    // C
+    await this.getOrCreateGame(email, answer, date)
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
@@ -104,8 +105,8 @@ export default class AdivinheACoisaService {
     const assistants = await this.assistantsRepository.getAssistants()
 
     const response = assistants?.map((curr) => {
-      const { personality, ...rest } = curr
-      const image = fs.readFileSync(curr.profilePicPath)
+      const { personality, profilePicPath, ...rest } = curr
+      const image = fs.readFileSync(profilePicPath)
       const base64Image = Buffer.from(image).toString('base64')
       const newObj: responseAssistant = {
         ...rest,
@@ -152,21 +153,27 @@ export default class AdivinheACoisaService {
     return result
   }
 
-  async getGameHistory (email: string, wordID: string, date: string): Promise<IGameHistory | null> {
-    const answer = await this.getWordId(wordID)
+  async getOrCreateGame (emailOrId: string | number, answer: string, date: string): Promise<IGameHistory> {
+    if (typeof emailOrId === 'string') {
+      const user = await this.usersRepository.findUserByEmail(emailOrId)
 
-    const user = await this.usersRepository.findUserByEmail(email)
+      if (user === null) {
+        throw new HTTPError(404, 'User not found')
+      }
 
-    if (user === null) {
-      throw new HTTPError(404, 'User not found')
+      emailOrId = user.id
     }
 
-    const history = await this.gamesHistoryRepository.getGame(user.id, answer, date)
+    const history = await this.gamesHistoryRepository.getGame(emailOrId, answer, date)
 
     if (history === null) {
-      const newGame = await this.gamesHistoryRepository.createGame(user.id, answer, date)
+      const newGame = await this.gamesHistoryRepository.createGame(emailOrId, answer, date)
       const { triesLeft, status } = newGame
       return { triesLeft, date, status }
+    }
+
+    if (history.triesLeft === 0 || history.status === 'finished') {
+      throw new HTTPError(403, 'This game is finished')
     }
 
     return history
@@ -181,11 +188,8 @@ export default class AdivinheACoisaService {
       throw new HTTPError(404, 'User not found')
     }
 
-    const game = await this.gamesHistoryRepository.getGame(user.id, answer, date)
-
-    if (game === null || game.status === 'finished' || game.triesLeft === 0) {
-      throw new HTTPError(400, 'The game is either finished or non existent')
-    }
+    // Validates tries left
+    await this.getOrCreateGame(user.id, answer, date)
 
     const affectedRows = await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
 
@@ -207,19 +211,5 @@ export default class AdivinheACoisaService {
     }
 
     return answer
-  }
-
-  async validateTriesLeft (id: number, answer: string, date: string): Promise<boolean> {
-    const history = await this.gamesHistoryRepository.getGame(id, answer, date)
-
-    if (history === null) {
-      throw new HTTPError(404, 'Game not found')
-    }
-
-    if (history.triesLeft === 0 || history.status === 'finished') {
-      throw new HTTPError(403, 'This game is finished')
-    }
-
-    return true
   }
 }

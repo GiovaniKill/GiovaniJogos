@@ -11,19 +11,6 @@ export default class AdivinheACoisaController {
     this.service = service
   }
 
-  async getSessionInfo (req: Request, res: Response): Promise<Response> {
-    const date = new Date()
-
-    const day = date.getDate().toString()
-    const month = date.getMonth().toString()
-
-    return res.status(200).json(JSON.stringify({
-      day: day.length === 1 ? '0' + day : day,
-      month: month.length === 1 ? '0' + month : month,
-      year: date.getFullYear().toString()
-    }))
-  }
-
   async createUser (req: Request, res: Response): Promise<Response> {
     let { email, subscription } = req.body
 
@@ -40,6 +27,7 @@ export default class AdivinheACoisaController {
   }
 
   async googleLogin (req: Request, res: Response): Promise<Response> {
+    // Auto creates user if it is not signep up already
     const { googleJWT } = req.body
 
     if (typeof googleJWT !== 'string') {
@@ -108,14 +96,14 @@ export default class AdivinheACoisaController {
     return res.status(200).json(JSON.stringify(response))
   }
 
-  async getGameHistory (req: Request, res: Response): Promise<Response> {
+  async getGame (req: Request, res: Response): Promise<Response> {
     const { payload: { data: { wordID, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     const date = `${year}/${month}/${day}`
 
-    const history = await this.service.getGameHistory(email as string, wordID as string, date)
+    const { triesLeft } = await this.service.getOrCreateGame(email as string, wordID as string, date)
 
-    return res.status(200).json(JSON.stringify(history))
+    return res.status(200).json(JSON.stringify({ triesLeft, day, month, year }))
   }
 
   async decreaseTriesLeft (req: Request, res: Response): Promise<Response> {
