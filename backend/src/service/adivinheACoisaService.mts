@@ -54,7 +54,7 @@ export default class AdivinheACoisaService {
       day: date.getDate().toString(),
       month: (date.getMonth() + 1).toString(),
       year: date.getFullYear().toString(),
-      wordID: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
+      wordId: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
     }
 
     const token = createToken({ email, ...payload })
@@ -63,8 +63,8 @@ export default class AdivinheACoisaService {
   }
 
   async ask (params: IAskParams): Promise<string | null> {
-    const { question, wordID, assistant, date, email } = params
-    const answer = await this.getWordId(wordID)
+    const { question, wordId, assistant, date, email } = params
+    const answer = await this.getWordId(wordId)
 
     const user = await this.usersRepository.findUserByEmail(email)
 
@@ -72,8 +72,8 @@ export default class AdivinheACoisaService {
       throw new HTTPError(404, 'User not found')
     }
 
-    // C
-    await this.getOrCreateGame(email, answer, date)
+    // Also checks number of tries left
+    await this.getOrCreateGame(email, wordId, date)
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
@@ -119,9 +119,9 @@ export default class AdivinheACoisaService {
   }
 
   async getGameOverMessage (params: IGameOverMessageParams): Promise<string | null> {
-    const { wordID, assistant } = params
+    const { wordId, assistant } = params
 
-    const answer = await this.getWordId(wordID)
+    const answer = await this.getWordId(wordId)
 
     const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa". Anuncie a derrota dele(a),
     revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
@@ -153,7 +153,7 @@ export default class AdivinheACoisaService {
     return result
   }
 
-  async getOrCreateGame (emailOrId: string | number, answer: string, date: string): Promise<IGameHistory> {
+  async getOrCreateGame (emailOrId: string | number, wordId: string, date: string): Promise<IGameHistory> {
     if (typeof emailOrId === 'string') {
       const user = await this.usersRepository.findUserByEmail(emailOrId)
 
@@ -163,6 +163,8 @@ export default class AdivinheACoisaService {
 
       emailOrId = user.id
     }
+
+    const answer = await this.getWordId(wordId)
 
     const history = await this.gamesHistoryRepository.getGame(emailOrId, answer, date)
 
@@ -176,11 +178,13 @@ export default class AdivinheACoisaService {
       throw new HTTPError(403, 'This game is finished')
     }
 
-    return history
+    const { triesLeft, status } = history
+
+    return { triesLeft, status }
   }
 
-  async decreaseTriesLeft (email: string, wordID: string, date: string): Promise<[affectedCount: number]> {
-    const answer = await this.getWordId(wordID)
+  async decreaseTriesLeft (email: string, wordId: string, date: string): Promise<[affectedCount: number]> {
+    const answer = await this.getWordId(wordId)
 
     const user = await this.usersRepository.findUserByEmail(email)
 
@@ -200,12 +204,12 @@ export default class AdivinheACoisaService {
     return affectedRows
   }
 
-  async getWordId (wordID: string): Promise<string> {
-    const treatedWordID = wordID.replace('"', '')
+  async getWordId (wordId: string): Promise<string> {
+    const treatedWordId = wordId.replace('"', '')
     let answer = ''
 
     try {
-      answer = IDToWord(treatedWordID, process.env.THING_PASSWORD ?? '')
+      answer = IDToWord(treatedWordId, process.env.THING_PASSWORD ?? '')
     } catch (error) {
       throw new HTTPError(400, 'Malformed request')
     }

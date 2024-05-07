@@ -84,22 +84,6 @@ const Chat = ({
     });
   };
 
-  const decreaseTriesLeft = () => {
-    const priorGames = JSON.parse(localStorage.getItem('gameHistory')) || {};
-
-    setTriesLeft((curr) => {
-      localStorage.setItem('gameHistory', JSON.stringify({
-        ...priorGames,
-        [currentDate]: {
-          ...priorGames[currentDate],
-          triesLeft: curr - 1,
-        },
-      }));
-
-      return curr - 1;
-    });
-  };
-
   const getGameOverMessage = async () => {
     setIsTyping(true);
     await postRequest('adivinheacoisa/getgameovermessage',
@@ -144,7 +128,7 @@ const Chat = ({
 
       scrollChatToBottom();
       if (triesLeft > 0) {
-        decreaseTriesLeft();
+        setTriesLeft((curr) => curr - 1);
       };
 
       return;
@@ -166,7 +150,7 @@ const Chat = ({
             });
             setIsTyping(false);
             if (triesLeft > 0) {
-              decreaseTriesLeft();
+              setTriesLeft((curr) => curr - 1);
             };
 
             setIsFormBlocked(false);
@@ -228,6 +212,7 @@ const Chat = ({
             response.month : '0' + response.month) +
           '/' +
           response.year);
+          setTriesLeft(response.triesLeft);
         })
         .catch((e) => {
           window.alert(`Programador aparentemente está de férias 😴.\

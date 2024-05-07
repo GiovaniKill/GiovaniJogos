@@ -1,4 +1,4 @@
 export default interface IGameOverMessageParams {
-  wordID: string
+  wordId: string
   assistant: string
 }

@@ -1,6 +1,6 @@
 export default interface IAskParams {
   question: string
-  wordID: string
+  wordId: string
   assistant: string
   date: string
   email: string
