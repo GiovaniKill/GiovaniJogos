@@ -115,4 +115,30 @@ export default class AdivinheACoisaController {
 
     return res.status(200).json(JSON.stringify({ response }))
   }
+
+  async createMessage (req: Request, res: Response): Promise<Response> {
+    const { assistantId, message } = req.body
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    if (typeof +assistantId !== 'number' || typeof message !== 'string' || typeof email !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const response = await this.service.createMessage({ email, assistantId: +assistantId, message })
+
+    return res.status(201).json(JSON.stringify(response))
+  }
+
+  async deleteAllConversationMessages (req: Request, res: Response): Promise<Response> {
+    const { assistantId } = req.body
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    if (typeof +assistantId !== 'number' || typeof email !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const deletedRows = await this.service.deleteAllConversationMessages(email, +assistantId)
+
+    return res.status(201).json(JSON.stringify({ message: `Succesfully deleted ${deletedRows} messages` }))
+  }
 }

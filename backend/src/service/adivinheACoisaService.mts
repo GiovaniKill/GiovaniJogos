@@ -10,28 +10,38 @@ import type ICreateUser from '../entities/ICreateUser.mjs'
 import type IUser from '../entities/IUser.mjs'
 import type IAskParams from '../entities/IAskParams.mjs'
 import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
-import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
 import { createToken, decodeToken } from '../utils/TokenManager.mjs'
+import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
 import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
 import type IGamesHistoryRepository from '../repositories/IGamesHistory.repository.mjs'
 import type IGameHistory from '../entities/IGameHistory.mjs'
+import type IMessage from '../entities/IMessage.mjs'
+import type IMessagesRepository from '../repositories/IMessages.repository.mjs'
+import type INewMessage from '../entities/INewMessage.mjs'
 
 export default class AdivinheACoisaService {
   private readonly usersRepository: IUsersRepository
   private readonly assistantsRepository: IAssistantsRepository
   private readonly gamesHistoryRepository: IGamesHistoryRepository
+  private readonly messagesRepository: IMessagesRepository
 
-  constructor (usersRepository: IUsersRepository, assistantsRepository: IAssistantsRepository, gamesHistoryRepository: IGamesHistoryRepository) {
+  constructor (usersRepository: IUsersRepository, assistantsRepository: IAssistantsRepository,
+    gamesHistoryRepository: IGamesHistoryRepository, messagesRepository: IMessagesRepository) {
     this.usersRepository = usersRepository
     this.assistantsRepository = assistantsRepository
     this.gamesHistoryRepository = gamesHistoryRepository
+    this.messagesRepository = messagesRepository
   }
 
   async googleLogin (googleJWT: string): Promise<string> {
     const { email, sub: subscription, picture, email_verified: emailVerified } = decodeToken(googleJWT).payload
 
-    if (emailVerified === false) {
-      throw new HTTPError(403, 'User not verified')
+    if (typeof email !== 'string' || typeof subscription !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    if (emailVerified !== true) {
+      throw new HTTPError(403, 'User not verified by Google')
     }
 
     const response = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
@@ -40,7 +50,7 @@ export default class AdivinheACoisaService {
       await this.createUser({ email, subscription, picture })
     }
 
-    const token = await this.generateToken(email as string)
+    const token = await this.generateToken(email)
 
     return token
   }
@@ -215,5 +225,28 @@ export default class AdivinheACoisaService {
     }
 
     return answer
+  }
+
+  async createMessage (newMessage: INewMessage): Promise<IMessage> {
+    const user = await this.usersRepository.findUserByEmail(newMessage.email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const response = await this.messagesRepository.createMessage({ ...newMessage, userId: user.id })
+    return response
+  }
+
+  async deleteAllConversationMessages (email: string, assistantId: number): Promise<number> {
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const deletedRows = await this.messagesRepository.deleteAllConversationMessages(user.id, assistantId)
+
+    return deletedRows
   }
 }

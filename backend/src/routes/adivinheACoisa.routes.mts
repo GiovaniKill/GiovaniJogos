@@ -6,15 +6,19 @@ import SequelizeUsers from '../repositories/Users.sequelize.repository.mjs'
 import SequelizeGamesHistory from '../repositories/GamesHistory.sequelize.repository.mjs'
 import AdivinheACoisaController from '../controller/AdivinheACoisaController.mjs'
 import tokenVerification from '../middlewares/TokenValidation.mjs'
+import SequelizeMessages from '../repositories/Messages.sequelize.repository.mjs'
 
 const adivinheACoisaRouter = Router()
 const usersRepository = new SequelizeUsers()
 const assistantsRepository = new SequelizeAssistants()
 const gamesHistoryRepository = new SequelizeGamesHistory()
-const service = new AdivinheACoisaService(usersRepository, assistantsRepository, gamesHistoryRepository)
+const messagesRepository = new SequelizeMessages()
+const service = new AdivinheACoisaService(usersRepository, assistantsRepository, gamesHistoryRepository, messagesRepository)
 const controller = new AdivinheACoisaController(service)
 
 adivinheACoisaRouter.post('/ask', tokenVerification, async (req, res) => await controller.ask(req, res))
+adivinheACoisaRouter.post('/createmessage', tokenVerification, async (req, res) => await controller.createMessage(req, res))
+adivinheACoisaRouter.delete('/deleteconversation', tokenVerification, async (req, res) => await controller.deleteAllConversationMessages(req, res))
 adivinheACoisaRouter.post('/getgameovermessage', tokenVerification, async (req, res) => await controller.getGameOverMessage(req, res))
 adivinheACoisaRouter.get('/getassistants', async (req, res) => await controller.getAssistants(req, res))
 adivinheACoisaRouter.get('/getgame', tokenVerification, async (req, res) => await controller.getGame(req, res))
