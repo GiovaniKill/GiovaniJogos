@@ -117,16 +117,17 @@ export default class AdivinheACoisaController {
   }
 
   async createMessage (req: Request, res: Response): Promise<Response> {
-    const { assistantId, message } = req.body
+    const { assistantId, message, sender } = req.body
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
-    if (typeof +assistantId !== 'number' || typeof message !== 'string' || typeof email !== 'string') {
+    if (typeof +assistantId !== 'number' || typeof message !== 'string' || typeof email !== 'string' ||
+    typeof sender !== 'string' || !(sender === 'user' || sender === 'assistant')) {
       throw new HTTPError(400, 'Malformed request')
     }
 
-    const response = await this.service.createMessage({ email, assistantId: +assistantId, message })
+    const response = await this.service.createMessage({ email, assistantId: +assistantId, message, sender })
 
-    return res.status(201).json(JSON.stringify(response))
+    return res.status(201).json(JSON.stringify({ createdAt: response.createdAt }))
   }
 
   async deleteAllConversationMessages (req: Request, res: Response): Promise<Response> {

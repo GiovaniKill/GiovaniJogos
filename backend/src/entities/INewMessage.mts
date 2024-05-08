@@ -4,4 +4,5 @@ export default interface INewMessage {
   userId?: number
   assistantId: number
   createdAt?: string
+  sender: string
 }
