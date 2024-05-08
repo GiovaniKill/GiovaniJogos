@@ -35,7 +35,7 @@ module.exports = {
         field: 'assistant_id'
       },
       createdAt: {
-        allowNull: true,
+        primaryKey: true,
         type: Sequelize.DATE,
         field: 'created_at'
       },
