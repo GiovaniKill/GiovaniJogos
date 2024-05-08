@@ -37,6 +37,10 @@ Messages.init({
     },
     field: 'assistant_id'
   },
+  sender: {
+    allowNull: false,
+    type: STRING
+  },
   createdAt: {
     primaryKey: true,
     type: DATE,

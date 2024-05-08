@@ -34,6 +34,10 @@ module.exports = {
         onDelete: 'CASCADE',
         field: 'assistant_id'
       },
+      sender: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       createdAt: {
         primaryKey: true,
         type: Sequelize.DATE,
