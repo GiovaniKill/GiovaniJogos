@@ -3,5 +3,5 @@ export default interface IMessage {
   userId: number
   assistantId: number
   createdAt?: string
-  sender?: string
+  role?: string
 }

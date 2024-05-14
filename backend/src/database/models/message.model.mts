@@ -37,7 +37,7 @@ Messages.init({
     },
     field: 'assistant_id'
   },
-  sender: {
+  role: {
     allowNull: false,
     type: STRING
   },

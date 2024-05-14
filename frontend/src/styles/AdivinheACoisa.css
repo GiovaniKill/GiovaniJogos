@@ -166,7 +166,7 @@
 
     .conversation-box {
         @apply w-full h-[83vh]
-        flex flex-col overflow-y-auto scroll-smooth 
+        flex flex-col overflow-y-auto scroll-smooth overflow-x-hidden
     }
 
     .date-divisor {

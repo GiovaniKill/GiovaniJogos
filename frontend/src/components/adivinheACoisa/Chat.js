@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {getRequest, postRequest} from '../../services/requests';
+import {deleteRequest, getRequest, postRequest} from '../../services/requests';
 import {AnimatePresence, motion} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
@@ -37,13 +37,19 @@ const Chat = ({
   const [triesLeft, setTriesLeft] = useState(30);
 
   const deleteMessages = () => {
-    setAllMessages((curr) => ({
-      ...curr,
-      [activeAssistant.name]: [],
-    }));
-    setMessages([]);
+    deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
+        .then(() => {
+          setAllMessages((curr) => ({
+            ...curr,
+            [activeAssistant.name]: [],
+          }));
+          setMessages([]);
 
-    localStorage.setItem('chatMessages', JSON.stringify(allMessages));
+          localStorage.setItem('chatMessages', JSON.stringify(allMessages));
+        })
+        .catch((e) => {
+          window.alert('Error ao excluir as mensagens');
+        });
   };
 
   const scrollChatToBottom = () => {
