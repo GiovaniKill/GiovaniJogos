@@ -249,4 +249,30 @@ export default class AdivinheACoisaService {
 
     return deletedRows
   }
+
+  async getAllLastMessages (email: string, amount: number): Promise<IMessage[] | null> {
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const messages = await this.messagesRepository.getAllLastMessages(user.id, amount)
+
+    return messages
+  }
+
+  async getLastMessagesFromReference (email: string, assistantId: number,
+    amount: number, createdAt: string): Promise<IMessage[] | null> {
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const messages = await this.messagesRepository
+      .getLastMessagesFromReference(user.id, assistantId, amount, createdAt)
+
+    return messages
+  }
 }

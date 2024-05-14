@@ -106,32 +106,22 @@ export default class AdivinheACoisaController {
     return res.status(200).json(JSON.stringify({ triesLeft, day, month, year }))
   }
 
-  async decreaseTriesLeft (req: Request, res: Response): Promise<Response> {
-    const { payload: { data: { wordId, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
-
-    const date = `${year}/${month}/${day}`
-
-    const response = await this.service.decreaseTriesLeft(email as string, wordId as string, date)
-
-    return res.status(200).json(JSON.stringify({ response }))
-  }
-
   async createMessage (req: Request, res: Response): Promise<Response> {
-    const { assistantId, message, sender } = req.body
+    const { assistantId, message, sender: role } = req.body
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof +assistantId !== 'number' || typeof message !== 'string' || typeof email !== 'string' ||
-    typeof sender !== 'string' || !(sender === 'user' || sender === 'assistant')) {
+    typeof role !== 'string' || !(role === 'user' || role === 'assistant')) {
       throw new HTTPError(400, 'Malformed request')
     }
 
-    const response = await this.service.createMessage({ email, assistantId: +assistantId, message, sender })
+    const response = await this.service.createMessage({ email, assistantId: +assistantId, message, role })
 
     return res.status(201).json(JSON.stringify({ createdAt: response.createdAt }))
   }
 
   async deleteAllConversationMessages (req: Request, res: Response): Promise<Response> {
-    const { assistantId } = req.body
+    const { assistantId } = req.params
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof +assistantId !== 'number' || typeof email !== 'string') {
@@ -141,5 +131,30 @@ export default class AdivinheACoisaController {
     const deletedRows = await this.service.deleteAllConversationMessages(email, +assistantId)
 
     return res.status(201).json(JSON.stringify({ message: `Succesfully deleted ${deletedRows} messages` }))
+  }
+
+  async getAllLastMessages (req: Request, res: Response): Promise<Response> {
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    if (typeof email !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const messages = await this.service.getAllLastMessages(email, 30)
+
+    return res.status(201).json(JSON.stringify({ messages }))
+  }
+
+  async getLastMessagesFromReference (req: Request, res: Response): Promise<Response> {
+    const { assistantId, createdAt } = req.params
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    if (typeof +assistantId !== 'number' || typeof email !== 'string' || typeof createdAt !== 'string') {
+      throw new HTTPError(400, 'Malformed request')
+    }
+
+    const messages = await this.service.getLastMessagesFromReference(email, +assistantId, 30, createdAt)
+
+    return res.status(201).json(JSON.stringify({ messages }))
   }
 }

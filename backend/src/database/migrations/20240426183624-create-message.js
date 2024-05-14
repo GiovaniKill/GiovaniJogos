@@ -34,7 +34,7 @@ module.exports = {
         onDelete: 'CASCADE',
         field: 'assistant_id'
       },
-      sender: {
+      role: {
         allowNull: false,
         type: Sequelize.STRING
       },
