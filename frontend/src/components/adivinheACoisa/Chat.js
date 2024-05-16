@@ -6,6 +6,7 @@ import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 import DropDownMenu from './DropDownMenu';
 import ChatMessage from './ChatMessage';
 import DateDivisor from './DateDivisor';
+import ChatInput from './ChatInput';
 
 const Chat = ({
   setIsProfileActive,
@@ -20,20 +21,13 @@ const Chat = ({
 
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const [isFormBlocked, setIsFormBlocked] = useState(false);
-
-  const [currentDate, setCurrentDate] = useState('');
-
   const [currentConversationMessages,
     setCurrentConversationMessages] = useState([]);
 
   const [isTyping, setIsTyping] = useState(false);
 
   const [showScrollBottomButton, setShowScrollBottomButton] = useState(false);
-
-  const [textInput, setTextInput] = useState('');
   const conversationBox = useRef();
-  const textInputField = useRef();
 
   const [triesLeft, setTriesLeft] = useState(30);
 
@@ -41,7 +35,9 @@ const Chat = ({
     deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
         .then(() => {
           setAllConversationsMessages((curr) => (
-            curr.filter((message) => message.assistantId !== activeAssistant.id)
+            curr.filter((message) => (
+              message.assistantId !== activeAssistant.id ||[]
+            ))
           ));
           setCurrentConversationMessages([]);
         })
@@ -64,22 +60,20 @@ const Chat = ({
       const pastMessages = [...prev];
       const lastMessage = pastMessages[pastMessages.length - 1];
 
-      const formattedDate = newMessage.createdAt
-          .slice(0, 10).split('-').reverse().join('/');
-
       // Adds DateDivisor
       if (newMessage.createdAt > lastMessage?.createdAt ||
         lastMessage === undefined ||
-        newMessage.message.includes('//newdate') /** For testing */) {
+        newMessage?.message?.includes('//newdate') /** For testing */) {
+        const formattedDate = newMessage?.createdAt
+            .slice(0, 10).split('-').reverse().join('/');
         pastMessages.push({role: 'date', date: formattedDate});
       }
 
       return [...pastMessages, newMessage];
     });
-    await setAllConversationsMessages((prev) => {
-      console.log(prev);
-      [...prev, newMessage];
-    });
+    await setAllConversationsMessages(
+        [...allConversationsMessages, newMessage],
+    );
   };
 
   const getGameOverMessage = async () => {
@@ -87,10 +81,11 @@ const Chat = ({
     await postRequest('adivinheacoisa/getgameovermessage',
         {assistantId: activeAssistant.id})
         .then((response) => {
+          response = JSON.parse(response);
           addNewMessage({
-            message: JSON.parse(response),
+            message: response.message,
             role: 'assistant',
-            date: currentDate,
+            createdAt: response.createdAt,
           });
           setIsTyping(false);
           scrollChatToBottom();
@@ -101,76 +96,6 @@ const Chat = ({
               parece estar descançando agora, tente de novo mais tarde`);
           console.log(error);
         });
-  };
-
-  const onQuestionSubmit = async (event) => {
-    event?.preventDefault();
-
-    if (textInput.length === 0) return;
-
-    await postRequest('adivinheacoisa/createmessage', {
-      assistantId: activeAssistant.id, message: textInput, role: 'user',
-    })
-        .then((response) => {
-          addNewMessage({
-            message: textInput,
-            role: 'user',
-            createdAt: response.createdAt,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          window.alert('Erro ao criar a mensagem');
-        });
-
-    setTextInput('');
-    scrollChatToBottom();
-
-    if (textInput.includes('//test')) {
-      await addNewMessage({
-        message: 'Teste aí, então.',
-        role: 'assistant',
-        createdAt: '9999-12-31',
-      });
-
-      scrollChatToBottom();
-      if (triesLeft > 0) {
-        setTriesLeft((curr) => curr - 1);
-      };
-
-      return;
-    }
-
-    if (!isGameOver) {
-      setIsTyping(true);
-      setIsFormBlocked(true);
-
-
-      await postRequest('adivinheacoisa/ask',
-          {question: textInput,
-            assistantId: activeAssistant.id})
-          .then((response) => {
-            addNewMessage({
-              message: response.message,
-              role: 'assistant',
-              createdAt: response.createdAt,
-            });
-            setIsTyping(false);
-            if (triesLeft > 0) {
-              setTriesLeft((curr) => curr - 1);
-            };
-
-            setIsFormBlocked(false);
-          })
-          .catch((error) => {
-            setIsTyping(false);
-            window.alert(`A tão temida inteligência artificial\
-            parece estar descançando agora, tente de novo mais tarde`);
-            console.log(error);
-          });
-    }
-
-    scrollChatToBottom();
   };
 
   const handleScroll = (e) => {
@@ -184,21 +109,19 @@ const Chat = ({
 
   useEffect(() => {
     console.log(allConversationsMessages);
-    setCurrentConversationMessages(allConversationsMessages.map(
+    setCurrentConversationMessages(allConversationsMessages.filter(
         (message) => message.assistantId === activeAssistant.id) ||
         []);
     scrollChatToBottom();
   }, [activeAssistant]);
 
-  // Game over
+  // Game over and refocus input
   useEffect(() => {
     if (triesLeft === 0) {
       setIsGameOver(true);
       // Timeout for realism
       setTimeout(async () => getGameOverMessage(), 1000);
     }
-
-    textInputField.current.focus();
   }, [triesLeft]);
 
   // Component did mount
@@ -206,13 +129,6 @@ const Chat = ({
     getRequest('adivinheacoisa/getgame')
         .then((response) => {
           response = JSON.parse(response);
-          setCurrentDate(
-              (response.day.length === 2 ? response.day : '0' + response.day) +
-          '/' +
-          (response.month.length === 2 ?
-            response.month : '0' + response.month) +
-          '/' +
-          response.year);
           setTriesLeft(response.triesLeft);
         })
         .catch((e) => {
@@ -282,39 +198,31 @@ const Chat = ({
           ))}
         </section>
 
-        <form onSubmit={onQuestionSubmit} className='conversation-form'>
+        <section className='flex align-middle justify-center w-full'>
           <AnimatePresence>
             {showScrollBottomButton &&
-          <motion.button
-            onClick={scrollChatToBottom}
-            className='scroll-bottom-button'
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0, transition: {duration: 0.1}}}
-          >
-            <img src='images/arrow-down.svg' className='scroll-bottom-icon'/>
-          </motion.button>
+              <motion.button
+                onClick={scrollChatToBottom}
+                className='scroll-bottom-button'
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                exit={{opacity: 0, transition: {duration: 0.1}}}
+              >
+                <img
+                  src='images/arrow-down.svg'
+                  className='scroll-bottom-icon'/>
+              </motion.button>
             }
           </AnimatePresence>
-          <input
-            type='text'
-            ref={textInputField}
-            onChange={(e) => setTextInput(e.target.value)}
-            placeholder='Faça sua pergunta'
-            value={textInput}
-            className='conversation-input'
-            maxLength={80}
-            disabled={isFormBlocked}
+          <ChatInput
+            addNewMessage={addNewMessage}
+            scrollChatToBottom={scrollChatToBottom}
+            triesLeft={triesLeft}
+            setTriesLeft={setTriesLeft}
+            setIsTyping={setIsTyping}
+            isGameOver={isGameOver}
           />
-          <button
-            type='submit'
-            onClick={(e) => onQuestionSubmit(e)}
-            className='conversation-send-button'
-            disabled={isFormBlocked}
-          >
-          Enviar
-          </button>
-        </form>
+        </section>
       </section>
     </motion.div>
   );

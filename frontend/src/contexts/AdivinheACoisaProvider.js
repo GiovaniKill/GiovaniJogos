@@ -34,7 +34,7 @@ const AdivinheACoisaProvider = ({children}) => {
     getRequest('adivinheacoisa/getalllastmessages')
         .then(async (data) => {
           const parsedMessages = await JSON.parse(data);
-          setAllConversationsMessages(parsedMessages.messages);
+          await setAllConversationsMessages(parsedMessages.messages);
         })
         .catch((e) => {
           window.alert('Erro ao recuperar mensagens');
