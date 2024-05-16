@@ -60,13 +60,16 @@ const Chat = ({
       const pastMessages = [...prev];
       const lastMessage = pastMessages[pastMessages.length - 1];
 
+      const newMessageDate = newMessage?.createdAt
+          .slice(0, 10).split('-').reverse().join('/');
+      const lastMessageDate = lastMessage?.createdAt
+          .slice(0, 10).split('-').reverse().join('/');
+
       // Adds DateDivisor
-      if (newMessage.createdAt > lastMessage?.createdAt ||
+      if (newMessageDate > lastMessageDate ||
         lastMessage === undefined ||
         newMessage?.message?.includes('//newdate') /** For testing */) {
-        const formattedDate = newMessage?.createdAt
-            .slice(0, 10).split('-').reverse().join('/');
-        pastMessages.push({role: 'date', date: formattedDate});
+        pastMessages.push({role: 'date', date: newMessageDate});
       }
 
       return [...pastMessages, newMessage];
