@@ -61,18 +61,18 @@ export default class AdivinheACoisaController {
   }
 
   async ask (req: Request, res: Response): Promise<Response> {
-    const { question, assistant } = req.body
+    const { question, assistantId } = req.body
     const { payload: { data: { wordId, day, month, year, email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     const date = `${year}/${month}/${day}`
 
     if (typeof wordId !== 'string' ||
     typeof question !== 'string' ||
-    typeof assistant !== 'string') {
+    typeof +assistantId !== 'number') {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
     }
 
-    const result = await this.service.ask({ question, assistant, wordId, date, email })
+    const result = await this.service.ask({ question, assistantId: +assistantId, wordId, date, email })
 
     return res.status(200).json(JSON.stringify(result))
   }
@@ -84,14 +84,14 @@ export default class AdivinheACoisaController {
   }
 
   async getGameOverMessage (req: Request, res: Response): Promise<Response> {
-    const { assistant } = req.body
-    const { payload: { data: { wordId } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { assistantId } = req.body
+    const { payload: { data: { wordId, email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
-    if (typeof wordId !== 'string' || typeof assistant !== 'string') {
+    if (typeof wordId !== 'string' || typeof assistantId !== 'number' || typeof email !== 'string') {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
     }
 
-    const response = await this.service.getGameOverMessage({ wordId, assistant })
+    const response = await this.service.getGameOverMessage({ wordId, assistantId, email })
 
     return res.status(200).json(JSON.stringify(response))
   }
@@ -107,7 +107,7 @@ export default class AdivinheACoisaController {
   }
 
   async createMessage (req: Request, res: Response): Promise<Response> {
-    const { assistantId, message, sender: role } = req.body
+    const { assistantId, message, role } = req.body
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     if (typeof +assistantId !== 'number' || typeof message !== 'string' || typeof email !== 'string' ||

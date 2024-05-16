@@ -15,8 +15,8 @@ const Chat = ({
   setIsChatActive,
 }) => {
   const {activeAssistant,
-    setAllMessages,
-    allMessages} = useContext(AdivinheACoisaContext);
+    setAllConversationsMessages,
+    allConversationsMessages} = useContext(AdivinheACoisaContext);
 
   const [isGameOver, setIsGameOver] = useState(false);
 
@@ -24,7 +24,8 @@ const Chat = ({
 
   const [currentDate, setCurrentDate] = useState('');
 
-  const [messages, setMessages] = useState([]);
+  const [currentConversationMessages,
+    setCurrentConversationMessages] = useState([]);
 
   const [isTyping, setIsTyping] = useState(false);
 
@@ -39,13 +40,10 @@ const Chat = ({
   const deleteMessages = () => {
     deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
         .then(() => {
-          setAllMessages((curr) => ({
-            ...curr,
-            [activeAssistant.name]: [],
-          }));
-          setMessages([]);
-
-          localStorage.setItem('chatMessages', JSON.stringify(allMessages));
+          setAllConversationsMessages((curr) => (
+            curr.filter((message) => message.assistantId !== activeAssistant.id)
+          ));
+          setCurrentConversationMessages([]);
         })
         .catch((e) => {
           window.alert('Error ao excluir as mensagens');
@@ -61,39 +59,33 @@ const Chat = ({
     });
   };
 
-  const setLocalStorageMessages = () => {
-    const pastMessages = JSON.parse(localStorage.getItem('chatMessages')) || {};
-    if (messages.length !== 0) {
-      localStorage.setItem('chatMessages', JSON.stringify({
-        ...pastMessages,
-        [activeAssistant.name]: messages,
-      }));
-    }
-  };
-
   const addNewMessage = async (newMessage) => {
-    await setMessages((prev) => {
+    await setCurrentConversationMessages((prev) => {
       const pastMessages = [...prev];
-      const newMessageDate = newMessage?.date?.split('/')
-          .reverse().join('/');
-      const lastMessageDate = pastMessages[pastMessages.length - 1]
-          ?.date.split('/').reverse().join('/');
+      const lastMessage = pastMessages[pastMessages.length - 1];
+
+      const formattedDate = newMessage.createdAt
+          .slice(0, 10).split('-').reverse().join('/');
 
       // Adds DateDivisor
-      if (newMessageDate > lastMessageDate ||
-        lastMessageDate === undefined ||
+      if (newMessage.createdAt > lastMessage?.createdAt ||
+        lastMessage === undefined ||
         newMessage.message.includes('//newdate') /** For testing */) {
-        pastMessages.push({role: 'date', date: newMessage?.date});
+        pastMessages.push({role: 'date', date: formattedDate});
       }
 
       return [...pastMessages, newMessage];
+    });
+    await setAllConversationsMessages((prev) => {
+      console.log(prev);
+      [...prev, newMessage];
     });
   };
 
   const getGameOverMessage = async () => {
     setIsTyping(true);
     await postRequest('adivinheacoisa/getgameovermessage',
-        {assistant: activeAssistant.name})
+        {assistantId: activeAssistant.id})
         .then((response) => {
           addNewMessage({
             message: JSON.parse(response),
@@ -116,11 +108,20 @@ const Chat = ({
 
     if (textInput.length === 0) return;
 
-    addNewMessage({
-      message: textInput,
-      role: 'user',
-      date: currentDate,
-    });
+    await postRequest('adivinheacoisa/createmessage', {
+      assistantId: activeAssistant.id, message: textInput, role: 'user',
+    })
+        .then((response) => {
+          addNewMessage({
+            message: textInput,
+            role: 'user',
+            createdAt: response.createdAt,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          window.alert('Erro ao criar a mensagem');
+        });
 
     setTextInput('');
     scrollChatToBottom();
@@ -129,7 +130,7 @@ const Chat = ({
       await addNewMessage({
         message: 'Teste aí, então.',
         role: 'assistant',
-        date: currentDate,
+        createdAt: '9999-12-31',
       });
 
       scrollChatToBottom();
@@ -147,12 +148,12 @@ const Chat = ({
 
       await postRequest('adivinheacoisa/ask',
           {question: textInput,
-            assistant: activeAssistant.name})
+            assistantId: activeAssistant.id})
           .then((response) => {
             addNewMessage({
-              message: JSON.parse(response),
+              message: response.message,
               role: 'assistant',
-              date: currentDate,
+              createdAt: response.createdAt,
             });
             setIsTyping(false);
             if (triesLeft > 0) {
@@ -182,16 +183,10 @@ const Chat = ({
   };
 
   useEffect(() => {
-    setAllMessages((curr) => (
-      {...curr, [activeAssistant.name]: messages}
-    ));
-
-    setLocalStorageMessages();
-  }, [messages]);
-
-
-  useEffect(() => {
-    setMessages(allMessages[activeAssistant?.name] || []);
+    console.log(allConversationsMessages);
+    setCurrentConversationMessages(allConversationsMessages.map(
+        (message) => message.assistantId === activeAssistant.id) ||
+        []);
     scrollChatToBottom();
   }, [activeAssistant]);
 
@@ -278,7 +273,7 @@ const Chat = ({
           className='conversation-box'
           onScroll={(e) => handleScroll(e) }
         >
-          {messages.map((curr, index) => (
+          {currentConversationMessages.map((curr, index) => (
             <>
               {curr.role === 'date' ?
               <DateDivisor key={curr.date} date={curr.date}/> :

@@ -37,17 +37,18 @@ const AdivinheACoisa = () => {
   }, []);
 
   return (
-    <AdivinheACoisaProvider>
+    <>
       {!isAuthenticated ?
       <Login setIsAuthenticated={setIsAuthenticated}/> :
-      <div className='adivinhe-a-coisa'>
-        {(isChatsNavBarActive || !isMobile()) &&
+      <AdivinheACoisaProvider>
+        <div className='adivinhe-a-coisa'>
+          {(isChatsNavBarActive || !isMobile()) &&
         <ChatsNavBar
           isChatsNavBarActive={isChatsNavBarActive}
           setIsChatsNavBarActive={setIsChatsNavBarActive}
           setIsChatActive={setIsChatActive}
         />}
-        {isChatActive &&
+          {isChatActive &&
         <Chat
           isProfileActive={isProfileActive}
           setIsProfileActive={setIsProfileActive}
@@ -55,12 +56,13 @@ const AdivinheACoisa = () => {
           setIsChatsNavBarActive={setIsChatsNavBarActive}
           setIsChatActive={setIsChatActive}
         />}
-        {isProfileActive &&
+          {isProfileActive &&
         <AssistantProfile
           setIsProfileActive={setIsProfileActive}/>}
-      </div>
+        </div>
+      </AdivinheACoisaProvider>
       }
-    </AdivinheACoisaProvider>
+    </>
   );
 };
 
