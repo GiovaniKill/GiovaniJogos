@@ -3,13 +3,14 @@ import {motion} from 'framer-motion';
 import {Link} from 'react-router-dom';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 import PropTypes from 'prop-types';
+import ChatNavCard from './ChatNavCard';
 
 const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
   const {
     activeAssistant,
     setActiveAssistant,
     assistants,
-    allMessages,
+    allConversationsMessages,
   } = useContext(AdivinheACoisaContext);
 
   return (
@@ -40,35 +41,14 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
         animate={{opacity: 1}}
       >
         {assistants.map((curr) => (
-          <motion.li
-            initial={{opacity: 0}}
-            animate={{opacity: 1, staggerChildren: 0.5}}
-            transition={{duration: 0.5}}
+          <ChatNavCard
             key={curr.name}
-            className={`
-            conversation-card 
-            ${activeAssistant === curr &&
-              'bg-slate-300/70 dark:bg-gray-600/80'}
-            `}
-            onClick={() => {
-              setActiveAssistant(curr);
-              setIsChatsNavBarActive(false);
-              setIsChatActive(true);
-            }}
-          >
-            <img
-              src={curr.profilePic}
-              className='conversation-card-profile-pic'
-            />
-            <div className='conversation-card-name-and-last-message'>
-              <p>{curr.name}</p>
-              <p className='conversation-card-last-message'>
-                {allMessages[curr.name]?.role === 'assistant' ? '' : 'Você: '}
-                {allMessages[curr.name]?.
-                    [allMessages[curr.name].length - 1]?.message || ''}
-              </p>
-            </div>
-          </motion.li>
+            activeAssistant={activeAssistant}
+            setActiveAssistant={setActiveAssistant}
+            allConversationsMessages={allConversationsMessages}
+            setIsChatsNavBarActive={setIsChatsNavBarActive}
+            setIsChatActive={setIsChatActive}
+            assistant={curr} />
         ))}
       </motion.ol>
     </motion.section>

@@ -6,14 +6,14 @@ import {getRequest} from '../services/requests';
 const AdivinheACoisaProvider = ({children}) => {
   const [assistants, setAssistants] = useState([]);
 
-  const [allMessages, setAllMessages] = useState({});
+  const [allConversationsMessages, setAllConversationsMessages] = useState([]);
 
   const [activeAssistant, setActiveAssistant] = useState({});
 
   const [isDarkModeOn, setIsDarkModeOn] = useState(false);
 
   useEffect(() => {
-    // Getting assistant from API
+    // Getting assistants from API
     getRequest('adivinheacoisa/getassistants')
         .then(async (data) => {
           const parsedAssistants = await JSON.parse(data);
@@ -30,11 +30,16 @@ const AdivinheACoisaProvider = ({children}) => {
           console.log(e);
         });
 
-    // Retrieving messages from local storage
-    const localStorageMessages = JSON.parse(
-        localStorage.getItem('chatMessages')) || [];
-
-    setAllMessages(localStorageMessages);
+    // Retrieving messages from database
+    getRequest('adivinheacoisa/getalllastmessages')
+        .then(async (data) => {
+          const parsedMessages = await JSON.parse(data);
+          setAllConversationsMessages(parsedMessages.messages);
+        })
+        .catch((e) => {
+          window.alert('Erro ao recuperar mensagens');
+          console.log(e);
+        });
 
     // Setting prefered theme
     if (window.matchMedia('prefers-color-scheme:dark').matches) {
@@ -60,8 +65,8 @@ const AdivinheACoisaProvider = ({children}) => {
         activeAssistant,
         setActiveAssistant,
         assistants,
-        allMessages,
-        setAllMessages,
+        allConversationsMessages,
+        setAllConversationsMessages,
         isDarkModeOn,
         setIsDarkModeOn,
       }}

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { askAI, instructAI } from '../utils/AIRequest.mjs'
-import { assistants, type responseAssistant } from '../data/adivinheACoisa/assistants.mjs'
+import { type responseAssistant } from '../data/adivinheACoisa/assistants.mjs'
 import * as fs from 'fs'
 import { IDToWord, wordToID } from '../utils/handleID.mjs'
 import answers from '../data/adivinheACoisa/answers.mjs'
@@ -72,8 +72,8 @@ export default class AdivinheACoisaService {
     return token
   }
 
-  async ask (params: IAskParams): Promise<string | null> {
-    const { question, wordId, assistant, date, email } = params
+  async ask (params: IAskParams): Promise<{ message: string | null, createdAt: string | undefined }> {
+    const { question, wordId, assistantId, date, email } = params
     const answer = await this.getWordId(wordId)
 
     const user = await this.usersRepository.findUserByEmail(email)
@@ -98,17 +98,17 @@ export default class AdivinheACoisaService {
       a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
       dele(a)`
 
-    const personality = assistants.find(
-      (curr) => curr.name === assistant)?.personality
+    const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
     const response = await askAI(
       JSON.stringify(question),
-      JSON.stringify(personality + ' ' + assistantInstructions) ?? '',
+      JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '',
       answer, 'gpt-4-0125-preview')
 
     await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
+    const assistantMessage = await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
 
-    return response.choices[0].message.content
+    return { message: response.choices[0].message.content, createdAt: assistantMessage.createdAt }
   }
 
   async getAssistants (): Promise<IResponseAssistant[] | undefined> {
@@ -129,7 +129,7 @@ export default class AdivinheACoisaService {
   }
 
   async getGameOverMessage (params: IGameOverMessageParams): Promise<string | null> {
-    const { wordId, assistant } = params
+    const { wordId, assistantId, email } = params
 
     const answer = await this.getWordId(wordId)
 
@@ -137,11 +137,12 @@ export default class AdivinheACoisaService {
     revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
     aguarda para jogar novamente. Dẽ personalidade à sua mensagem e maneire nos emojis.`
 
-    const personality = assistants.find(
-      (curr) => curr.name === assistant)?.personality
+    const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
     const response = await instructAI(
-      JSON.stringify(personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
+      JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
+
+    await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
 
     return response.choices[0].message.content
   }
