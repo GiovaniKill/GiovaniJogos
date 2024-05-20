@@ -35,14 +35,13 @@ const Chat = ({
     deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
         .then(() => {
           setAllConversationsMessages((curr) => (
-            curr.filter((message) => (
-              message.assistantId !== activeAssistant.id ||[]
-            ))
+            curr.filter((message) => message.assistantId !== activeAssistant.id,
+            )
           ));
           setCurrentConversationMessages([]);
         })
         .catch((e) => {
-          window.alert('Error ao excluir as mensagens');
+          window.alert('Error ao excluir mensagens');
         });
   };
 
@@ -74,8 +73,8 @@ const Chat = ({
 
       return [...pastMessages, newMessage];
     });
-    setAllConversationsMessages(() =>(
-      [...allConversationsMessages, newMessage]
+    setAllConversationsMessages((curr) =>(
+      [...curr, newMessage]
     ));
   };
 
@@ -140,7 +139,6 @@ const Chat = ({
            Tente novamente mais tarde.`);
         });
   }, []);
-
 
   return (
     <motion.div
