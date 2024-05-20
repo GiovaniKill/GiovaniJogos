@@ -16,6 +16,8 @@ const ChatNavCard = ({setActiveAssistant, setIsChatsNavBarActive,
     setLastMessage(() => (
       conversationMessages[conversationMessages.length - 1] || {}
     ));
+    console.log('allConversationsMessages: ');
+    console.log(allConversationsMessages);
   }, [allConversationsMessages]);
 
   return (
@@ -53,7 +55,6 @@ ChatNavCard.propTypes = {
   setActiveAssistant: PropTypes.func.isRequired,
   setIsChatsNavBarActive: PropTypes.func.isRequired,
   setIsChatActive: PropTypes.func.isRequired,
-  allConversationsMessages: PropTypes.array.isRequired,
   activeAssistant: PropTypes.object.isRequired,
   assistant: PropTypes.object.isRequired,
 };
