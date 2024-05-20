@@ -1,4 +1,4 @@
-import React, {useState, useContext, useRef} from 'react';
+import React, {useState, useContext, useRef, useEffect} from 'react';
 import {postRequest} from '../../services/requests';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 import PropTypes from 'prop-types';
@@ -17,9 +17,9 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
   const onQuestionSubmit = async (event) => {
     event?.preventDefault();
 
-    setIsFormBlocked(true);
-
     if (textInput.length === 0) return;
+
+    setIsFormBlocked(true);
 
     await postRequest('adivinheacoisa/createmessage', {
       assistantId: activeAssistant.id, message: textInput, role: 'user',
@@ -30,6 +30,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
             message: textInput,
             role: 'user',
             createdAt: response.createdAt,
+            assistantId: activeAssistant.id,
           });
         })
         .catch((error) => {
@@ -45,6 +46,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
         message: 'Teste aí, então.',
         role: 'assistant',
         createdAt: '9999-12-31',
+        assistantId: activeAssistant.id,
       });
 
       scrollChatToBottom();
@@ -52,6 +54,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
         setTriesLeft((curr) => curr - 1);
       };
 
+      setIsFormBlocked(false);
       return;
     }
 
@@ -67,6 +70,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
               message: response.message,
               role: 'assistant',
               createdAt: response.createdAt,
+              assistantId: activeAssistant.id,
             });
             setIsTyping(false);
             if (triesLeft > 0) {
@@ -74,7 +78,6 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
             };
 
             setIsFormBlocked(false);
-            textInputField.current.focus();
           })
           .catch((error) => {
             setIsTyping(false);
@@ -86,6 +89,12 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
 
     scrollChatToBottom();
   };
+
+  useEffect(() => {
+    if (!isFormBlocked) {
+      textInputField.current.focus();
+    }
+  }, [isFormBlocked]);
 
   return (
     <form onSubmit={onQuestionSubmit} className='conversation-form'>

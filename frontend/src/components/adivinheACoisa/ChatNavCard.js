@@ -1,14 +1,22 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {motion} from 'framer-motion';
 import PropTypes from 'prop-types';
+import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
 
 
 const ChatNavCard = ({setActiveAssistant, setIsChatsNavBarActive,
-  setIsChatActive, allConversationsMessages, activeAssistant,
+  setIsChatActive, activeAssistant,
   assistant}) => {
-  const conversationMessages = allConversationsMessages.filter((curr) => (
-    curr.assistantId === assistant.id
-  ));
+  const {allConversationsMessages} = useContext(AdivinheACoisaContext);
+  const [lastMessage, setLastMessage] = useState({role: 'assistant'});
+
+  useEffect(() => {
+    const conversationMessages = allConversationsMessages
+        .filter((curr) => curr.assistantId === assistant.id);
+    setLastMessage(() => (
+      conversationMessages[conversationMessages.length - 1] || {}
+    ));
+  }, [allConversationsMessages]);
 
   return (
     <motion.li
@@ -33,10 +41,8 @@ const ChatNavCard = ({setActiveAssistant, setIsChatsNavBarActive,
       <div className='conversation-card-name-and-last-message'>
         <p>{assistant.name}</p>
         <p className='conversation-card-last-message'>
-          {conversationMessages?.[conversationMessages.length - 1]?.
-              role === 'assistant' ? '' : 'Você: '}
-          {conversationMessages?.
-              [conversationMessages.length - 1]?.message || ''}
+          {lastMessage.role === 'assistant' ? '' : 'Você: '}
+          {lastMessage.message || ''}
         </p>
       </div>
     </motion.li>

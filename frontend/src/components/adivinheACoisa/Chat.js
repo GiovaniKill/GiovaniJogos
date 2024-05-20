@@ -74,9 +74,9 @@ const Chat = ({
 
       return [...pastMessages, newMessage];
     });
-    await setAllConversationsMessages(
-        [...allConversationsMessages, newMessage],
-    );
+    setAllConversationsMessages(() =>(
+      [...allConversationsMessages, newMessage]
+    ));
   };
 
   const getGameOverMessage = async () => {
@@ -89,6 +89,7 @@ const Chat = ({
             message: response.message,
             role: 'assistant',
             createdAt: response.createdAt,
+            assistantId: activeAssistant.id,
           });
           setIsTyping(false);
           scrollChatToBottom();
@@ -111,12 +112,12 @@ const Chat = ({
   };
 
   useEffect(() => {
-    console.log(allConversationsMessages);
     setCurrentConversationMessages(allConversationsMessages.filter(
         (message) => message.assistantId === activeAssistant.id) ||
         []);
     scrollChatToBottom();
   }, [activeAssistant]);
+
 
   // Game over and refocus input
   useEffect(() => {
@@ -201,7 +202,7 @@ const Chat = ({
           ))}
         </section>
 
-        <section className='flex align-middle justify-center w-full'>
+        <section className='flex flex-col items-center w-full'>
           <AnimatePresence>
             {showScrollBottomButton &&
               <motion.button

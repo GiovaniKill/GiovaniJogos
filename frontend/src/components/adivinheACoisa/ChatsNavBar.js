@@ -10,7 +10,6 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
     activeAssistant,
     setActiveAssistant,
     assistants,
-    allConversationsMessages,
   } = useContext(AdivinheACoisaContext);
 
   return (
@@ -45,7 +44,6 @@ const ChatsNavBar = ({setIsChatActive, setIsChatsNavBarActive}) => {
             key={curr.name}
             activeAssistant={activeAssistant}
             setActiveAssistant={setActiveAssistant}
-            allConversationsMessages={allConversationsMessages}
             setIsChatsNavBarActive={setIsChatsNavBarActive}
             setIsChatActive={setIsChatActive}
             assistant={curr} />
