@@ -200,7 +200,7 @@
     }
 
     .scroll-bottom-button {
-        @apply absolute left-0 right-0 ml-auto mr-auto bottom-[5vh] w-fit
+        @apply absolute bottom-[7vh] w-fit
     }
 
     .scroll-bottom-icon {
