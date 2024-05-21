@@ -55,24 +55,7 @@ const Chat = ({
   };
 
   const addNewMessage = async (newMessage) => {
-    await setCurrentConversationMessages((prev) => {
-      const pastMessages = [...prev];
-      const lastMessage = pastMessages[pastMessages.length - 1];
-
-      const newMessageDate = newMessage?.createdAt
-          .slice(0, 10).split('-').reverse().join('/');
-      const lastMessageDate = lastMessage?.createdAt
-          .slice(0, 10).split('-').reverse().join('/');
-
-      // Adds DateDivisor
-      if (newMessageDate > lastMessageDate ||
-        lastMessage === undefined ||
-        newMessage?.message?.includes('//newdate') /** For testing */) {
-        pastMessages.push({role: 'date', date: newMessageDate});
-      }
-
-      return [...pastMessages, newMessage];
-    });
+    await setCurrentConversationMessages((prev) => [...prev, newMessage]);
     setAllConversationsMessages((curr) =>(
       [...curr, newMessage]
     ));
@@ -116,6 +99,28 @@ const Chat = ({
         []);
     scrollChatToBottom();
   }, [activeAssistant]);
+
+  const renderMessages = (messages) => {
+    return messages.map((message, index) => {
+      // Checks the need for a date divisor
+      if (messages[index - 1]?.createdAt.slice(0, 10) <
+        message.createdAt.slice(0, 10) || index === 0) {
+        const formattedDate = message.createdAt.slice(0, 10)
+            .split('-').reverse().join('/');
+        return (
+          <>
+            <DateDivisor key={message.createdAt} date={formattedDate}/>
+            <ChatMessage
+              key={message.createdAt + message.message}
+              message={message}/>
+          </>
+        );
+      }
+      return <ChatMessage
+        key={message.createdAt + message.message}
+        message={message}/>;
+    });
+  };
 
 
   // Game over and refocus input
@@ -191,13 +196,7 @@ const Chat = ({
           className='conversation-box'
           onScroll={(e) => handleScroll(e) }
         >
-          {currentConversationMessages.map((curr, index) => (
-            <>
-              {curr.role === 'date' ?
-              <DateDivisor key={curr.date} date={curr.date}/> :
-              <ChatMessage key={index} message={curr}/>}
-            </>
-          ))}
+          {renderMessages(currentConversationMessages)}
         </section>
 
         <section className='flex flex-col items-center w-full'>
