@@ -16,15 +16,16 @@ export default class SequelizeMessages implements IMessagesRepository {
     return response
   }
 
-  async getAllLastMessages (userId: number, amount: number): Promise<IMessage[] | null> {
+  async getLastMessagesByAssistant (userId: number, assistantId: number, amount: number): Promise<IMessage[] | null> {
     const response = await this.model.findAll(
       {
         where: {
-          userId
+          userId,
+          assistantId
         },
-        order: [['createdAt', 'ASC']],
         limit: amount,
-        attributes: { exclude: ['id', 'userId', 'updatedAt'] }
+        attributes: { exclude: ['id', 'userId', 'updatedAt'] },
+        raw: true
       }
     )
     return response
