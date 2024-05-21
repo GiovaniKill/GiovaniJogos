@@ -16,8 +16,6 @@ const ChatNavCard = ({setActiveAssistant, setIsChatsNavBarActive,
     setLastMessage(() => (
       conversationMessages[conversationMessages.length - 1] || {}
     ));
-    console.log('allConversationsMessages: ');
-    console.log(allConversationsMessages);
   }, [allConversationsMessages]);
 
   return (
@@ -43,7 +41,7 @@ const ChatNavCard = ({setActiveAssistant, setIsChatsNavBarActive,
       <div className='conversation-card-name-and-last-message'>
         <p>{assistant.name}</p>
         <p className='conversation-card-last-message'>
-          {lastMessage.role === 'assistant' ? '' : 'Você: '}
+          {lastMessage.role === 'user' ? 'Você: ' : ''}
           {lastMessage.message || ''}
         </p>
       </div>

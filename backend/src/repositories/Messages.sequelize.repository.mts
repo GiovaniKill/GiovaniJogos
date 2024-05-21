@@ -24,7 +24,7 @@ export default class SequelizeMessages implements IMessagesRepository {
         },
         order: [['createdAt', 'ASC']],
         limit: amount,
-        attributes: { exclude: ['id, userId, updatedAt'] }
+        attributes: { exclude: ['id', 'userId', 'updatedAt'] }
       }
     )
     return response
