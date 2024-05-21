@@ -6,11 +6,11 @@ module.exports = {
       id: 1,
       first_name: 'Giovani',
       last_name: 'Jogos',
-      email: 'giovanijogos.com',
+      email: 'stevekiller78@gmail.com',
       password: '',
-      subscription: '',
-      created_at: new Date(),
-      updated_at: new Date()
+      subscription: '103253633340459380476',
+      created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
+      updated_at: Sequelize.literal('CURRENT_TIMESTAMP')
     }])
   },
 

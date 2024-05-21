@@ -1,4 +1,4 @@
-import { Model, INTEGER, STRING, DATE } from 'sequelize'
+import { Model, INTEGER, STRING, DATE, NOW } from 'sequelize'
 // @ts-expect-error: Is not detecting type file before compilation
 import db from '../../../src/database/models/index.mjs'
 import Users from './user.model.mjs'
@@ -46,12 +46,14 @@ GamesHistory.init({
   createdAt: {
     allowNull: true,
     type: DATE,
-    field: 'created_at'
+    field: 'created_at',
+    defaultValue: NOW
   },
   updatedAt: {
     allowNull: true,
     type: DATE,
-    field: 'updated_at'
+    field: 'updated_at',
+    defaultValue: NOW
   }
 }, {
   underscored: true,

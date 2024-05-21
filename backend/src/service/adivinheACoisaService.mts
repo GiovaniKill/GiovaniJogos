@@ -34,7 +34,10 @@ export default class AdivinheACoisaService {
   }
 
   async googleLogin (googleJWT: string): Promise<string> {
-    const { email, sub: subscription, picture, email_verified: emailVerified } = decodeToken(googleJWT).payload
+    const {
+      email, sub: subscription, picture, email_verified: emailVerified,
+      given_name: firstName, family_name: lastName
+    } = decodeToken(googleJWT).payload
 
     if (typeof email !== 'string' || typeof subscription !== 'string') {
       throw new HTTPError(400, 'Malformed request')
@@ -44,10 +47,10 @@ export default class AdivinheACoisaService {
       throw new HTTPError(403, 'User not verified by Google')
     }
 
-    const response = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
+    const response = await this.usersRepository.findUserBySubscription(subscription)
 
     if (response === null) {
-      await this.createUser({ email, subscription, picture })
+      await this.createUser({ email, subscription, picture, firstName, lastName })
     }
 
     const token = await this.generateToken(email)
@@ -148,8 +151,8 @@ export default class AdivinheACoisaService {
   }
 
   async createUser (newUser: ICreateUser): Promise<IUser> {
-    const { email, subscription } = newUser
-    const user = await this.usersRepository.findUserByEmailAndSubscription({ email, subscription })
+    const { subscription } = newUser
+    const user = await this.usersRepository.findUserBySubscription(subscription)
 
     if (user !== null) {
       throw new HTTPError(409, 'User already exists')
@@ -258,7 +261,16 @@ export default class AdivinheACoisaService {
       throw new HTTPError(404, 'User not found')
     }
 
-    const messages = await this.messagesRepository.getAllLastMessages(user.id, amount)
+    const assistants = await this.assistantsRepository.getAssistants()
+    if (assistants === null) throw new HTTPError(404, 'No assistant found')
+
+    let messages: IMessage[] = []
+
+    for (let i = 0; i < assistants.length; i++) {
+      const assistant = assistants[i]
+      const result = await this.messagesRepository.getLastMessagesByAssistant(user.id, assistant.id, amount)
+      if (result !== null) messages = [...messages, ...result]
+    }
 
     return messages
   }
