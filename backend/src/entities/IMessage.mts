@@ -4,4 +4,5 @@ export default interface IMessage {
   assistantId: number
   createdAt?: string
   role?: string
+  firstMessage?: boolean
 }
