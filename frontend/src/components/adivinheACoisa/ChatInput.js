@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 
 const ChatInput = ({addNewMessage, scrollChatToBottom,
-  triesLeft, setTriesLeft, setIsTyping, isGameOver}) => {
+  triesLeft, setTriesLeft, setIsTyping, isGameOver, setGameOver}) => {
   const {activeAssistant} = useContext(AdivinheACoisaContext);
 
   const [textInput, setTextInput] = useState('');
@@ -48,6 +48,25 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
         createdAt: '9999-12-31',
         assistantId: activeAssistant.id,
       });
+
+      scrollChatToBottom();
+      if (triesLeft > 0) {
+        setTriesLeft((curr) => curr - 1);
+      };
+
+      setIsFormBlocked(false);
+      return;
+    }
+
+    if (textInput.includes('//setgameover')) {
+      await addNewMessage({
+        message: 'Finalizando o jogo.',
+        role: 'assistant',
+        createdAt: '9999-12-31',
+        assistantId: activeAssistant.id,
+      });
+
+      setGameOver();
 
       scrollChatToBottom();
       if (triesLeft > 0) {
@@ -127,6 +146,7 @@ ChatInput.propTypes = {
   setTriesLeft: PropTypes.func.isRequired,
   setIsTyping: PropTypes.func.isRequired,
   isGameOver: PropTypes.bool.isRequired,
+  setGameOver: PropTypes.func.isRequired,
 };
 
 export default ChatInput;

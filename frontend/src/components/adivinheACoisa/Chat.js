@@ -66,9 +66,10 @@ const Chat = ({
     ));
   };
 
-  const getGameOverMessage = async () => {
+  const setGameOver = async () => {
+    setIsGameOver(true);
     setIsTyping(true);
-    await postRequest('adivinheacoisa/getgameovermessage',
+    await postRequest('adivinheacoisa/setgameover',
         {assistantId: activeAssistant.id})
         .then((response) => {
           response = JSON.parse(response);
@@ -156,16 +157,17 @@ const Chat = ({
     if (triesLeft === 0) {
       setIsGameOver(true);
       // Timeout for realism
-      setTimeout(async () => getGameOverMessage(), 1000);
+      setTimeout(async () => setGameOver(), 1000);
     }
   }, [triesLeft]);
 
   // Component did mount
   useEffect(() => {
-    getRequest('adivinheacoisa/getgame')
+    getRequest('adivinheacoisa/getorcreategame')
         .then((response) => {
           response = JSON.parse(response);
           setTriesLeft(response.triesLeft);
+          if (response.status === 'finished') setIsGameOver(() => true);
         })
         .catch((e) => {
           window.alert(`Programador aparentemente está de férias 😴.\
@@ -251,6 +253,7 @@ const Chat = ({
             setTriesLeft={setTriesLeft}
             setIsTyping={setIsTyping}
             isGameOver={isGameOver}
+            setGameOver={setGameOver}
           />
         </section>
       </section>
