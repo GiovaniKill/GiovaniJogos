@@ -107,6 +107,7 @@ const Chat = ({
           ${activeAssistant.id}/${currentConversationMessages[0].createdAt}`)
           .then((response) => {
             response = JSON.parse(response);
+            if (!response?.messages) return;
             console.log('response: ');
             console.log(response);
             setCurrentConversationMessages((prev) => [
@@ -170,6 +171,7 @@ const Chat = ({
           window.alert(`Programador aparentemente está de férias 😴.\
            Tente novamente mais tarde.`);
         });
+    setTimeout(() => scrollChatToBottom(), 100);
   }, []);
 
   return (
