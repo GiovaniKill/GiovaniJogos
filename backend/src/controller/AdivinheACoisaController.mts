@@ -83,12 +83,21 @@ export default class AdivinheACoisaController {
     return res.status(200).json(JSON.stringify(result))
   }
 
-  async getGameOverMessage (req: Request, res: Response): Promise<Response> {
+  async setGameOver (req: Request, res: Response): Promise<Response> {
     const { assistantId } = req.body
-    const { payload: { data: { wordId, email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+    const { payload: { data: { wordId, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
-    if (typeof wordId !== 'string' || typeof assistantId !== 'number' || typeof email !== 'string') {
+    if (typeof wordId !== 'string' || typeof assistantId !== 'number' || typeof email !== 'string' ||
+      typeof day !== 'string' || typeof month !== 'string' || typeof year !== 'string') {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    }
+
+    const date = `${year}/${month}/${day}`
+
+    const affectedRows = await this.service.endGame(email, wordId, date)
+
+    if (affectedRows[0] === 0) {
+      return res.status(400).json(JSON.stringify({ error: 'No game found' }))
     }
 
     const response = await this.service.getGameOverMessage({ wordId, assistantId, email })
@@ -96,14 +105,14 @@ export default class AdivinheACoisaController {
     return res.status(200).json(JSON.stringify(response))
   }
 
-  async getGame (req: Request, res: Response): Promise<Response> {
+  async getOrCreateGame (req: Request, res: Response): Promise<Response> {
     const { payload: { data: { wordId, email, day, month, year } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
 
     const date = `${year}/${month}/${day}`
 
-    const { triesLeft } = await this.service.getOrCreateGame(email as string, wordId as string, date)
+    const { triesLeft, status } = await this.service.getOrCreateGame(email as string, wordId as string, date)
 
-    return res.status(200).json(JSON.stringify({ triesLeft, day, month, year }))
+    return res.status(200).json(JSON.stringify({ triesLeft, day, month, year, status }))
   }
 
   async createMessage (req: Request, res: Response): Promise<Response> {

@@ -99,7 +99,7 @@ export default class AdivinheACoisaService {
       Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
       Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${accentuatedAnswer}" ou use emojis que
       a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
-      dele(a)`
+      dele(a). O nome do(a) jogador(a) é ${user?.firstName}`
 
     const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
@@ -131,23 +131,38 @@ export default class AdivinheACoisaService {
     return response
   }
 
-  async getGameOverMessage (params: IGameOverMessageParams): Promise<string | null> {
+  async getGameOverMessage (params: IGameOverMessageParams): Promise<IMessage> {
     const { wordId, assistantId, email } = params
 
     const answer = await this.getWordId(wordId)
+    const user = await this.usersRepository.findUserByEmail(email)
 
-    const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa". Anuncie a derrota dele(a),
+    const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa" depois de te fazer várias perguntas. Anuncie a derrota dele(a),
     revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
-    aguarda para jogar novamente. Dẽ personalidade à sua mensagem e maneire nos emojis.`
+    aguarda para jogar novamente. Dê personalidade à sua mensagem e maneire nos emojis. O nome do(a) jogador(a) é ${user?.firstName}`
 
     const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
     const response = await instructAI(
       JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
 
-    await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
+    const message = await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
 
-    return response.choices[0].message.content
+    return message
+  }
+
+  async endGame (email: string, wordId: string, date: string): Promise<[affectedCount: number]> {
+    const user = await this.usersRepository.findUserByEmail(email)
+
+    if (user === null) {
+      throw new HTTPError(404, 'User not found')
+    }
+
+    const answer = await this.getWordId(wordId)
+
+    const affectedRows = await this.gamesHistoryRepository.endGame(user.id, answer, date)
+
+    return affectedRows
   }
 
   async createUser (newUser: ICreateUser): Promise<IUser> {
@@ -186,10 +201,6 @@ export default class AdivinheACoisaService {
       const newGame = await this.gamesHistoryRepository.createGame(emailOrId, answer, date)
       const { triesLeft, status } = newGame
       return { triesLeft, date, status }
-    }
-
-    if (history.triesLeft === 0 || history.status === 'finished') {
-      throw new HTTPError(403, 'This game is finished')
     }
 
     const { triesLeft, status } = history
