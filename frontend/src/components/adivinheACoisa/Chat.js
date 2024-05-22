@@ -31,6 +31,8 @@ const Chat = ({
 
   const [triesLeft, setTriesLeft] = useState(30);
 
+  const [isFetchingMessages, setIsFetchingMessages] = useState(false);
+
   const deleteMessages = () => {
     deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
         .then(() => {
@@ -55,6 +57,9 @@ const Chat = ({
   };
 
   const addNewMessage = async (newMessage) => {
+    if (currentConversationMessages.length === 0) {
+      newMessage.firstMessage = true;
+    }
     await setCurrentConversationMessages((prev) => [...prev, newMessage]);
     setAllConversationsMessages((curr) =>(
       [...curr, newMessage]
@@ -91,14 +96,31 @@ const Chat = ({
     } else {
       setShowScrollBottomButton(false);
     }
+    if (scrollHeight > clientHeight &&
+      scrollTop === 0 &&
+      currentConversationMessages[0]?.firstMessage !== true &&
+      !isFetchingMessages) {
+      console.log('Buscando novas mensagens');
+      setIsFetchingMessages(true);
+      getRequest(
+          `adivinheacoisa/getlastmessagesfromreference/\
+          ${activeAssistant.id}/${currentConversationMessages[0].createdAt}`)
+          .then((response) => {
+            response = JSON.parse(response);
+            console.log('response: ');
+            console.log(response);
+            setCurrentConversationMessages((prev) => [
+              ...response.messages,
+              ...prev,
+            ]);
+            setIsFetchingMessages(false);
+          })
+          .catch((e) => {
+            setIsFetchingMessages(false);
+            window.alert('Erro ao buscar mais mensagens');
+          });
+    }
   };
-
-  useEffect(() => {
-    setCurrentConversationMessages(allConversationsMessages.filter(
-        (message) => message.assistantId === activeAssistant.id) ||
-        []);
-    scrollChatToBottom();
-  }, [activeAssistant]);
 
   const renderMessages = (messages) => {
     return messages.map((message, index) => {
@@ -121,6 +143,12 @@ const Chat = ({
     });
   };
 
+  useEffect(() => {
+    setCurrentConversationMessages(allConversationsMessages.filter(
+        (message) => message.assistantId === activeAssistant.id) ||
+        []);
+    scrollChatToBottom();
+  }, [activeAssistant]);
 
   // Game over and refocus input
   useEffect(() => {
