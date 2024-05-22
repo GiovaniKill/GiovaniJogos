@@ -41,8 +41,25 @@ export default class SequelizeMessages implements IMessagesRepository {
           createdAt: { [Op.lt]: createdAt }
         },
         order: [['createdAt', 'ASC']],
+        raw: true,
         limit: amount,
         attributes: { exclude: ['id, userId, updatedAt'] }
+      }
+    )
+    return response
+  }
+
+  async getFirstMessageByAssistant (userId: number, assistantId: number): Promise<IMessage | null> {
+    const response = await this.model.findOne(
+      {
+        where: {
+          userId,
+          assistantId
+        },
+        order: [['createdAt', 'ASC']],
+        limit: 1,
+        attributes: { exclude: ['id', 'userId', 'updatedAt'] },
+        raw: true
       }
     )
     return response
