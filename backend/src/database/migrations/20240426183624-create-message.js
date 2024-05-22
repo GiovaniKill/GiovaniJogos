@@ -40,13 +40,13 @@ module.exports = {
       },
       createdAt: {
         primaryKey: true,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE(3),
         field: 'created_at',
         defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: true,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE(3),
         field: 'updated_at',
         defaultValue: Sequelize.NOW
       }

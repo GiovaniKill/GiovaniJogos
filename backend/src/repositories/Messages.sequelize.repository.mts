@@ -24,6 +24,7 @@ export default class SequelizeMessages implements IMessagesRepository {
           assistantId
         },
         limit: amount,
+        order: [['id', 'DESC']],
         attributes: { exclude: ['id', 'userId', 'updatedAt'] },
         raw: true
       }
@@ -40,7 +41,7 @@ export default class SequelizeMessages implements IMessagesRepository {
           assistantId,
           createdAt: { [Op.lt]: createdAt }
         },
-        order: [['createdAt', 'ASC']],
+        order: [['id', 'DESC']],
         raw: true,
         limit: amount,
         attributes: { exclude: ['id, userId, updatedAt'] }
