@@ -272,7 +272,8 @@ export default class AdivinheACoisaService {
       const firstMessage = await this.messagesRepository.getFirstMessageByAssistant(user.id, assistant.id)
       if (result !== null) {
         result.reverse()
-        if (result[0] === firstMessage) result[0].firstMessage = true
+        if (new Date(result[0].createdAt ?? '').getTime() ===
+        new Date(firstMessage?.createdAt ?? '').getTime()) result[0].firstMessage = true
         messages = [...messages, ...result]
       }
     }
@@ -290,12 +291,15 @@ export default class AdivinheACoisaService {
 
     const messages = await this.messagesRepository
       .getLastMessagesFromReference(user.id, assistantId, amount, createdAt)
-    if (messages === null) return null
+    if (messages === null || messages.length === 0) return null
+    messages.reverse()
 
     const firstMessage = await this.messagesRepository.getFirstMessageByAssistant(user.id, assistantId)
 
-    messages.reverse()
-    if (messages[0] === firstMessage) messages[0].firstMessage = true
+    if (new Date(messages[0].createdAt ?? '').getTime() ===
+    new Date(firstMessage?.createdAt ?? '').getTime()) {
+      messages[0].firstMessage = true
+    }
 
     return messages
   }
