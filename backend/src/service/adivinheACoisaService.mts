@@ -75,6 +75,38 @@ export default class AdivinheACoisaService {
     return token
   }
 
+  async getWelcomeMessage (email: string, assistantId: number): Promise<IMessage> {
+    const assistant = await this.assistantsRepository.getAssistant(assistantId)
+    if (assistant === null) {
+      throw new HTTPError(404, 'Assistant not found')
+    }
+
+    const user = await this.usersRepository.findUserByEmail(email)
+    if (user === null) {
+      throw new HTTPError(404, 'Assistant not found')
+    }
+
+    const priorGames = await this.gamesHistoryRepository.getAllGamesByUser(user?.id)
+
+    const isFirstTime = priorGames.length <= 1
+
+    const instructions = `O jogador(a) de nome ${user?.firstName} acaba de entrar no jogo \
+    "Adivinhe a coisa", dê suas boas vindas casuais de acordo com sua personalidade.
+    ${isFirstTime
+      ? `Esse é a primeira vez que ele(a) joga o jogo, descreva como jogar. O jogo é de perguntas
+      e respostas. O jogador deve te fazer uma pergunta que pode ser respondida com 'sim' ou 'não'
+      para adivinhar uma 'coisa' secreta, que é uma palavra que muda diariamente.`
+      : 'O(A) jogador(a) já jogou outras vezes, o(a) receba como um conhecido(a)'}
+      Não se estenda muito.`
+
+    const response = await instructAI(assistant.personality + ' ' + instructions, 'gpt-4o')
+
+    const assistantMessage = await this.createMessage(
+      { email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
+
+    return assistantMessage
+  }
+
   async ask (params: IAskParams): Promise<{ message: string | null, createdAt: string | undefined }> {
     const { question, wordId, assistantId, date, email } = params
     const answer = await this.getWordId(wordId)
@@ -90,8 +122,8 @@ export default class AdivinheACoisaService {
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
-    const assistantInstructions = `O(A) jogador(a) te fará perguntas de sim ou não com o objetivo de
-      encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
+    const assistantInstructions = `O(A) jogador(a), de nome ${user.firstName}, te fará perguntas de sim
+      ou não com o objetivo de encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
       Responda com respostas simples como "Sim", "Não", "Também", "Provavelmente sim",
       "Provavelmente não", "Pode ser", "Em partes, sim", "Essa pergunta não pode ser respondida com sim ou não",
       "Não sei responder" ou "Depende de [alguma coisa que você queira completar]". Nunca revele demais sobre a
@@ -99,17 +131,18 @@ export default class AdivinheACoisaService {
       Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
       Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${accentuatedAnswer}" ou use emojis que
       a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
-      dele(a). O nome do(a) jogador(a) é ${user?.firstName}`
+      dele(a). O nome do(a) jogador(a) é ${user?.firstName}. Caso requisitado, auxilie o jogador ensinando como jogar o jogo.`
 
     const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
     const response = await askAI(
       JSON.stringify(question),
       JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '',
-      answer, 'gpt-4-0125-preview')
+      answer, 'gpt-4o')
 
     await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
-    const assistantMessage = await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
+    const assistantMessage = await this.createMessage(
+      { email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
 
     return { message: response.choices[0].message.content, createdAt: assistantMessage.createdAt }
   }
@@ -144,7 +177,7 @@ export default class AdivinheACoisaService {
     const assistant = await this.assistantsRepository.getAssistant(assistantId)
 
     const response = await instructAI(
-      JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '', 'gpt-3.5-turbo-0125')
+      JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '', 'gpt-4o')
 
     const message = await this.createMessage({ email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
 
@@ -200,12 +233,12 @@ export default class AdivinheACoisaService {
     if (history === null) {
       const newGame = await this.gamesHistoryRepository.createGame(emailOrId, answer, date)
       const { triesLeft, status } = newGame
-      return { triesLeft, date, status }
+      return { triesLeft, date, status, newGame: true }
     }
 
     const { triesLeft, status } = history
 
-    return { triesLeft, status }
+    return { triesLeft, status, newGame: false }
   }
 
   async decreaseTriesLeft (email: string, wordId: string, date: string): Promise<[affectedCount: number]> {

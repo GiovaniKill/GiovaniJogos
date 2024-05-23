@@ -5,4 +5,5 @@ export default interface IGamesHistoryRepository {
   createGame: (userId: number, answer: string, date: string) => Promise<IGameHistory>
   decreaseTriesLeft: (userId: number, answer: string, date: string) => Promise<[affectedCount: number]>
   endGame: (userId: number, answer: string, date: string) => Promise<[affectedCount: number]>
+  getAllGamesByUser: (userId: number) => Promise<IGameHistory[]>
 }
