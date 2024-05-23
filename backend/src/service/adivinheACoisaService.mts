@@ -12,7 +12,7 @@ import type IAskParams from '../entities/IAskParams.mjs'
 import type IResponseAssistant from '../entities/IResponseAssistant.mjs'
 import { createToken, decodeToken } from '../utils/TokenManager.mjs'
 import type IAssistantsRepository from '../repositories/IAssistants.repository.mjs'
-import type IGameOverMessageParams from '../entities/IGameOverMessageParams.mjs'
+import type IGameOverParams from '../entities/IGameOverParams.mjs'
 import type IGamesHistoryRepository from '../repositories/IGamesHistory.repository.mjs'
 import type IGameHistory from '../entities/IGameHistory.mjs'
 import type IMessage from '../entities/IMessage.mjs'
@@ -107,14 +107,18 @@ export default class AdivinheACoisaService {
     return assistantMessage
   }
 
-  async ask (params: IAskParams): Promise<{ message: string | null, createdAt: string | undefined }> {
+  async ask (params: IAskParams): Promise<{ message: IMessage, foundTheAnswer: boolean }> {
     const { question, wordId, assistantId, date, email } = params
     const answer = await this.getWordId(wordId)
 
     const user = await this.usersRepository.findUserByEmail(email)
-
     if (user === null) {
       throw new HTTPError(404, 'User not found')
+    }
+
+    const assistant = await this.assistantsRepository.getAssistant(assistantId)
+    if (assistant === null) {
+      throw new HTTPError(404, 'Assistant not found')
     }
 
     // Also checks number of tries left
@@ -122,7 +126,23 @@ export default class AdivinheACoisaService {
 
     const accentuatedAnswer = answers.find((curr) => curr.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === answer)
 
-    const assistantInstructions = `O(A) jogador(a), de nome ${user.firstName}, te fará perguntas de sim
+    if (accentuatedAnswer === undefined) {
+      throw new HTTPError(404, 'Answer not found')
+    }
+
+    let message: IMessage
+
+    await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
+
+    const foundTheAnswer = question.includes(accentuatedAnswer) || question.includes(answer)
+
+    if (foundTheAnswer) {
+      message = await this.getGameOverMessage(
+        { email, wordId, assistantId, result: 'victory' })
+
+      await this.gamesHistoryRepository.endGame(user.id, answer, date)
+    } else {
+      const assistantInstructions = `O(A) jogador(a), de nome ${user.firstName}, te fará perguntas de sim
       ou não com o objetivo de encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
       Responda com respostas simples como "Sim", "Não", "Também", "Provavelmente sim",
       "Provavelmente não", "Pode ser", "Em partes, sim", "Essa pergunta não pode ser respondida com sim ou não",
@@ -133,18 +153,15 @@ export default class AdivinheACoisaService {
       a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
       dele(a). O nome do(a) jogador(a) é ${user?.firstName}. Caso requisitado, auxilie o jogador ensinando como jogar o jogo.`
 
-    const assistant = await this.assistantsRepository.getAssistant(assistantId)
+      const response = await askAI(
+        JSON.stringify(question),
+        JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '',
+        answer, 'gpt-4o')
+      message = await this.createMessage(
+        { email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
+    }
 
-    const response = await askAI(
-      JSON.stringify(question),
-      JSON.stringify(assistant?.personality + ' ' + assistantInstructions) ?? '',
-      answer, 'gpt-4o')
-
-    await this.gamesHistoryRepository.decreaseTriesLeft(user.id, answer, date)
-    const assistantMessage = await this.createMessage(
-      { email, message: response.choices[0].message.content ?? '', assistantId, role: 'assistant' })
-
-    return { message: response.choices[0].message.content, createdAt: assistantMessage.createdAt }
+    return { message, foundTheAnswer }
   }
 
   async getAssistants (): Promise<IResponseAssistant[] | undefined> {
@@ -164,15 +181,28 @@ export default class AdivinheACoisaService {
     return response
   }
 
-  async getGameOverMessage (params: IGameOverMessageParams): Promise<IMessage> {
-    const { wordId, assistantId, email } = params
+  async getGameOverMessage (params: IGameOverParams): Promise<IMessage> {
+    const { wordId, assistantId, email, result } = params
 
     const answer = await this.getWordId(wordId)
     const user = await this.usersRepository.findUserByEmail(email)
 
-    const assistantInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa" depois de te fazer várias perguntas. Anuncie a derrota dele(a),
-    revele que a "coisa" secreta, que ele não adivinhou, era "${answer}", fale que você estará indisponível e só volta amanhã e que o(a)
-    aguarda para jogar novamente. Dê personalidade à sua mensagem e maneire nos emojis. O nome do(a) jogador(a) é ${user?.firstName}`
+    const victoryInstructions = `O(A) jogador(a), de nome ${user?.firstName} acaba de acertar
+      a resposta, que era "${answer}" depois de te fazer várias perguntas. O(A) parabenize.`
+
+    const defeatInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa" depois
+    de te fazer várias perguntas. Anuncie a derrota dele(a), revele que a "coisa" secreta,
+    que ele não adivinhou, era "${answer}"`
+
+    let assistantInstructions = `Fale que você estará indisponível e só volta amanhã e que o(a)
+    aguarda para jogar novamente. Dê personalidade à sua mensagem e maneire nos emojis. 
+    O nome do(a) jogador(a) é ${user?.firstName}`
+
+    if (result === 'victory') {
+      assistantInstructions = victoryInstructions + ' ' + assistantInstructions
+    } else {
+      assistantInstructions = defeatInstructions + ' ' + assistantInstructions
+    }
 
     const assistant = await this.assistantsRepository.getAssistant(assistantId)
 

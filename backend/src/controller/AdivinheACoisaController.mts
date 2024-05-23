@@ -85,9 +85,14 @@ export default class AdivinheACoisaController {
       return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
     }
 
-    const result = await this.service.ask({ question, assistantId: +assistantId, wordId, date, email })
+    const { message, foundTheAnswer } = await this.service.ask({ question, assistantId: +assistantId, wordId, date, email })
 
-    return res.status(200).json(JSON.stringify(result))
+    return res.status(200).json(JSON.stringify(
+      {
+        message: message.message,
+        createdAt: message.createdAt,
+        foundTheAnswer
+      }))
   }
 
   async getAssistants (req: Request, res: Response): Promise<Response> {
@@ -113,7 +118,7 @@ export default class AdivinheACoisaController {
       return res.status(400).json(JSON.stringify({ error: 'No game found' }))
     }
 
-    const response = await this.service.getGameOverMessage({ wordId, assistantId, email })
+    const response = await this.service.getGameOverMessage({ wordId, assistantId, email, result: 'defeat' })
 
     return res.status(200).json(JSON.stringify(response))
   }
