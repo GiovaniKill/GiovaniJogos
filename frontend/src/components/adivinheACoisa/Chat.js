@@ -33,8 +33,12 @@ const Chat = ({
 
   const [isFetchingMessages, setIsFetchingMessages] = useState(false);
 
+  const [isFormBlocked, setIsFormBlocked] = useState(false);
+
+
   const setWelcomeMessage = () => {
     setIsTyping(true);
+    setIsFormBlocked(true);
     getRequest(`adivinheacoisa/getwelcomemessage/${activeAssistant.id}`)
         .then((response) => {
           response = JSON.parse(response);
@@ -45,11 +49,13 @@ const Chat = ({
             assistantId: response.assistantId,
           });
           setIsTyping(false);
+          setIsFormBlocked(false);
         })
         .catch((e) => {
           window.alert('Error ao dar boas vindas :(');
           console.log(e);
           setIsTyping(false);
+          setIsFormBlocked(false);
         });
   };
 
@@ -87,7 +93,7 @@ const Chat = ({
     scrollChatToBottom();
   };
 
-  const setGameOver = async () => {
+  const setGameAsDefeat = async () => {
     setIsGameOver(true);
     setIsTyping(true);
     await postRequest('adivinheacoisa/setgameover',
@@ -178,7 +184,7 @@ const Chat = ({
     if (triesLeft === 0) {
       setIsGameOver(true);
       // Timeout for realism
-      setTimeout(async () => setGameOver(), 1000);
+      setTimeout(async () => setGameAsDefeat(), 1000);
     }
   }, [triesLeft]);
 
@@ -274,7 +280,10 @@ const Chat = ({
             setTriesLeft={setTriesLeft}
             setIsTyping={setIsTyping}
             isGameOver={isGameOver}
-            setGameOver={setGameOver}
+            setGameAsDefeat={setGameAsDefeat}
+            isFormBlocked={isFormBlocked}
+            setIsFormBlocked={setIsFormBlocked}
+            setIsGameOver={setIsGameOver}
           />
         </section>
       </section>
