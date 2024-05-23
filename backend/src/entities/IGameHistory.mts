@@ -6,4 +6,5 @@ export default interface IGameHistory {
   updated_at?: Date
   date?: string
   status?: string
+  newGame?: boolean
 }

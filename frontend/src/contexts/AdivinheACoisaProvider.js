@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from './AdivinheACoisaContext';
 import {getRequest} from '../services/requests';
+import LoadingScreen from '../components/adivinheACoisa/LoadingScreen';
 
 const AdivinheACoisaProvider = ({children}) => {
   const [assistants, setAssistants] = useState([]);
@@ -12,7 +13,16 @@ const AdivinheACoisaProvider = ({children}) => {
 
   const [isDarkModeOn, setIsDarkModeOn] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
+    // Setting prefered theme
+    if (window.matchMedia('prefers-color-scheme:dark').matches) {
+      setIsDarkModeOn(true);
+    } else {
+      setIsDarkModeOn(false);
+    }
+
     // Getting assistants from API
     getRequest('adivinheacoisa/getassistants')
         .then(async (data) => {
@@ -23,7 +33,10 @@ const AdivinheACoisaProvider = ({children}) => {
                 profilePic: 'data:image/svg+xml;base64,' + curr.profilePic,
               }));
           setAssistants(assistantsWithConvertedImages);
-          setActiveAssistant(assistantsWithConvertedImages[0]);
+          const randomAssistant = assistantsWithConvertedImages[
+              Math.floor(Math.random() * assistantsWithConvertedImages.length)
+          ];
+          setActiveAssistant(randomAssistant);
         })
         .catch((e) => {
           window.alert('Zap caiu 😮‍💨, tente de novo mais tarde');
@@ -41,12 +54,7 @@ const AdivinheACoisaProvider = ({children}) => {
           console.log(e);
         });
 
-    // Setting prefered theme
-    if (window.matchMedia('prefers-color-scheme:dark').matches) {
-      setIsDarkModeOn(true);
-    } else {
-      setIsDarkModeOn(false);
-    }
+    setTimeout(() => setIsLoading(false), 2500);
   }, []);
 
   useEffect(() => {
@@ -71,7 +79,7 @@ const AdivinheACoisaProvider = ({children}) => {
         setIsDarkModeOn,
       }}
     >
-      {children}
+      {isLoading ? <LoadingScreen/> : children}
     </AdivinheACoisaContext.Provider>
   );
 };

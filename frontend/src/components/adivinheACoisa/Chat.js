@@ -33,6 +33,26 @@ const Chat = ({
 
   const [isFetchingMessages, setIsFetchingMessages] = useState(false);
 
+  const setWelcomeMessage = () => {
+    setIsTyping(true);
+    getRequest(`adivinheacoisa/getwelcomemessage/${activeAssistant.id}`)
+        .then((response) => {
+          response = JSON.parse(response);
+          addNewMessage({
+            message: response.message,
+            role: 'assistant',
+            createdAt: response.createdAt,
+            assistantId: response.assistantId,
+          });
+          setIsTyping(false);
+        })
+        .catch((e) => {
+          window.alert('Error ao dar boas vindas :(');
+          console.log(e);
+          setIsTyping(false);
+        });
+  };
+
   const deleteMessages = () => {
     deleteRequest(`adivinheacoisa/deleteconversation/${activeAssistant.id}`)
         .then(() => {
@@ -64,6 +84,7 @@ const Chat = ({
     setAllConversationsMessages((curr) =>(
       [...curr, newMessage]
     ));
+    scrollChatToBottom();
   };
 
   const setGameOver = async () => {
@@ -167,6 +188,7 @@ const Chat = ({
         .then((response) => {
           response = JSON.parse(response);
           setTriesLeft(response.triesLeft);
+          if (response.newGame) setWelcomeMessage();
           if (response.status === 'finished') setIsGameOver(() => true);
         })
         .catch((e) => {
@@ -181,7 +203,6 @@ const Chat = ({
       key={'chat'}
       initial={{x: '50vh'}}
       animate={{x: 0}}
-      exit={{background: 'red', rotate: '180deg'}}
       transition={{
         type: 'spring',
         duration: 0.2,

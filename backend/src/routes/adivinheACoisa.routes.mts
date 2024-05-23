@@ -16,6 +16,7 @@ const messagesRepository = new SequelizeMessages()
 const service = new AdivinheACoisaService(usersRepository, assistantsRepository, gamesHistoryRepository, messagesRepository)
 const controller = new AdivinheACoisaController(service)
 
+adivinheACoisaRouter.get('/getwelcomemessage/:assistantId', tokenVerification, async (req, res) => await controller.getWelcomeMessage(req, res))
 adivinheACoisaRouter.post('/ask', tokenVerification, async (req, res) => await controller.ask(req, res))
 adivinheACoisaRouter.post('/createmessage', tokenVerification, async (req, res) => await controller.createMessage(req, res))
 adivinheACoisaRouter.get('/getalllastmessages', tokenVerification, async (req, res) => await controller.getAllLastMessages(req, res))

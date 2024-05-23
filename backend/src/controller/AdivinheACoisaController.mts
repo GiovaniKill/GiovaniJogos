@@ -60,6 +60,19 @@ export default class AdivinheACoisaController {
     return res.status(202).json()
   }
 
+  async getWelcomeMessage (req: Request, res: Response): Promise<Response> {
+    const { assistantId } = req.params
+    const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
+
+    if (typeof +assistantId !== 'number' || typeof email !== 'string') {
+      return res.status(400).json(JSON.stringify({ error: 'Malformed request' }))
+    }
+
+    const result = await this.service.getWelcomeMessage(email, +assistantId)
+
+    return res.status(200).json(JSON.stringify(result))
+  }
+
   async ask (req: Request, res: Response): Promise<Response> {
     const { question, assistantId } = req.body
     const { payload: { data: { wordId, day, month, year, email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))
@@ -110,9 +123,9 @@ export default class AdivinheACoisaController {
 
     const date = `${year}/${month}/${day}`
 
-    const { triesLeft, status } = await this.service.getOrCreateGame(email as string, wordId as string, date)
+    const { triesLeft, status, newGame } = await this.service.getOrCreateGame(email as string, wordId as string, date)
 
-    return res.status(200).json(JSON.stringify({ triesLeft, day, month, year, status }))
+    return res.status(200).json(JSON.stringify({ triesLeft, day, month, year, status, newGame }))
   }
 
   async createMessage (req: Request, res: Response): Promise<Response> {
