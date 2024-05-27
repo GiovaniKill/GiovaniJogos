@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import PropTypes from 'prop-types';
 import AdivinheACoisaContext from '../../contexts/AdivinheACoisaContext';
+import {deleteRequest} from '../../services/requests';
 
 const DropDownMenu = ({deleteMessages}) => {
   const {isDarkModeOn, setIsDarkModeOn} = useContext(AdivinheACoisaContext);
@@ -49,6 +50,17 @@ const DropDownMenu = ({deleteMessages}) => {
     },
   };
 
+  const logout = () => {
+    deleteRequest('adivinheacoisa/logout')
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((e) => {
+          window.alert('Error ao fazer logout');
+          console.log(e);
+        });
+  };
+
   return (
     <div
       className='menu-container'
@@ -77,6 +89,13 @@ const DropDownMenu = ({deleteMessages}) => {
            onClick={() => setIsDarkModeOn((curr) => !curr)}
          >
            {isDarkModeOn ? 'Ativar modo claro' : 'Ativar modo escuro'}
+         </motion.li>
+         <motion.li
+           className='menu-option'
+           variants={optionsVariants}
+           onClick={logout}
+         >
+           Fazer Logout
          </motion.li>
        </motion.ol>}
       </AnimatePresence>

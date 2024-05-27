@@ -60,6 +60,12 @@ export default class AdivinheACoisaController {
     return res.status(202).json()
   }
 
+  async logout (req: Request, res: Response): Promise<Response> {
+    res.clearCookie('jwt_token')
+
+    return res.status(200).json({ message: 'Logged out succesfully' })
+  }
+
   async getWelcomeMessage (req: Request, res: Response): Promise<Response> {
     const { assistantId } = req.params
     const { payload: { data: { email } } } = decodeToken(getCookie('jwt_token', req.headers.cookie ?? ''))

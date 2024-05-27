@@ -29,5 +29,6 @@ adivinheACoisaRouter.get('/getorcreategame', tokenVerification, async (req, res)
 adivinheACoisaRouter.post('/googlelogin', async (req, res) => await controller.googleLogin(req, res))
 adivinheACoisaRouter.post('/createuser', async (req, res) => await controller.createUser(req, res))
 adivinheACoisaRouter.get('/validateandrenew', tokenVerification, async (req, res) => await controller.validateAndRenew(req, res))
+adivinheACoisaRouter.delete('/logout', tokenVerification, async (req, res) => await controller.logout(req, res))
 
 export { adivinheACoisaRouter }
