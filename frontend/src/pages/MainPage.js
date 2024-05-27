@@ -15,8 +15,9 @@ const MainPage = () => {
           <Link to='/palavrou'>
             <img
               className='rounded-lg border-2 border-solid
-          border-black hover:border-yellow-400 hover:border-dashed'
-              src='images/palavrou_logo.png'
+            border-black hover:border-yellow-400 hover:border-dashed
+            w-[25vw]'
+              src='images/palavrou-logo.svg'
             />
           </Link>
           <Link to='/adivinheacoisa'>

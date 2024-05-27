@@ -19,7 +19,10 @@ function App() {
         <Route exact path="/palavrou" element={ <Palavrou /> } />
         <Route exact path="/adivinheacoisa" element={ <AdivinheACoisa /> } />
         <Route exact path="/termosdeservico" element={ <TermsOfService /> } />
-        <Route exact path="/politicadeprivacidade" element={ <PrivacyPolicy /> } />
+        <Route
+          exact path="/politicadeprivacidade"
+          element={ <PrivacyPolicy /> }
+        />
         <Route exact path="/politicadecookies" element={ <CookiesPolicy /> } />
         <Route path="/" element={ <MainPage /> } />
       </Routes>
