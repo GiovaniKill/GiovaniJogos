@@ -128,7 +128,6 @@ const Chat = ({
       scrollTop === 0 &&
       currentConversationMessages[0]?.firstMessage !== true &&
       !isFetchingMessages) {
-      console.log('Buscando novas mensagens');
       setIsFetchingMessages(true);
       getRequest(
           `adivinheacoisa/getlastmessagesfromreference/\
@@ -136,8 +135,7 @@ const Chat = ({
           .then((response) => {
             response = JSON.parse(response);
             if (!response?.messages) return;
-            console.log('response: ');
-            console.log(response);
+
             setCurrentConversationMessages((prev) => [
               ...response.messages,
               ...prev,

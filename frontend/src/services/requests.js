@@ -2,10 +2,6 @@ import axios from 'axios';
 
 const NODE_ENV = process.env.NODE_ENV;
 
-console.log('tipo: ');
-console.log(typeof NODE_ENV);
-console.log('NODE_ENV: ');
-console.log(NODE_ENV);
 
 const api = axios.create({
   baseURL: NODE_ENV === 'production' ? 'https://giovanijogos.fun/be' :
