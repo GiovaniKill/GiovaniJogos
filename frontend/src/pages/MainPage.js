@@ -19,6 +19,14 @@ const MainPage = () => {
               src='images/palavrou_logo.png'
             />
           </Link>
+          <Link to='/adivinheacoisa'>
+            <img
+              className='rounded-lg border-2 border-solid
+            border-black hover:border-yellow-400 hover:border-dashed
+            w-[25vw]'
+              src='images/adivinheacoisa-logo.svg'
+            />
+          </Link>
         </nav>
       </div>
       <Footer/>

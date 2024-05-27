@@ -1,0 +1,4 @@
+{
+    "watch": ["server.mts",  "./src/**", "./src/"],
+    "ext": "js, ts, mjs, mts, cjs, cts"
+}

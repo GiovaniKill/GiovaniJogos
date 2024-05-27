@@ -175,7 +175,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[0]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square0"
           onKeyDown={(e) => handleKeyDown(e, 0)}
           onChange={(e) => handleFields(e, 0)}
@@ -187,7 +187,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[1]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square1"
           onKeyDown={(e) => handleKeyDown(e, 1)}
           onChange={(e) => handleFields(e, 1)}
@@ -199,7 +199,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[2]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square2"
           onKeyDown={(e) => handleKeyDown(e, 2)}
           onChange={(e) => handleFields(e, 2)}
@@ -211,7 +211,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[3]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square3"
           onKeyDown={(e) => handleKeyDown(e, 3)}
           onChange={(e) => handleFields(e, 3)}
@@ -223,7 +223,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[4]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square4"
           onKeyDown={(e) => handleKeyDown(e, 4)}
           onChange={(e) => handleFields(e, 4)}
@@ -235,7 +235,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           type='text'
           className=
             {`${classNames[5]} caret-transparent focus:border-2
-          focus:border-amber-500`}
+          focus:border-amber-500 shadow-md`}
           id="square5"
           onKeyDown={(e) => handleKeyDown(e, 5)}
           onChange={(e) => handleFields(e, 5)}

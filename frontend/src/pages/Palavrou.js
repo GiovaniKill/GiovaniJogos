@@ -1,8 +1,8 @@
 import '../styles/Palavrou.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {Word} from '../components/palavrou/Word';
-import {requestData} from '../services/requests';
-import sixLetteredWords from '../sixLetteredWords.json';
+import {getRequest} from '../services/requests';
+import sixLetteredWords from '../sixLetteredWords';
 import {Scoreboard} from '../components/palavrou/Scoreboard';
 import {Link} from 'react-router-dom';
 import {Tutorial} from '../components/palavrou/Tutorial';
@@ -61,7 +61,7 @@ const Palavrou = () => {
       return;
     }
 
-    requestData(`palavrou/check/${attempt.toLowerCase()}`)
+    getRequest(`palavrou/check/${attempt.toLowerCase()}`)
         .then((response) => {
           if (response.evaluation.every((elem) => elem === 'right')) {
             const score = JSON.

@@ -5,6 +5,8 @@ import MainPage from './pages/MainPage';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import CookiesPolicy from './pages/CookiesPolicy';
+import AdivinheACoisa from './pages/AdivinheACoisa';
+import GiovaniJogosProvider from './contexts/GiovaniJogosProvider';
 
 /**
  * Routing
@@ -12,13 +14,17 @@ import CookiesPolicy from './pages/CookiesPolicy';
  */
 function App() {
   return (
-    <Routes>
-      <Route path="/palavrou" element={ <Palavrou /> } />
-      <Route path="/termosdeservico" element={ <TermsOfService /> } />
-      <Route path="/politicadeprivacidade" element={ <PrivacyPolicy /> } />
-      <Route path="/politicadecookies" element={ <CookiesPolicy /> } />
-      <Route exact path="/" element={ <MainPage /> } />
-    </Routes>
+    <GiovaniJogosProvider>
+      <Routes>
+        <Route exact path="/palavrou" element={ <Palavrou /> } />
+        <Route exact path="/adivinheacoisa" element={ <AdivinheACoisa /> } />
+        <Route exact path="/termosdeservico" element={ <TermsOfService /> } />
+        <Route exact path="/politicadeprivacidade" element={ <PrivacyPolicy /> } />
+        <Route exact path="/politicadecookies" element={ <CookiesPolicy /> } />
+        <Route path="/" element={ <MainPage /> } />
+      </Routes>
+    </GiovaniJogosProvider>
+
   );
 }
 

@@ -3,6 +3,7 @@ module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   content: [],
+  darkMode: 'selector',
   theme: {
     extend: {
       fontSize: {
@@ -16,6 +17,11 @@ module.exports = {
       },
       animation: {
         wiggle: 'wiggle 0.1s linear infinite',
+      },
+      screens: {
+        phone: '450px',
+        fullhd: '1919px',
+        fourk: '2159px',
       },
     },
   },
