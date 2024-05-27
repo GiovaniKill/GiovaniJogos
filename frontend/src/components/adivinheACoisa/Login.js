@@ -43,39 +43,15 @@ const Login = ({setIsAuthenticated}) => {
         flex flex-col items-center justify-between shadow-2xl fullhd:text-3xl
         fourk:text-5xl'>
 
-        <h1>Para jogar, faça Login</h1>
-
-        <form className='flex flex-col items-center justify-center w-[90%]'>
-          <input
-            type='text'
-            placeholder='Email'
-            className='mb-[1vh] border border-black w-full
-            ps-1 dark:bg-gray-300 text-black'
-          />
-          <input
-            type='password'
-            placeholder='Senha'
-            className='mb-[1vh] border border-black w-full
-            ps-1 dark:bg-gray-300 text-black'
-          />
-          <button
-            type='submit'
-            className='border fourk:border-4 transition
-          border-gray-300 hover:border-gray-600 p-1'
-          >
-            Entrar
-          </button>
-        </form>
-
-        <p>ou Cadastre-se</p>
+        <h1 className='font-bold'>Para jogar, faça Login</h1>
 
         <button
           id='googleLogin'
-          className='fullhd:scale-150 fourk:scale-[2.5]'
+          className='scale-[1.5] fullhd:scale-[2.5] fourk:scale-[4]'
         />
 
         <p
-          className='text-xs fourk:text-2xl text-center
+          className='text-sm fullhd:text-base fourk:text-2xl text-center
           text-gray-600 dark:text-gray-400'
         >
         Ao continuar com o login, você concorda com nossos {' '}
