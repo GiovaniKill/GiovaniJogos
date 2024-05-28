@@ -21,7 +21,8 @@ module.exports = {
       screens: {
         phone: '450px',
         fullhd: '1919px',
-        fourk: '2159px',
+        twok: '2559px',
+        fourk: '3839px',
       },
     },
   },

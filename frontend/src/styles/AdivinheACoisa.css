@@ -28,7 +28,8 @@
 
     .assistant-profile-close-button {
         @apply p-1 m-1 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700/30
-        w-[10vw] phone:w-[3vw] xl:w-[2vw] fourk:w-[3vw] transition duration-75 self-start
+        w-[10vw] phone:w-[3vw] xl:w-[2vw] fourk:w-[3vw] 
+        transition duration-75 self-start
     }
 
     .contact-details-text {
