@@ -90,7 +90,7 @@ export default class AdivinheACoisaService {
 
     const isFirstTime = priorGames.length <= 1
 
-    const instructions = `O jogador(a) de nome ${user?.firstName} acaba de entrar no jogo \
+    const instructions = `O jogador(a) ${user.firstName !== null && `de nome ${user?.firstName}`} acaba de entrar no jogo \
     "Adivinhe a coisa", dê suas boas vindas casuais de acordo com sua personalidade.
     ${isFirstTime
       ? `Esse é a primeira vez que ele(a) joga o jogo, descreva como jogar. O jogo é de perguntas
@@ -142,7 +142,9 @@ export default class AdivinheACoisaService {
 
       await this.gamesHistoryRepository.endGame(user.id, answer, date)
     } else {
-      const assistantInstructions = `O(A) jogador(a), de nome ${user.firstName}, te fará perguntas de sim
+      const assistantInstructions = `O(A) jogador(a) \
+      ${user.firstName !== null && `de nome ${user?.firstName}`}
+      te fará perguntas de sim
       ou não com o objetivo de encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
       Responda com respostas simples como "Sim", "Não", "Também", "Provavelmente sim",
       "Provavelmente não", "Pode ser", "Em partes, sim", "Essa pergunta não pode ser respondida com sim ou não",
@@ -151,7 +153,7 @@ export default class AdivinheACoisaService {
       Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
       Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${accentuatedAnswer}" ou use emojis que
       a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
-      dele(a). O nome do(a) jogador(a) é ${user?.firstName}. Caso requisitado, auxilie o jogador ensinando como jogar o jogo.`
+      dele(a). Caso requisitado, auxilie o jogador ensinando como jogar o jogo.`
 
       const response = await askAI(
         JSON.stringify(question),
@@ -187,8 +189,8 @@ export default class AdivinheACoisaService {
     const answer = await this.getWordId(wordId)
     const user = await this.usersRepository.findUserByEmail(email)
 
-    const victoryInstructions = `O(A) jogador(a), de nome ${user?.firstName} acaba de acertar
-      a resposta, que era "${answer}" depois de te fazer várias perguntas. O(A) parabenize.`
+    const victoryInstructions = `O(A) jogador(a) acaba de acertar a resposta, que era
+    "${answer}" depois de te fazer várias perguntas. O(A) parabenize.`
 
     const defeatInstructions = `O(A) jogador(a) acabou de perder o jogo "Adivinhe a coisa" depois
     de te fazer várias perguntas. Anuncie a derrota dele(a), revele que a "coisa" secreta,
@@ -196,7 +198,7 @@ export default class AdivinheACoisaService {
 
     let assistantInstructions = `Fale que você estará indisponível e só volta amanhã e que o(a)
     aguarda para jogar novamente. Dê personalidade à sua mensagem e maneire nos emojis. 
-    O nome do(a) jogador(a) é ${user?.firstName}`
+    ${user?.firstName !== null && `O nome do jogador é ${user?.firstName}`}`
 
     if (result === 'victory') {
       assistantInstructions = victoryInstructions + ' ' + assistantInstructions
