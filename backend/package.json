@@ -12,7 +12,7 @@
     "prestart": "npm run clean && npm run build && npm run db:start",
     "start": "node .",
     "predev": "npm run build && npm run db:reset",
-    "dev": "nodemon --config nodemon.json --exec \"npm start\" -V -L"
+    "dev": "nodemon --config nodemon.json --exec \"node .\" -V -L"
   },
   "keywords": [],
   "author": "",

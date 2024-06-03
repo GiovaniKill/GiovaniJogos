@@ -19,6 +19,12 @@ const Chat = ({
     setAllConversationsMessages,
     allConversationsMessages} = useContext(AdivinheACoisaContext);
 
+  const activeAssistantRef = useRef(activeAssistant);
+
+  useEffect(() => {
+    activeAssistantRef.current = activeAssistant;
+  }, [activeAssistant]);
+
   const [isGameOver, setIsGameOver] = useState(false);
 
   const [currentConversationMessages,
@@ -86,7 +92,11 @@ const Chat = ({
     if (currentConversationMessages.length === 0) {
       newMessage.firstMessage = true;
     }
-    if (newMessage.assistantId === activeAssistant.id) {
+
+    // Prevents message from going to the wrong chat
+    if ((newMessage.role === 'assistant' &&
+    newMessage.assistantId === activeAssistantRef.current.id) ||
+    newMessage.role === 'user') {
       await setCurrentConversationMessages((prev) => [...prev, newMessage]);
     }
     setAllConversationsMessages((curr) =>(

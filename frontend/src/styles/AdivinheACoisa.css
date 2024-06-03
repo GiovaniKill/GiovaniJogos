@@ -131,7 +131,7 @@
     }
 
     .typing-status {
-        @apply dark:text-white
+        @apply dark:text-white text-xs lg:text-sm fullhd:text-2xl fourk:text-5xl
     }
 
     .menu-container {

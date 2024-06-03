@@ -90,7 +90,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
               role: 'assistant',
               createdAt: response.createdAt,
               assistantId: activeAssistant.id,
-            });
+            }, activeAssistant);
             setIsTyping(false);
             if (triesLeft > 0) {
               setTriesLeft((curr) => curr - 1);
