@@ -97,7 +97,8 @@ export default class AdivinheACoisaService {
       e respostas. O jogador deve te fazer uma pergunta que pode ser respondida com 'sim' ou 'não'
       para adivinhar uma 'coisa' secreta, que é uma palavra que muda diariamente.`
       : 'O(A) jogador(a) já jogou outras vezes, o(a) receba como um conhecido(a)'}
-      Não se estenda muito.`
+      Não se estenda muito. Também informe que seus outros colegas estão disponíveis para ajudá-lo(la),
+      e que a única diferença entre vocês é suas personalidades.`
 
     const response = await instructAI(assistant.personality + ' ' + instructions, 'gpt-4o')
 
