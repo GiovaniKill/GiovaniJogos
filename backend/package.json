@@ -9,7 +9,7 @@
     "clean": "rimraf build && rimraf tsconfig.tsbuildinfo",
     "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:start": "npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "prestart": "npm run clean && npm run build && db:start",
+    "prestart": "npm run clean && npm run build && npm run db:start",
     "start": "node .",
     "predev": "npm run build && npm run db:reset",
     "dev": "nodemon --config nodemon.json --exec \"npm start\" -V -L"
