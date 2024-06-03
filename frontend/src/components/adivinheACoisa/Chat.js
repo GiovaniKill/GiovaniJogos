@@ -86,7 +86,9 @@ const Chat = ({
     if (currentConversationMessages.length === 0) {
       newMessage.firstMessage = true;
     }
-    await setCurrentConversationMessages((prev) => [...prev, newMessage]);
+    if (newMessage.assistantId === activeAssistant.id) {
+      await setCurrentConversationMessages((prev) => [...prev, newMessage]);
+    }
     setAllConversationsMessages((curr) =>(
       [...curr, newMessage]
     ));
