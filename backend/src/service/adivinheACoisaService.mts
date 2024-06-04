@@ -151,9 +151,10 @@ export default class AdivinheACoisaService {
       "Provavelmente não", "Pode ser", "Em partes, sim", "Essa pergunta não pode ser respondida com sim ou não",
       "Não sei responder" ou "Depende de [alguma coisa que você queira completar]". Nunca revele demais sobre a
       "coisa", ela é secreta. Sempre adicione personalidade às suas respostas e use emojis com moderação, mas seja breve.
-      Parabenize o(a) jogador(a) caso ele acerte a palavra. A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
+      O(A) jogador(a) pode se referir a você como a "coisa", perguntando, por exemplo, "Você é de madeira?".
+      A "coisa" que ele deverá acertar é "${accentuatedAnswer}".
       Não dê dicas ou converse sobre outros assuntos. Nunca mencione a palavra "${accentuatedAnswer}" ou use emojis que
-      a representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
+      representem "${accentuatedAnswer}". O(a) jogador(a) te fará várias perguntas, mas você só terá acesso à ultima mensagem
       dele(a). Caso requisitado, auxilie o jogador ensinando como jogar o jogo.`
 
       const response = await askAI(
