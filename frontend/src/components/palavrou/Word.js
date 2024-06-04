@@ -43,6 +43,8 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     } else if (e.target.value.length > 0 && !validLetters.test(e.key)) {
       e.target.value = '';
       // Had to include foreign keys because they trigger onChange
+    } else if (e.key.length === 1 && validLetters.test(e.key)) {
+      e.target.value = '';
     }
   };
 
