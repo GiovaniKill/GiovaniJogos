@@ -28,7 +28,7 @@ const MainPage = () => {
             <img
               className='rounded-lg border-2 border-solid
             border-black hover:border-yellow-400 hover:border-dashed
-            w-[25vw]'
+            w-[90vw] lg:w-[25vw]'
               src='images/palavrou-logo.svg'
             />
           </Link>
@@ -36,7 +36,7 @@ const MainPage = () => {
             <img
               className='rounded-lg border-2 border-solid
             border-black hover:border-yellow-400 hover:border-dashed
-            w-[25vw]'
+            w-[90vw] lg:w-[25vw]'
               src='images/adivinheacoisa-logo.svg'
             />
           </Link>

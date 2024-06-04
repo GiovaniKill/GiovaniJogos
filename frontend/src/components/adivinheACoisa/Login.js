@@ -47,7 +47,7 @@ const Login = ({setIsAuthenticated}) => {
 
         <button
           id='googleLogin'
-          className='scale-[1.5] fullhd:scale-[2.5] fourk:scale-[4]'
+          className='lg:scale-[1.5] fullhd:scale-[2.5] fourk:scale-[4]'
         />
 
         <p
