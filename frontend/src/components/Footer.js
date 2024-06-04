@@ -5,7 +5,7 @@ const Footer = () => {
     <footer
       className={`
         flex justify-evenly items-center w-[100vw] bg-orange-900
-        p-[2vh] mt-[10vh]
+        p-[2vh] mt-[10vh] absolute bottom-0
       `}
     >
       <a
