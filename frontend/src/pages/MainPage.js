@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 
 const MainPage = () => {
   return (
-    <div className='overflow-x-hidden overflow-y-scroll bg-amber-50'>
-      <div className='h-screen'>
+    <div className='overflow-x-hidden bg-amber-50'>
+      <div className='h-[100vh]'>
         <header className='flex justify-center'>
           <h1 className='my-11 text-5xl handrawn'>Giovani Jogos</h1>
           <a
