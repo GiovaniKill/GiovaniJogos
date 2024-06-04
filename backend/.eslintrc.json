@@ -8,7 +8,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["index.js", "index.ts"],
+    "ignorePatterns": ["index.js", "index.ts", "checkDBExistence.mjs"],
     "rules": {
     }
 }

@@ -5,10 +5,22 @@ import Footer from '../components/Footer';
 
 const MainPage = () => {
   return (
-    <div className='overflow-x-hidden'>
+    <div className='overflow-x-hidden overflow-y-scroll'>
       <div className='bg-amber-50 h-screen'>
         <header className='flex justify-center'>
           <h1 className='my-11 text-5xl handrawn'>Giovani Jogos</h1>
+          <a
+            href='https://github.com/GiovaniKill'
+            target='_blank'
+            rel="noreferrer"
+          >
+            <img
+              src='images/github-logo.svg'
+              alt='github logo'
+              className='w-[3vw] absolute right-[2vw] top-[2vh]
+              opacity-70 hover:opacity-100 transition'
+            />
+          </a>
         </header>
         <nav className='grid md:grid-cols-2 lg:grid-cols-3
           gap-3 mx-3 justify-items-center'>
