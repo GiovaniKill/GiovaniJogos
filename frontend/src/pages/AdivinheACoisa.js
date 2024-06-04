@@ -37,7 +37,7 @@ const AdivinheACoisa = () => {
   }, []);
 
   return (
-    <>
+    <div className='h-[100dvh]'>
       {!isAuthenticated ?
       <Login setIsAuthenticated={setIsAuthenticated}/> :
       <AdivinheACoisaProvider>
@@ -62,7 +62,7 @@ const AdivinheACoisa = () => {
         </div>
       </AdivinheACoisaProvider>
       }
-    </>
+    </div>
   );
 };
 
