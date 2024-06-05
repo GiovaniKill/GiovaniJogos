@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
+import {PropTypes} from 'prop-types';
 
-const Scoreboard = () => {
+const Scoreboard = ({answer}) => {
   const [isHidden, setIsHidden] = useState(false);
 
   const score = JSON.parse(localStorage.getItem('score'));
@@ -26,14 +27,16 @@ const Scoreboard = () => {
     <div
       id="scoreboard"
       className=
-        {`absolute inset-0 m-auto w-fit h-fit rounded-lg p-5 bg-amber-100
+        {`absolute inset-0 m-auto w-fit h-fit rounded-lg p-5 pt-8 bg-amber-100
         ${isHidden && 'hidden'} border-2 border-black border-double`}>
       <button
         onClick={() => setIsHidden(true)}
-        className='absolute top-3 right-5 font-extrabold text-lg hover:text-xl'>
+        className='absolute top-2 right-5 font-extrabold text-lg hover:text-xl'>
             X
       </button>
       <div className="">
+        {answer?.length > 0 && <div className='py-2'>A resposta era
+          <span className='font-bold'> &quot;{answer}&quot;</span></div>}
         <div>Jogos: {score.timesPlayed}</div>
         <div>Vitórias: {score.wins}</div>
         <div>
@@ -115,8 +118,15 @@ const Scoreboard = () => {
           {attemptsPerTry[7] !== 0 ? attemptsPerTry[7] : ''}
         </div>
       </div>
+      <div>
+        Amanhã tem mais!
+      </div>
     </div>
   );
+};
+
+Scoreboard.propTypes = {
+  answer: PropTypes.string,
 };
 
 export {Scoreboard};

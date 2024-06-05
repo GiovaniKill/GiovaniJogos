@@ -70,7 +70,7 @@ export default class AdivinheACoisaService {
       wordId: wordToID(normalizedAnswer, process.env.THING_PASSWORD ?? '')
     }
 
-    const token = createToken({ email, ...payload })
+    const token = createToken({ email, ...payload }, 2)
 
     return token
   }

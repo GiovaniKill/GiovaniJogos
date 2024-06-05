@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 const Palavrou = () => {
   const [attemptNumber, setAttemptNumber] = useState(0);
   const _attemptNumber = useRef(attemptNumber);
+
   const [message, _setMessage] = useState('');
   const setMessage = (arg) => {
     _setMessage(arg);
@@ -24,6 +25,8 @@ const Palavrou = () => {
   const [blockTyping, setBlockTyping] = useState(false);
 
   const [messageAnimation, setMessageAnimation] = useState(false);
+
+  const [answer, setAnswer] = useState('');
 
   const messages = {
     unknownWord: [
@@ -63,6 +66,7 @@ const Palavrou = () => {
 
     getRequest(`palavrou/check/${attempt.toLowerCase()}`)
         .then((response) => {
+          // GAME WIN
           if (response.evaluation.every((elem) => elem === 'right')) {
             const score = JSON.
                 parse(localStorage.getItem('score')) || scoreTemplate;
@@ -85,6 +89,14 @@ const Palavrou = () => {
 
             setResponse(() => response);
             setTimeout(() => setMessage(() => 'Estudar mais né, sei lá'), 3500);
+            getRequest('palavrou/getanswer')
+                .then((response) => {
+                  response = JSON.parse(response);
+                  setAnswer(response.answer);
+                })
+                .catch((e) => {
+                  console.log('Erro ao recuperar a resposta: ', e);
+                });
             setTimeout(() => setShowScoreboard(true), 4500);
           } else {
             setResponse(() => response);
@@ -95,13 +107,23 @@ const Palavrou = () => {
         })
         .catch((error) => {
           console.log(error);
-          setMessage(() => 'Falha ao se conectar ao servidor: ' + error);
+          setMessage(() => 'Falha ao se conectar ao servidor 😕');
         });
   };
 
   useEffect(() => {
     _attemptNumber.current = attemptNumber;
   }, [attemptNumber]);
+
+  useEffect(() => {
+    getRequest('palavrou/gettoken')
+        .then()
+        .catch((e) => {
+          window.alert('Palavrou está temporariamente indisponível. 😕');
+          console.log(e);
+        },
+        );
+  }, []);
 
 
   return (
@@ -174,7 +196,7 @@ const Palavrou = () => {
             </tbody>
           </table>
         </div>
-        {showScoreboard && <Scoreboard/>}
+        {showScoreboard && <Scoreboard answer={answer} />}
       </section>
       <Footer/>
     </div>

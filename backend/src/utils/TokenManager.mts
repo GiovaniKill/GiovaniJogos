@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import HTTPError from './HTTPError.mjs'
 
-export const createToken = (payload: object): string => {
+export const createToken = (payload: object, expiresIn: number): string => {
   const secret = process.env.JWT_SECRET ?? 'secret' as jwt.Secret
   const config: jwt.SignOptions = {
-    expiresIn: '2d',
+    expiresIn: `${expiresIn}d`,
     algorithm: 'HS256'
   }
 

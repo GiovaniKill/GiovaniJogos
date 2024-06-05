@@ -3,7 +3,7 @@ import { validateToken } from '../utils/TokenManager.mjs'
 import HTTPError from '../utils/HTTPError.mjs'
 import { getCookie } from '../utils/handleCookies.mjs'
 
-const tokenVerification = (req: Request, res: Response, next: NextFunction): void => {
+const adivinheACoisaValidation = (req: Request, res: Response, next: NextFunction): void => {
   const token = getCookie('jwt_token', req.headers.cookie ?? '')
 
   if (typeof token !== 'string') throw new HTTPError(400, 'Token must be valid')
@@ -11,4 +11,4 @@ const tokenVerification = (req: Request, res: Response, next: NextFunction): voi
   next()
 }
 
-export default tokenVerification
+export default adivinheACoisaValidation
