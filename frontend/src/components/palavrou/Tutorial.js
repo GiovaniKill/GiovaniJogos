@@ -21,7 +21,7 @@ const Tutorial = () => {
         Se o campo ficar verde,
         você acertou a letra. Se ficar amarelo, a resposta contém a sua letra,
         mas em uma posição diferente à do seu palpite. Se ficar vermelho, a
-        resposta não contém essa letra.
+        resposta não contém essa letra. A palavra muda diariamente.
       </article>
     </div>
   );
