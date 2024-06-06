@@ -90,7 +90,7 @@ export default class AdivinheACoisaService {
 
     const isFirstTime = priorGames.length <= 1
 
-    const instructions = `O jogador(a) ${typeof user?.firstName !== 'string' && `de nome ${user?.firstName}`} acaba de entrar no jogo \
+    const instructions = `O jogador(a) ${typeof user?.firstName === 'string' && `de nome ${user?.firstName}`} acaba de entrar no jogo \
     "Adivinhe a coisa", dê suas boas vindas casuais de acordo com sua personalidade.
     ${isFirstTime
       ? `Esse é a primeira vez que ele(a) joga o jogo, descreva como jogar. O jogo é de perguntas
@@ -144,7 +144,7 @@ export default class AdivinheACoisaService {
       await this.gamesHistoryRepository.endGame(user.id, answer, date)
     } else {
       const assistantInstructions = `O(A) jogador(a) \
-      ${typeof user?.firstName !== 'string' && `de nome ${user?.firstName}`}
+      ${typeof user?.firstName === 'string' && `de nome ${user?.firstName}`}
       te fará perguntas de sim
       ou não com o objetivo de encontrar uma "coisa" secreta, que hoje é "${accentuatedAnswer}".
       Responda com respostas simples como "Sim", "Não", "Também", "Provavelmente sim",
@@ -200,7 +200,7 @@ export default class AdivinheACoisaService {
 
     let assistantInstructions = `Fale que você estará indisponível e só volta amanhã e que o(a)
     aguarda para jogar novamente. Dê personalidade à sua mensagem e maneire nos emojis. 
-    ${typeof user?.firstName !== 'string' && `O nome do jogador é ${user?.firstName}`}`
+    ${typeof user?.firstName === 'string' && `O nome do(a) jogador(a) é ${user?.firstName}`}`
 
     if (result === 'victory') {
       assistantInstructions = victoryInstructions + ' ' + assistantInstructions
