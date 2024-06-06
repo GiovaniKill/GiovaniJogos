@@ -81,9 +81,9 @@ const Chat = ({
 
   const scrollChatToBottom = () => {
     requestAnimationFrame(() => {
-      conversationBox.current.scrollTo(
+      conversationBox?.current?.scrollTo(
           0,
-          conversationBox.current.scrollHeight,
+          conversationBox?.current?.scrollHeight,
       );
     });
   };

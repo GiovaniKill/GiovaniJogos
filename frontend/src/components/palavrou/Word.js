@@ -152,6 +152,13 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
     _classNames.current = classNames;
   }, [classNames]);
 
+  // ComponentWillUnmount
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   // For when the evaluation comes in
   useEffect(() => {
     if (isActive && response.evaluation.length) {
