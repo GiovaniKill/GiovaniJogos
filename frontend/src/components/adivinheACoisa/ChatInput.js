@@ -128,6 +128,7 @@ const ChatInput = ({addNewMessage, scrollChatToBottom,
         className='conversation-input'
         maxLength={80}
         disabled={isFormBlocked}
+        autoComplete="off"
       />
       <button
         type='submit'

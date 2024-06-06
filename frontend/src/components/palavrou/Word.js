@@ -188,6 +188,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square0"
           onKeyDown={(e) => handleKeyDown(e, 0)}
           onChange={(e) => handleFields(e, 0)}
+          autoComplete="off"
         />
       </td>
       <td>
@@ -200,6 +201,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square1"
           onKeyDown={(e) => handleKeyDown(e, 1)}
           onChange={(e) => handleFields(e, 1)}
+          autoComplete="off"
         />
       </td>
       <td>
@@ -212,6 +214,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square2"
           onKeyDown={(e) => handleKeyDown(e, 2)}
           onChange={(e) => handleFields(e, 2)}
+          autoComplete="off"
         />
       </td>
       <td>
@@ -224,6 +227,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square3"
           onKeyDown={(e) => handleKeyDown(e, 3)}
           onChange={(e) => handleFields(e, 3)}
+          autoComplete="off"
         />
       </td>
       <td>
@@ -236,6 +240,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square4"
           onKeyDown={(e) => handleKeyDown(e, 4)}
           onChange={(e) => handleFields(e, 4)}
+          autoComplete="off"
         />
       </td>
       <td>
@@ -248,6 +253,7 @@ const Word = ({attemptNumber, wordNumber, checkAttempt,
           id="square5"
           onKeyDown={(e) => handleKeyDown(e, 5)}
           onChange={(e) => handleFields(e, 5)}
+          autoComplete="off"
         />
       </td>
     </tr>
