@@ -348,9 +348,9 @@ export default class AdivinheACoisaService {
       const assistant = assistants[i]
       const result = await this.messagesRepository.getLastMessagesByAssistant(user.id, assistant.id, amount)
       const firstMessage = await this.messagesRepository.getFirstMessageByAssistant(user.id, assistant.id)
-      if (result !== null) {
+      if (result !== null && result.length > 0) {
         result.reverse()
-        if (new Date(result[0].createdAt ?? '').getTime() ===
+        if (new Date(result[0]?.createdAt ?? '').getTime() ===
         new Date(firstMessage?.createdAt ?? '').getTime()) result[0].firstMessage = true
         messages = [...messages, ...result]
       }
