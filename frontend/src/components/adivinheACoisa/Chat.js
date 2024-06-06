@@ -168,16 +168,16 @@ const Chat = ({
         message.createdAt.slice(0, 10) || index === 0) {
         const formattedDate = message.createdAt.slice(0, 10)
             .split('-').reverse().join('/');
-        return (
-          <React.Fragment
-            key={message.createdAt + message.message + message.assistantId}>
-            <DateDivisor date={formattedDate}/>
-            <ChatMessage message={message}/>
-          </React.Fragment>
-        );
+        return [
+          <DateDivisor key={message.createdAt} date={formattedDate}/>,
+          <ChatMessage
+            key={message.createdAt + message.message + message.assistantId}
+            message={message}/>,
+
+        ];
       }
       return <ChatMessage
-        key={message.createdAt + message.message}
+        key={message.createdAt + message.message + message.assistantId}
         message={message}/>;
     });
   };
