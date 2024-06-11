@@ -27,8 +27,6 @@ export default class PalavrouController {
     const { payload: { data: { day, month, year } } } = decodeToken(
       getCookie('palavrou_jwt', req.headers.cookie ?? ''))
 
-    console.log(day, month, year)
-
     if (typeof word !== 'string' || word.length !== 6) {
       return res.status(400).json({ message: 'Invalid word' })
     }
