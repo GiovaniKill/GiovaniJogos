@@ -1,6 +1,6 @@
 # Giovani Jogos
 
-Bem-vindo ao repositório do site [giovanijogos.fun](giovanijogos.fun)! Este projeto atualmente inclui dois jogos interativos desenvolvidos para desafiar suas habilidades de vocabulário e dedução.
+Bem-vindo ao repositório do site [giovanijogos.fun](giovanijogos.fun)! Este projeto atualmente inclui dois jogos interativos desenvolvidos para desafiar suas habilidades de vocabulário e dedução. No momento, sem suporte para Safari.
 
 ## Jogos
 
@@ -17,7 +17,7 @@ Neste jogo, você faz perguntas de sim ou não a assistentes IA com o objetivo d
 ## Como Jogar
 
 ### Palavrou
-1. Acesse o [site](https://giovanijogos.fun/palavrou).
+1. Acesse o [site](https://giovanijogos.fun/palavrou). (No momento, sem suporte para Safari.)
 2. Insira uma palavra de 6 letras.
 3. Receba feedback sobre a sua tentativa:
    - Nos campos verdes, as letras estão na posição correta
@@ -29,7 +29,7 @@ Neste jogo, você faz perguntas de sim ou não a assistentes IA com o objetivo d
 ![Exemplo do Palavrou](https://github.com/GiovaniKill/GiovaniJogos/assets/99694430/9dae2045-0b28-47d2-9c73-4575eac58c9c)
 
 ### Adivinhe a Coisa
-1. Acesse o [site](https://giovanijogos.fun/adivinheacoisa).
+1. Acesse o [site](https://giovanijogos.fun/adivinheacoisa). (No momento, sem suporte para Safari.)
 2. Faça login com o Google.
 3. Faça perguntas de sim ou não para os assistentes (o que os difere são apenas suas personalidades).
 4. Use as respostas dos assistents para formular novas perguntas e tentar adivinhar a palavra.
