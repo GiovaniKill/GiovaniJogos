@@ -35,16 +35,12 @@ export default class AdivinheACoisaService {
 
   async googleLogin (googleJWT: string): Promise<string> {
     const {
-      email, sub: subscription, picture, email_verified: emailVerified,
+      email, sub: subscription, picture,
       given_name: firstName, family_name: lastName
     } = decodeToken(googleJWT).payload
 
     if (typeof email !== 'string' || typeof subscription !== 'string') {
       throw new HTTPError(400, 'Malformed request')
-    }
-
-    if (emailVerified !== true) {
-      throw new HTTPError(403, 'User not verified by Google')
     }
 
     const response = await this.usersRepository.findUserBySubscription(subscription)
