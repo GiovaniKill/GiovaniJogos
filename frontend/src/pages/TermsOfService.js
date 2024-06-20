@@ -92,7 +92,7 @@ const TermsOfService = () => {
 
         <p className='py-5'>
           <span className='font-bold'>8.</span> Podemos alterar os termos e condições desses direitos de vinculação a qualquer momento. Ao conectar-se continuamente
-          osso site, você concorda em se comprometer e seguir os termos desta política de links.
+          com nosso site, você concorda em se comprometer e seguir os termos desta política de links.
         </p>
 
         <p className='py-5'>
